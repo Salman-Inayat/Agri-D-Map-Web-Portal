@@ -90,6 +90,7 @@ function Sidebar({ location }) {
         }),
       }}
       open={isSidebarOpened}
+      // style={{ backgroundColor: "#373368" }}
     >
       <div className={classes.toolbar} />
       <div className={classes.mobileBackButton}>

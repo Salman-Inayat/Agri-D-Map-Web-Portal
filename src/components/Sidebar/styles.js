@@ -14,15 +14,21 @@ export default makeStyles((theme) => ({
     width: drawerWidth,
     flexShrink: 0,
     whiteSpace: "nowrap",
+    background: "#373368",
+    color: "white",
   },
   drawerOpen: {
     width: drawerWidth,
+    background: "#373368",
+    color: "white",
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
   drawerClose: {
+    background: "#373368",
+    color: "white",
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -43,9 +49,10 @@ export default makeStyles((theme) => ({
     flexGrow: 1,
     padding: theme.spacing(3),
   },
-  /* sidebarList: {
-    marginTop: theme.spacing(6),
-  }, */
+  sidebarList: {
+    // marginTop: theme.spacing(6),
+    color: "white",
+  },
   mobileBackButton: {
     marginTop: theme.spacing(0.5),
     marginLeft: 18,
