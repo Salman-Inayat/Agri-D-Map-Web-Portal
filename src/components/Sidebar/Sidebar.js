@@ -33,19 +33,25 @@ const structure = [
   { id: 0, label: "Dashboard", link: "/app/dashboard", icon: <HomeIcon /> },
   {
     id: 1,
+    label: "Image Segmentation",
+    link: "/app/segmentation",
+    icon: <HomeIcon />,
+  },
+  {
+    id: 2,
     label: "Typography",
     link: "/app/typography",
     icon: <TypographyIcon />,
   },
-  { id: 2, label: "Tables", link: "/app/tables", icon: <TableIcon /> },
+  { id: 3, label: "Tables", link: "/app/tables", icon: <TableIcon /> },
   {
-    id: 3,
+    id: 4,
     label: "Notifications",
     link: "/app/notifications",
     icon: <NotificationsIcon />,
   },
   {
-    id: 4,
+    id: 5,
     label: "UI Elements",
     link: "/app/ui",
     icon: <UIElementsIcon />,
