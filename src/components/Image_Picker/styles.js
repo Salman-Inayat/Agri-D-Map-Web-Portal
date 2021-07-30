@@ -1,0 +1,62 @@
+import { makeStyles } from "@material-ui/styles";
+
+export default makeStyles((theme) => ({
+  App: {
+    fontFamily: "sans-serif",
+  },
+  span: {
+    fontSize: "3rem",
+    color: "#777",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "2rem",
+    },
+  },
+  p: {
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "0.8rem",
+    },
+  },
+  dropzone: {
+    textAlign: "center",
+    padding: theme.spacing(2),
+    border: "3px dashed #373368",
+    backgroundColor: "#fafafa",
+    color: "#bdbdbd",
+    height: "150px",
+    marginBottom: theme.spacing(2),
+  },
+  thumbsContainer: {
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginWop: "16px",
+  },
+  thumb: {
+    borderRadius: "6px",
+    border: "1px solid rgba(55, 51, 104, 0.51)",
+    marginBottom: "8px",
+    marginRight: " 8px",
+    width: "100px",
+    height: "100px",
+    padding: "4px",
+    boxSizing: "border-box",
+    position: "relative",
+  },
+  thumbInner: {
+    display: "flex",
+    minWidth: "0",
+    overflow: " hidden",
+  },
+  img: {
+    display: "block",
+    width: "100%",
+    height: "auto",
+  },
+
+  container: {
+    padding: theme.spacing(5),
+    [theme.breakpoints.down("sm")]: {
+      padding: "0px",
+    },
+  },
+}));
