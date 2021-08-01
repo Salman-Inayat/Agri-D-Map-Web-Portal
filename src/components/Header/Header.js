@@ -161,7 +161,7 @@ export default function Header(props) {
             }}
           />
         </div>
-        <IconButton
+        {/* <IconButton
           color="inherit"
           aria-haspopup="true"
           aria-controls="mail-menu"
@@ -194,7 +194,7 @@ export default function Header(props) {
           >
             <MailIcon classes={{ root: classes.headerIcon }} />
           </Badge>
-        </IconButton>
+        </IconButton> */}
         <IconButton
           aria-haspopup="true"
           color="inherit"
@@ -288,16 +288,16 @@ export default function Header(props) {
         >
           <div className={classes.profileMenuUser}>
             <Typography variant="h4" weight="medium">
-              John Smith
+              John Doe
             </Typography>
-            <Typography
+            {/* <Typography
               className={classes.profileMenuLink}
               component="a"
               color="primary"
               href="https://flatlogic.com"
             >
               Flalogic.com
-            </Typography>
+            </Typography> */}
           </div>
           <MenuItem
             className={classNames(
