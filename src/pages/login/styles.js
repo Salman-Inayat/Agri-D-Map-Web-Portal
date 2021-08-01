@@ -1,6 +1,6 @@
 import { makeStyles } from "@material-ui/styles";
 
-export default makeStyles(theme => ({
+export default makeStyles((theme) => ({
   container: {
     height: "100vh",
     width: "100vw",
@@ -10,6 +10,7 @@ export default makeStyles(theme => ({
     position: "absolute",
     top: 0,
     left: 0,
+    backgroundColor: "#373368",
   },
   logotypeContainer: {
     backgroundColor: theme.palette.primary.main,
@@ -39,11 +40,13 @@ export default makeStyles(theme => ({
     },
   },
   formContainer: {
-    width: "40%",
-    height: "100%",
+    width: "35%",
+    height: "75%",
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
+    backgroundColor: "white",
+    borderRadius: "15px",
     alignItems: "center",
     [theme.breakpoints.down("md")]: {
       width: "50%",
@@ -90,6 +93,9 @@ export default makeStyles(theme => ({
   createAccountButton: {
     height: 46,
     textTransform: "none",
+    "&:hover": {
+      backgroundColor: "#373368",
+    },
   },
   formDividerContainer: {
     marginTop: theme.spacing(4),
@@ -129,6 +135,11 @@ export default makeStyles(theme => ({
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
+  },
+  submitButton: {
+    "&:hover": {
+      backgroundColor: "#373368",
+    },
   },
   forgetButton: {
     textTransform: "none",

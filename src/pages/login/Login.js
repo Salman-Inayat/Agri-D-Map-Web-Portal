@@ -15,10 +15,6 @@ import classnames from "classnames";
 // styles
 import useStyles from "./styles";
 
-// logo
-import logo from "./logo.svg";
-import google from "../../images/google.svg";
-
 // context
 import { useUserDispatch, loginUser } from "../../context/UserContext";
 
@@ -34,14 +30,17 @@ function Login(props) {
   var [activeTabId, setActiveTabId] = useState(0);
   var [nameValue, setNameValue] = useState("");
   var [loginValue, setLoginValue] = useState("demo@demo.com");
-  var [passwordValue, setPasswordValue] = useState("demo");
+  var [loginPasswordValue, setLoginPasswordValue] = useState("demo");
+
+  var [signupValue, setSignupValue] = useState("");
+  var [signupPasswordValue, setSignupPasswordValue] = useState("");
 
   return (
     <Grid container className={classes.container}>
-      <div className={classes.logotypeContainer}>
+      {/* <div className={classes.logotypeContainer}>
         <img src={logo} alt="logo" className={classes.logotypeImage} />
         <Typography className={classes.logotypeText}>Material Admin</Typography>
-      </div>
+      </div> */}
       <div className={classes.formContainer}>
         <div className={classes.form}>
           <Tabs
@@ -52,14 +51,14 @@ function Login(props) {
             centered
           >
             <Tab label="Login" classes={{ root: classes.tab }} />
-            <Tab label="New User" classes={{ root: classes.tab }} />
+            <Tab label="Sign up" classes={{ root: classes.tab }} />
           </Tabs>
           {activeTabId === 0 && (
             <React.Fragment>
               <Typography variant="h2" className={classes.greeting}>
                 Welcome Back!
               </Typography>
-              <Button size="large" className={classes.googleButton}>
+              {/* <Button size="large" className={classes.googleButton}>
                 <img src={google} alt="google" className={classes.googleIcon} />
                 &nbsp;Sign in with Google
               </Button>
@@ -67,7 +66,7 @@ function Login(props) {
                 <div className={classes.formDivider} />
                 <Typography className={classes.formDividerWord}>or</Typography>
                 <div className={classes.formDivider} />
-              </div>
+              </div> */}
               <Fade in={error}>
                 <Typography color="secondary" className={classes.errorMessage}>
                   Something is wrong with your login or password :(
@@ -96,8 +95,8 @@ function Login(props) {
                     input: classes.textField,
                   },
                 }}
-                value={passwordValue}
-                onChange={(e) => setPasswordValue(e.target.value)}
+                value={loginPasswordValue}
+                onChange={(e) => setLoginPasswordValue(e.target.value)}
                 margin="normal"
                 placeholder="Password"
                 type="password"
@@ -109,13 +108,13 @@ function Login(props) {
                 ) : (
                   <Button
                     disabled={
-                      loginValue.length === 0 || passwordValue.length === 0
+                      loginValue.length === 0 || loginPasswordValue.length === 0
                     }
                     onClick={() =>
                       loginUser(
                         userDispatch,
                         loginValue,
-                        passwordValue,
+                        loginPasswordValue,
                         props.history,
                         setIsLoading,
                         setError,
@@ -124,6 +123,7 @@ function Login(props) {
                     variant="contained"
                     color="primary"
                     size="large"
+                    className={classes.submitButton}
                   >
                     Login
                   </Button>
@@ -174,8 +174,8 @@ function Login(props) {
                     input: classes.textField,
                   },
                 }}
-                value={loginValue}
-                onChange={(e) => setLoginValue(e.target.value)}
+                value={signupValue}
+                onChange={(e) => setSignupValue(e.target.value)}
                 margin="normal"
                 placeholder="Email Adress"
                 type="email"
@@ -189,8 +189,8 @@ function Login(props) {
                     input: classes.textField,
                   },
                 }}
-                value={passwordValue}
-                onChange={(e) => setPasswordValue(e.target.value)}
+                value={signupPasswordValue}
+                onChange={(e) => setSignupPasswordValue(e.target.value)}
                 margin="normal"
                 placeholder="Password"
                 type="password"
@@ -204,16 +204,16 @@ function Login(props) {
                     onClick={() =>
                       loginUser(
                         userDispatch,
-                        loginValue,
-                        passwordValue,
+                        signupValue,
+                        signupPasswordValue,
                         props.history,
                         setIsLoading,
                         setError,
                       )
                     }
                     disabled={
-                      loginValue.length === 0 ||
-                      passwordValue.length === 0 ||
+                      signupValue.length === 0 ||
+                      signupPasswordValue.length === 0 ||
                       nameValue.length === 0
                     }
                     size="large"
@@ -226,7 +226,7 @@ function Login(props) {
                   </Button>
                 )}
               </div>
-              <div className={classes.formDividerContainer}>
+              {/* <div className={classes.formDividerContainer}>
                 <div className={classes.formDivider} />
                 <Typography className={classes.formDividerWord}>or</Typography>
                 <div className={classes.formDivider} />
@@ -240,7 +240,7 @@ function Login(props) {
               >
                 <img src={google} alt="google" className={classes.googleIcon} />
                 &nbsp;Sign in with Google
-              </Button>
+              </Button> */}
             </React.Fragment>
           )}
         </div>
