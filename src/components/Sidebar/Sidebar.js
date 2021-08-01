@@ -39,28 +39,46 @@ const structure = [
   },
   {
     id: 2,
-    label: "Typography",
-    link: "/app/typography",
-    icon: <TypographyIcon />,
+    label: "Demo page",
+    // link: "/app/dashboard",
+    icon: <HomeIcon />,
   },
-  { id: 3, label: "Tables", link: "/app/tables", icon: <TableIcon /> },
+  {
+    id: 3,
+    label: "Demo page",
+    // link: "/app/dashboard",
+    icon: <HomeIcon />,
+  },
   {
     id: 4,
-    label: "Notifications",
-    link: "/app/notifications",
-    icon: <NotificationsIcon />,
+    label: "Demo page",
+    // link: "/app/dashboard",
+    icon: <HomeIcon />,
   },
-  {
-    id: 5,
-    label: "UI Elements",
-    link: "/app/ui",
-    icon: <UIElementsIcon />,
-    children: [
-      { label: "Icons", link: "/app/ui/icons" },
-      { label: "Charts", link: "/app/ui/charts" },
-      { label: "Maps", link: "/app/ui/maps" },
-    ],
-  },
+  // {
+  //   id: 2,
+  //   label: "Typography",
+  //   link: "/app/typography",
+  //   icon: <TypographyIcon />,
+  // },
+  // { id: 3, label: "Tables", link: "/app/tables", icon: <TableIcon /> },
+  // {
+  //   id: 4,
+  //   label: "Notifications",
+  //   link: "/app/notifications",
+  //   icon: <NotificationsIcon />,
+  // },
+  // {
+  //   id: 5,
+  //   label: "UI Elements",
+  //   link: "/app/ui",
+  //   icon: <UIElementsIcon />,
+  //   children: [
+  //     { label: "Icons", link: "/app/ui/icons" },
+  //     { label: "Charts", link: "/app/ui/charts" },
+  //     { label: "Maps", link: "/app/ui/maps" },
+  //   ],
+  // },
 ];
 
 function Sidebar({ location }) {
@@ -109,7 +127,7 @@ function Sidebar({ location }) {
         </IconButton>
       </div>
       <div className={classes.userArea}>
-        <img src="/favicon.ico" className={classes.sideBarImage} />
+        <img src="/person.png" className={classes.sideBarImage} />
         <h3>John Doe</h3>
       </div>
       <List className={classes.sidebarList}>
