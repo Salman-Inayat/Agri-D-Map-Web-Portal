@@ -24,6 +24,7 @@ export default makeStyles((theme) => ({
     color: "#bdbdbd",
     height: "150px",
     marginBottom: theme.spacing(2),
+    cursor: "pointer",
   },
   thumbsContainer: {
     display: "flex",
@@ -58,5 +59,12 @@ export default makeStyles((theme) => ({
     [theme.breakpoints.down("sm")]: {
       padding: "0px",
     },
+  },
+  upload_container: {
+    display: "flex",
+    flexDirection: "column",
+  },
+  upload_button: {
+    marginTop: theme.spacing(1),
   },
 }));
