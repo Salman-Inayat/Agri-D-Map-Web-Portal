@@ -83,15 +83,6 @@ function Image_Picker(props) {
     return { url: "http://localhost:3000/image-segment", body };
   };
 
-  // const handleChangeStatus = ({ meta, remove }, status) => {
-  //   if (status === "headers_received") {
-  //     toast(`${meta.name} uploaded!`);
-  //     remove();
-  //   } else if (status === "aborted") {
-  //     toast(`${meta.name}, upload failed...`);
-  //   }
-  // };
-
   const handleChangeStatus = ({ xhr }) => {
     if (xhr) {
       xhr.onreadystatechange = () => {
@@ -121,7 +112,7 @@ function Image_Picker(props) {
         }}
       />
       <div>
-        <img src={`http://localhost:3000/${imageFile}`} alt="demo" />
+        <img src={`http://localhost:3000/${imageFile}`} alt="" />
       </div>
     </>
   );
