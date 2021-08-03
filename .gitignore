@@ -2,9 +2,11 @@
 
 # dependencies
 /node_modules
+/AgriDMap_Server/node_modules
 /.pnp
 .pnp.js
 .idea/
+/AgriDMap_Server/uploads/
 
 # testing
 /coverage
