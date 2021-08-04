@@ -6,7 +6,9 @@
 /.pnp
 .pnp.js
 .idea/
-/AgriDMap_Server/uploads/
+/AgriDMap_Server/u2net/images
+/AgriDMap_Server/u2net/results
+/AgriDMap_Server/u2net/output
 
 # testing
 /coverage
