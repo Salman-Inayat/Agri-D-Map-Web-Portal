@@ -6,18 +6,17 @@ from tensorflow.keras.preprocessing.image import load_img
 from tensorflow.keras.preprocessing.image import img_to_array
 
 os.chdir("./u2net")
-print(os.getcwd())
 
-import u2net_test.py
+#import u2net_test.py
 
 
 # Testing on CPU by disabling GPU
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 def background_removal():
+    os.system("python -W ignore u2net_test.py")
     #!python -W ignore u2net_test.py
    
-
     image_dir = os.path.join(os.getcwd(), 'images')
     names = [name[:-4] for name in os.listdir(image_dir)]
     THRESHOLD = 0.9
@@ -99,3 +98,5 @@ def background_removal():
     #   result_img = Img.fromarray(result.astype('uint8'), 'RGBA')
     #   print('\nINPUT                                    BACKGROUND REMOVED                     BOUNDING BOX                               SALIENT MAP\n')
     #   display(result_img)
+
+background_removal()
