@@ -7,26 +7,16 @@ const imageToBase64 = require("image-to-base64");
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "uploads");
+    cb(null, "u2net/images");
   },
   filename: function (req, file, cb) {
     cb(
       null,
-      `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`
+      `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`,
     );
   },
 });
 var upload = multer({ storage: storage });
-
-// // function to encode file data to base64 encoded string
-// function base64_encode(file) {
-//   return fs.readFileSync(file, { encoding: "base64" });
-//   // return new Buffer(bitmap).toString("base64");
-// }
-
-function base64_encode(file) {
-  return "data:image/png;base64," + fs.readFileSync(file, "base64");
-}
 
 router.get("/", function (req, res, next) {
   const { spawn } = require("child_process");
@@ -49,13 +39,24 @@ router.get("/", function (req, res, next) {
 router.post("/image-segment", upload.single("dataFiles"), (req, res, next) => {
   const file = req.file;
 
-  const directoryPath = path.resolve("uploads");
-
   if (!file) {
     return res.status(400).send({ message: "Please upload a file." });
   }
 
-  return res.send(file);
+  const { spawn } = require("child_process");
+
+  const python = spawn("python", ["segment.py"]);
+
+  python.stdout.on("data", function (data) {
+    console.log("Pipe data from python script ...");
+  });
+
+  python.on("close", (code) => {
+    console.log(`child process close all stdio with code ${code}`);
+  });
+  setTimeout(() => {
+    res.send(file);
+  }, 30000);
 });
 
 module.exports = router;
