@@ -20,9 +20,9 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "u2net/output")));
 
-app.use(express.static(__dirname + "/uploads")); //Serves resources from public folder
+app.use(express.static(__dirname + "u2net/output")); //Serves resources from public folder
 
 app.use("/", indexRouter);
 
