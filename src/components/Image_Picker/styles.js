@@ -67,4 +67,8 @@ export default makeStyles((theme) => ({
   upload_button: {
     marginTop: theme.spacing(1),
   },
+  preview_image: {
+    height: "300px",
+    width: "300px",
+  },
 }));

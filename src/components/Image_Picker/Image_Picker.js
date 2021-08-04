@@ -23,7 +23,7 @@ const Preview = ({ meta }) => {
 function Image_Picker(props) {
   const [imageFile, setimageFile] = useState("");
 
-  // const classes = useStyles();
+  const classes = useStyles();
 
   // const [files, setFiles] = useState([]);
   // const { getRootProps, getInputProps } = useDropzone({
@@ -88,7 +88,9 @@ function Image_Picker(props) {
       xhr.onreadystatechange = () => {
         if (xhr.readyState === 4) {
           const result = JSON.parse(xhr.response);
-          setimageFile(result.filename);
+          console.log(result);
+          const new_image_file = result.filename.slice(0, -3) + "PNG";
+          setimageFile(new_image_file);
         }
       };
     }
@@ -112,7 +114,11 @@ function Image_Picker(props) {
         }}
       />
       <div>
-        <img src={`http://localhost:3000/${imageFile}`} alt="" />
+        <img
+          src={`http://localhost:3000/${imageFile}`}
+          className={classes.preview_image}
+          alt=""
+        />
       </div>
     </>
   );
