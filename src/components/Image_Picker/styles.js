@@ -70,5 +70,6 @@ export default makeStyles((theme) => ({
   preview_image: {
     height: "300px",
     width: "300px",
+    border: "2px solid black",
   },
 }));
