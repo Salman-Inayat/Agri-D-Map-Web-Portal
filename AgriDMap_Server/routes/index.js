@@ -47,9 +47,9 @@ router.post("/image-segment", upload.single("dataFiles"), (req, res, next) => {
 
   const python = spawn("python", ["segment.py"]);
 
-  python.stdout.on("data", function (data) {
-    console.log("Pipe data from python script ...");
-  });
+  // python.stdout.on("data", function (data) {
+  //   console.log("Pipe data from python script ...");
+  // });
 
   python.on("close", (code) => {
     console.log(`child process close all stdio with code ${code}`);
