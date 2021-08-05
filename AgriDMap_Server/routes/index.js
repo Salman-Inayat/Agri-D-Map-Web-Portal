@@ -52,11 +52,10 @@ router.post("/image-segment", upload.single("dataFiles"), (req, res, next) => {
   // });
 
   python.on("close", (code) => {
+    res.send(file);
+    console.log("File name sent");
     console.log(`child process close all stdio with code ${code}`);
   });
-  setTimeout(() => {
-    res.send(file);
-  }, 30000);
 });
 
 module.exports = router;
