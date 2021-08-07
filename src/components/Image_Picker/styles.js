@@ -67,9 +67,18 @@ export default makeStyles((theme) => ({
   upload_button: {
     marginTop: theme.spacing(1),
   },
+  image_container: {
+    width: "300px",
+    height: "300px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   preview_image: {
     height: "300px",
     width: "300px",
-    border: "2px solid black",
+  },
+  loading_gif: {
+    width: "150px",
   },
 }));

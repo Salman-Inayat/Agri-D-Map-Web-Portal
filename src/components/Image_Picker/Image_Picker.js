@@ -20,11 +20,12 @@ const Preview = ({ meta }) => {
 
 function Image_Picker(props) {
   const [imageFile, setimageFile] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState();
 
   const classes = useStyles();
 
   const getUploadParams = ({ file }) => {
+    setLoading(true);
     const body = new FormData();
     body.append("dataFiles", file);
     return { url: props.url, body };
@@ -49,7 +50,6 @@ function Image_Picker(props) {
       <Dropzone
         getUploadParams={getUploadParams}
         onChangeStatus={handleChangeStatus}
-        // onSubmit={handleSubmit}
         accept="image/*"
         maxFiles={1}
         multiple={false}
@@ -61,19 +61,18 @@ function Image_Picker(props) {
           dropzoneActive: { borderColor: "green" },
         }}
       />
-      {loading ? (
-        <div>
-          <img src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif" />
-        </div>
-      ) : (
-        <div>
+      <div className={classes.image_container}>
+        {loading ? (
+          <img src="/loading.gif" className={classes.loading_gif} />
+        ) : (
           <img
             src={`http://localhost:3000/${imageFile}`}
+            // className={`${"loading" ? "" : classes.preview_image}`}
             className={classes.preview_image}
             alt=""
           />
-        </div>
-      )}
+        )}
+      </div>
     </>
   );
 }
