@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
-// import { useDropzone } from "react-dropzone";
 import Dropzone from "react-dropzone-uploader";
 import useStyles from "./styles.js";
 import Button from "@material-ui/core/Button";
 import "react-dropzone-uploader/dist/styles.css";
-import { CompareArrowsOutlined } from "@material-ui/icons";
 
 const Preview = ({ meta }) => {
   const { name, percent, status, previewUrl } = meta;
@@ -22,60 +20,9 @@ const Preview = ({ meta }) => {
 
 function Image_Picker(props) {
   const [imageFile, setimageFile] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const classes = useStyles();
-
-  // const [files, setFiles] = useState([]);
-  // const { getRootProps, getInputProps } = useDropzone({
-  //   accept: "image/*",
-  //   onDrop: (acceptedFiles) => {
-  //     setFiles(
-  //       acceptedFiles.map((file) =>
-  //         Object.assign(file, {
-  //           preview: URL.createObjectURL(file),
-  //         }),
-  //       ),
-  //     );
-  //   },
-  // });
-
-  // const thumbs = files.map((file) => (
-  //   <div className={classes.upload_container}>
-  //     <div className={classes.thumb} key={file.name}>
-  //       <img src={file.preview} className={classes.img} />
-  //     </div>
-
-  //     <Button
-  //       variant="outlined"
-  //       color="primary"
-  //       className={classes.upload_button}
-  //       onClick={() => alert("You uploaded the photo")}
-  //     >
-  //       Upload
-  //     </Button>
-  //   </div>
-  // ));
-
-  // useEffect(
-  //   () => () => {
-  //     // Make sure to revoke the data uris to avoid memory leaks
-  //     files.forEach((file) => URL.revokeObjectURL(file.preview));
-  //   },
-  //   [files],
-  // );
-
-  // return (
-  //   <section className={classes.container}>
-  //     <div {...getRootProps({ className: `${classes.dropzone}` })}>
-  //       <input {...getInputProps()} />
-  //       <span className={classes.span}>📁</span>
-  //       <p className={classes.p}>
-  //         Drag 'n' drop some files here, or click to select files
-  //       </p>
-  //     </div>
-  //     <aside className={classes.thumbsContainer}>{thumbs}</aside>
-  //   </section>
-  // );
 
   const getUploadParams = ({ file }) => {
     const body = new FormData();
@@ -91,6 +38,7 @@ function Image_Picker(props) {
           console.log(result);
           const new_image_file = result.filename.slice(0, -3) + "PNG";
           setimageFile(new_image_file);
+          setLoading(false);
         }
       };
     }
@@ -113,13 +61,19 @@ function Image_Picker(props) {
           dropzoneActive: { borderColor: "green" },
         }}
       />
-      <div>
-        <img
-          src={`http://localhost:3000/${imageFile}`}
-          className={classes.preview_image}
-          alt=""
-        />
-      </div>
+      {loading ? (
+        <div>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif" />
+        </div>
+      ) : (
+        <div>
+          <img
+            src={`http://localhost:3000/${imageFile}`}
+            className={classes.preview_image}
+            alt=""
+          />
+        </div>
+      )}
     </>
   );
 }
