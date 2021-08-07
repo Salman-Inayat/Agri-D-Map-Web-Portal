@@ -27,7 +27,7 @@ function Image_Picker(props) {
   const getUploadParams = ({ file }) => {
     const body = new FormData();
     body.append("dataFiles", file);
-    return { url: "http://localhost:3000/image-segment", body };
+    return { url: props.url, body };
   };
 
   const handleChangeStatus = ({ xhr }) => {
