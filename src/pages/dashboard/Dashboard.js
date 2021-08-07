@@ -52,12 +52,6 @@ export default function Dashboard(props) {
             <Audio_Player />
           </Grid>
         </Grid>
-        <Grid item md={12}>
-          <Button variant="outlined" color="secondary" onClick={handleClick}>
-            Click
-          </Button>
-          <h1>{response}</h1>
-        </Grid>
       </Grid>
     </>
   );
