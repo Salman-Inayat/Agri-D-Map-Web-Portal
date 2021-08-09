@@ -21,7 +21,7 @@ export default function Dashboard(props) {
 
   return (
     <>
-      <Grid container spacing={4}>
+      <Grid container spacing={1}>
         <Grid item md={12} className={classes.image_picker_grid}>
           <Image_Picker url="http://localhost:3000/image-segment" />
         </Grid>

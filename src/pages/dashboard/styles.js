@@ -2,8 +2,12 @@ import { makeStyles } from "@material-ui/styles";
 
 export default makeStyles((theme) => ({
   image_picker_grid: {
-    paddingRight: theme.spacing(15),
-    paddingLeft: theme.spacing(15),
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    // paddingRight: theme.spacing(2),
+    // paddingLeft: theme.spacing(2),
   },
   output_container: {
     paddingRight: theme.spacing(20),
