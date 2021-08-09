@@ -81,4 +81,9 @@ export default makeStyles((theme) => ({
   loading_gif: {
     width: "150px",
   },
+  image_picker_container: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
 }));

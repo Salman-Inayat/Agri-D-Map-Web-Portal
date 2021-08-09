@@ -46,18 +46,17 @@ function Image_Picker(props) {
   };
 
   return (
-    <>
+    <div className={classes.image_picker_container}>
       <Dropzone
         getUploadParams={getUploadParams}
         onChangeStatus={handleChangeStatus}
         accept="image/*"
         maxFiles={1}
         multiple={false}
-        // PreviewComponent={Preview}
         canCancel={false}
         inputContent="Drop A File"
         styles={{
-          dropzone: { width: 400, height: 200 },
+          dropzone: { width: 400, height: 200, marginRight: 30 },
           dropzoneActive: { borderColor: "green" },
         }}
       />
@@ -67,13 +66,12 @@ function Image_Picker(props) {
         ) : (
           <img
             src={`http://localhost:3000/${imageFile}`}
-            // className={`${"loading" ? "" : classes.preview_image}`}
             className={classes.preview_image}
             alt=""
           />
         )}
       </div>
-    </>
+    </div>
   );
 }
 
