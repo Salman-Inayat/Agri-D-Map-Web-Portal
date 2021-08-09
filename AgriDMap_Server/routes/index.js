@@ -2,8 +2,7 @@ var express = require("express");
 var router = express.Router();
 const path = require("path");
 const multer = require("multer");
-var fs = require("fs");
-const imageToBase64 = require("image-to-base64");
+var fse = require("fs-extra");
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -16,24 +15,21 @@ var storage = multer.diskStorage({
     );
   },
 });
+
 var upload = multer({ storage: storage });
 
-router.get("/", function (req, res, next) {
-  const { spawn } = require("child_process");
-  var dataToSend;
+router.get("/", (req, res) => {
+  // try {
+  //   const folder_to_be_deleted = process.cwd() + "/u2net/output";
+  //   fse.emptyDir(folder_to_be_deleted, (err) => {
+  //     if (err) return console.error(err);
+  //     console.log("success!");
+  //   });
+  // } catch (err) {
+  //   console.log(err);
+  // }
 
-  const python = spawn("python", ["script.py"]);
-
-  python.stdout.on("data", function (data) {
-    console.log("Pipe data from python script ...");
-    dataToSend = data.toString();
-  });
-
-  python.on("close", (code) => {
-    console.log(`child process close all stdio with code ${code}`);
-    // send data to browser
-    res.send(dataToSend);
-  });
+  res.send("Hello again");
 });
 
 router.post("/image-segment", upload.single("dataFiles"), (req, res, next) => {
@@ -47,14 +43,21 @@ router.post("/image-segment", upload.single("dataFiles"), (req, res, next) => {
 
   const python = spawn("python", ["segment.py"]);
 
-  // python.stdout.on("data", function (data) {
-  //   console.log("Pipe data from python script ...");
-  // });
-
   python.on("close", (code) => {
     res.send(file);
     console.log("File name sent");
     console.log(`child process close all stdio with code ${code}`);
+
+    const images_folder = process.cwd() + "/u2net/images";
+    const results_folder = process.cwd() + "/u2net/results";
+    fse.emptyDir(images_folder, (err) => {
+      if (err) return console.error(err);
+      console.log("Images folder deleted!");
+    });
+    fse.emptyDir(results_folder, (err) => {
+      if (err) return console.error(err);
+      console.log("Results folder deleted!");
+    });
   });
 });
 
