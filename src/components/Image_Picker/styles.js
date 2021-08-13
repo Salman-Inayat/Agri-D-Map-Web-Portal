@@ -77,6 +77,7 @@ export default makeStyles((theme) => ({
   preview_image: {
     height: "300px",
     width: "300px",
+    border: "1px solid black",
   },
   loading_gif: {
     width: "150px",
