@@ -50,13 +50,32 @@ router.post("/image-segment", upload.single("dataFiles"), (req, res, next) => {
 
     const images_folder = process.cwd() + "/u2net/images";
     const results_folder = process.cwd() + "/u2net/results";
+    const output_folder = process.cwd() + "/u2net/output";
+
     fse.emptyDir(images_folder, (err) => {
       if (err) return console.error(err);
       console.log("Images folder deleted!");
     });
+
     fse.emptyDir(results_folder, (err) => {
       if (err) return console.error(err);
       console.log("Results folder deleted!");
+    });
+
+    fse.readdir(output_folder, (err, files) => {
+      if (err) {
+        console.log(err);
+      }
+
+      files.forEach((f) => {
+        const fileDir = path.join(output_folder, f);
+        const image_file = file.filename.slice(0, -3) + "PNG";
+
+        if (f !== image_file) {
+          fse.unlinkSync(fileDir);
+        }
+      });
+      console.log("Output folder cleaned");
     });
   });
 });
