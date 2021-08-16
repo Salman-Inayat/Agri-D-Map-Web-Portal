@@ -127,7 +127,7 @@ function Sidebar({ location }) {
         </IconButton>
       </div>
       <div className={classes.userArea}>
-        <img src="/person.png" className={classes.sideBarImage} />
+        <img src="/person.png" className={classes.sideBarImage} alt="" />
         <h3>John Doe</h3>
       </div>
       <List className={classes.sidebarList}>

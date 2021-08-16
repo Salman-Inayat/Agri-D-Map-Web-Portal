@@ -64,10 +64,12 @@ export default makeStyles((theme) => ({
     },
   },
   userArea: {
-    padding: "40px 0px",
+    margin: "30px 10px 10px 10px",
+    padding: "20px 0px",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    borderBottom: "1px solid white",
   },
   sideBarImage: {
     height: "100px",
