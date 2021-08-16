@@ -1,22 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Dropzone from "react-dropzone-uploader";
 import useStyles from "./styles.js";
-import Button from "@material-ui/core/Button";
 import "react-dropzone-uploader/dist/styles.css";
 
-const Preview = ({ meta }) => {
-  const { name, percent, status, previewUrl } = meta;
-  return (
-    <div className="preview-box">
-      <img src={previewUrl} style={{ height: "100px", width: "100px" }} />{" "}
-      <span className="name">{name}</span> -{" "}
-      <span className="status">{status}</span>
-      {status !== "done" && (
-        <span className="percent"> ({Math.round(percent)}%)</span>
-      )}
-    </div>
-  );
-};
+// const Preview = ({ meta }) => {
+//   const { name, percent, status, previewUrl } = meta;
+//   return (
+//     <div className="preview-box">
+//       <img src={previewUrl} alt="" style={{ height: "100px", width: "100px" }} />{" "}
+//       <span className="name">{name}</span> -{" "}
+//       <span className="status">{status}</span>
+//       {status !== "done" && (
+//         <span className="percent"> ({Math.round(percent)}%)</span>
+//       )}
+//     </div>
+//   );
+// };
 
 function Image_Picker(props) {
   const [imageFile, setimageFile] = useState("");
@@ -62,7 +61,7 @@ function Image_Picker(props) {
       />
       <div className={classes.image_container}>
         {loading ? (
-          <img src="/loading.gif" className={classes.loading_gif} />
+          <img src="/loading.gif" className={classes.loading_gif} alt="" />
         ) : (
           <img
             src={`http://localhost:3000/${imageFile}`}
