@@ -4,13 +4,6 @@ import classnames from "classnames";
 import { Box, IconButton, Link } from "@material-ui/core";
 import Icon from "@mdi/react";
 
-//icons
-import {
-  mdiFacebook as FacebookIcon,
-  mdiTwitter as TwitterIcon,
-  mdiGithub as GithubIcon,
-} from "@mdi/js";
-
 // styles
 import useStyles from "./styles";
 
@@ -21,6 +14,7 @@ import Sidebar from "../Sidebar";
 // pages
 import Dashboard from "../../pages/dashboard";
 import Image_Segmentation from "../../pages/Image_Segmentation/Image_Segmentation";
+import Vari from "../../pages/Vari/Vari";
 import Typography from "../../pages/typography";
 import Notifications from "../../pages/notifications";
 import Maps from "../../pages/maps";
@@ -51,6 +45,7 @@ function Layout(props) {
           <Switch>
             <Route path="/app/dashboard" component={Dashboard} />
             <Route path="/app/segmentation" component={Image_Segmentation} />
+            <Route path="/app/vari" component={Vari} />
             <Route path="/app/typography" component={Typography} />
             <Route path="/app/tables" component={Tables} />
             <Route path="/app/notifications" component={Notifications} />

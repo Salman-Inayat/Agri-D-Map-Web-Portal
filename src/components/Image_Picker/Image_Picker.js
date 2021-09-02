@@ -36,7 +36,7 @@ function Image_Picker(props) {
         if (xhr.readyState === 4) {
           const result = JSON.parse(xhr.response);
           console.log(result);
-          const new_image_file = result.filename.slice(0, -3) + "PNG";
+          const new_image_file = result.filename.slice(0, -3) + "png";
           setimageFile(new_image_file);
           setLoading(false);
         }
