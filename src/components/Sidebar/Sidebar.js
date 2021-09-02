@@ -38,8 +38,8 @@ const structure = [
   },
   {
     id: 2,
-    label: "Demo page",
-    // link: "/app/dashboard",
+    label: "Vari  Calculation",
+    link: "/app/vari",
     icon: <HomeIcon />,
   },
   {
