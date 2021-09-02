@@ -91,7 +91,7 @@ def background_removal():
       inp_img = cv2.resize(inp_img,(int(shape[1]/3),int(shape[0]/3)))
       rem_back = cv2.resize(rem_back_scaled,(int(shape[1]/3),int(shape[0]/3)))
       rem_save = Img.fromarray(rem_back.astype('uint8'), 'RGBA')
-      rem_save.save("./output/" + name + ".PNG")
+      rem_save.save("../output/" + name + ".png")
     #   box_img = cv2.resize(box_img_scaled,(int(shape[1]/3),int(shape[0]/3)))
     #   sal_img = cv2.resize(sal_img_scaled,(int(shape[1]/3),int(shape[0]/3)))
     #   result = np.concatenate((inp_img,rem_back,box_img,sal_img),axis=1)

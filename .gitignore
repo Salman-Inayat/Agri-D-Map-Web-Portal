@@ -9,6 +9,8 @@
 /AgriDMap_Server/u2net/images
 /AgriDMap_Server/u2net/results
 /AgriDMap_Server/u2net/output
+/AgriDMap_Server/output
+/AgriDMap_Server/vari/input
 
 # testing
 /coverage
