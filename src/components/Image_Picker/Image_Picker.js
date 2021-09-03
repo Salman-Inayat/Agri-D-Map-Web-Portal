@@ -60,9 +60,19 @@ function Image_Picker(props) {
         }}
       />
       <div className={classes.image_container}>
-        {loading ? (
+        {/* {loading ? (
           <img src="/loading.gif" className={classes.loading_gif} alt="" />
         ) : (
+          <img
+            src={`http://localhost:3000/${imageFile}`}
+            className={classes.preview_image}
+            alt=""
+          />
+        )} */}
+        {loading && (
+          <img src="/loading.gif" className={classes.loading_gif} alt="" />
+        )}
+        {imageFile && (
           <img
             src={`http://localhost:3000/${imageFile}`}
             className={classes.preview_image}
