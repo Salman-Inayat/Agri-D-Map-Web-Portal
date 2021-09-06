@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/styles";
 import AudioPlayer from "material-ui-audio-player";
+import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -58,12 +59,31 @@ const useStyles = makeStyles((theme) => {
 });
 
 function Audio_Player() {
+  const [counter, setCounter] = useState(0);
+  const [audio, setAudio] = useState();
+  const [audioToggle, setAudioToggle] = useState(false);
+
+  const handleCounter = function () {
+    setAudioToggle(true);
+    setCounter(counter + 1);
+    if (counter === 1) {
+      setAudio("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3");
+      console.log("Audio 1");
+    } else if (counter === 2) {
+      setAudio(
+        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3",
+      );
+      console.log("Audio 2");
+    }
+  };
+
   return (
-    <AudioPlayer
-      width="300px"
-      useStyles={useStyles}
-      src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
-    />
+    <div>
+      <Button onClick={handleCounter}>current value = {counter}</Button>
+      {audioToggle && (
+        <AudioPlayer width="300px" useStyles={useStyles} src={audio} />
+      )}
+    </div>
   );
 }
 
