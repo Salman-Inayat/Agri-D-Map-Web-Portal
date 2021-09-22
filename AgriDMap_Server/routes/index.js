@@ -99,21 +99,25 @@ router.post("/vari", vari_upload.single("dataFiles"), (req, res, next) => {
   console.log("Spawning child process...");
   const python = spawn("python", ["vari.py", file.filename]);
 
+  python.stdout.on("data", (data) => {
+    console.log(data.toString());
+  });
+
+  python.stderr.on("data", (data) => {
+    console.log(data.toString());
+  });
+
   python.on("close", (code) => {
     res.send(file);
     console.log("File name sent");
     console.log(`child process close all stdio with code ${code}`);
-
-    python.stdout.on("data", (data) => {
-      console.log(data);
-    });
 
     const images_folder = process.cwd() + "/vari/input";
     const output_folder = process.cwd() + "/output";
 
     fse.emptyDir(images_folder, (err) => {
       if (err) return console.error(err);
-      console.log("Input folder deleted!");
+      console.log("Input folder cleaned!");
     });
 
     fse.readdir(output_folder, (err, files) => {
