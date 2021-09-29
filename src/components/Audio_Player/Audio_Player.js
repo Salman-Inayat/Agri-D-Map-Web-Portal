@@ -68,12 +68,10 @@ function Audio_Player() {
     setCounter(counter + 1);
     if (counter === 1) {
       setAudio("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3");
-      console.log("Audio 1");
     } else if (counter === 2) {
       setAudio(
         "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3",
       );
-      console.log("Audio 2");
     }
   };
 
