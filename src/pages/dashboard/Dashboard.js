@@ -9,37 +9,75 @@ import "react-dropzone-uploader/dist/styles.css";
 // import ReactWeather, { useOpenWeather } from "react-open-weather";
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import "mapbox-gl/dist/mapbox-gl.css";
+import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
+import * as turf from "@turf/turf";
+import MapboxDraw from "@mapbox/mapbox-gl-draw";
 
 mapboxgl.accessToken =
   "pk.eyJ1Ijoic2FsbWFuLWluYXlhdCIsImEiOiJja3U3OGNzZzQzNHVlMm9xaG9sZmtoOXI3In0.rF7GhHsrNL8YPMUCLCI92A";
 // const ReactWeather, { useOpenWeather } = require("react-open-weather");
 
+const API_KEY = "b22d00c2f91807b86822083ead929d76";
 export default function Dashboard(props) {
   var classes = useStyles();
 
   const mapContainer = useRef(null);
   const map = useRef(null);
-  const [lng, setLng] = useState(77.5946);
-  const [lat, setLat] = useState(30.7333);
-  const [zoom, setZoom] = useState(11);
+  const draw = useRef(null);
+  const [lng, setLng] = useState(73.1386);
+  const [lat, setLat] = useState(33.6762);
+  const [zoom, setZoom] = useState(13.39);
+  const [roundedArea, setroundedArea] = useState(0);
+  const [location, setLocation] = useState({
+    latitude: 34,
+    longitude: 45,
+  });
+  const [weatherData, setweatherData] = useState({});
 
   useEffect(() => {
+    console.log(navigator.geolocation);
     navigator.geolocation.getCurrentPosition((position) => {
-      setLng(position.coords.longitude);
-      setLat(position.coords.latitude);
+      setLocation({
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      });
     });
-    console.log("Initial Values: ", lng);
-  });
+    getList();
+  }, []);
+
+  const getList = () => {
+    return fetch(
+      `https://api.agromonitoring.com/agro/1.0/weather?lat=${location.latitude}=&lon=${location.longitude}&appid=${API_KEY}`,
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        setweatherData(data);
+        console.log(weatherData);
+      });
+  };
 
   useEffect(() => {
     if (map.current) return; // initialize map only once
-    console.log("Updated value: ", lng);
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: "mapbox://styles/mapbox/streets-v11",
+      style: "mapbox://styles/salman-inayat/cku817f1m079d18mqqh70gguw",
       center: [lng, lat],
       zoom: zoom,
     });
+
+    draw.current = new MapboxDraw({
+      displayControlsDefault: false,
+      controls: {
+        polygon: true,
+        trash: true,
+      },
+      defaultMode: "draw_polygon",
+    });
+    map.current.addControl(draw.current);
+
+    map.current.on("draw.create", updateArea);
+    map.current.on("draw.delete", updateArea);
+    map.current.on("draw.update", updateArea);
   });
 
   useEffect(() => {
@@ -50,6 +88,27 @@ export default function Dashboard(props) {
       setZoom(map.current.getZoom().toFixed(2));
     });
   });
+
+  const showMyLocation = () => {
+    if (!map.current) return;
+    map.current.flyTo({
+      center: [location.longitude, location.latitude],
+      essential: true,
+    });
+  };
+
+  function updateArea(e) {
+    const data = draw.current.getAll();
+    console.log(data);
+    if (data.features.length > 0) {
+      const area = turf.area(data);
+      // Restrict the area to 2 decimal points.
+      setroundedArea(Math.round(area * 100) / 100);
+      // rounded_area = Math.round(area * 100) / 100;
+    } else {
+      if (e.type !== "draw.delete") alert("Click the map to draw a polygon.");
+    }
+  }
 
   // const [imageFile, setimageFile] = useState("");
 
@@ -174,12 +233,24 @@ export default function Dashboard(props) {
             showForecast
             theme={customStyles}
           />{" "} */}
-          <div className={classes.sidebar}>
+          {/* <div className={classes.sidebar}>
             Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
+          </div> */}
+          <div className="calculation-box">
+            <p>Click the map to draw a polygon.</p>
+            <div> {roundedArea} square meters</div>
           </div>
           <div ref={mapContainer} className={classes.map_container} />
         </Grid>
+        <button className="btn btn-primary" onClick={showMyLocation}>
+          Locate Me
+        </button>
       </Grid>
+      {/* <Grid item xs={12} md={6}>
+<div>
+  <h2>{}</h2>
+</div>
+      </Grid> */}
     </Grid>
   );
 }
