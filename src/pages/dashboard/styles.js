@@ -39,4 +39,20 @@ export default makeStyles((theme) => ({
     height: "10vh",
     padding: "auto",
   },
+  map_container: {
+    height: "400px",
+    position: "relative",
+  },
+  sidebar: {
+    backgroundColor: "rgba(35, 55, 75, 0.9)",
+    color: "#fff",
+    padding: "6px 12px",
+    fontFamily: "monospace",
+    zIndex: "1",
+    position: "absolute",
+    top: "0",
+    left: "0",
+    margin: "12px",
+    borderRadius: "4px",
+  },
 }));
