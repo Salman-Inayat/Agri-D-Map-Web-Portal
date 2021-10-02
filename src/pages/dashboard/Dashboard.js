@@ -2,22 +2,31 @@ import React, { useRef, useEffect, useState } from "react";
 import { Grid } from "@material-ui/core";
 
 // styles
-import Dropzone from "react-dropzone-uploader";
 import useStyles from "./styles.js";
 import "react-dropzone-uploader/dist/styles.css";
 // import Audio_Player from "../../components/Audio_Player/Audio_Player";
-// import ReactWeather, { useOpenWeather } from "react-open-weather";
+
+import Geocode from "react-geocode";
+
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import "mapbox-gl/dist/mapbox-gl.css";
 import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 import * as turf from "@turf/turf";
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
+import WeatherWidget from "../../components/Weather_Widget/WeatherWidget";
+import Button from "@material-ui/core/Button";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from "@material-ui/pickers";
+import TextField from "@material-ui/core/TextField";
+
+import "date-fns";
+import DateFnsUtils from "@date-io/date-fns";
 
 mapboxgl.accessToken =
   "pk.eyJ1Ijoic2FsbWFuLWluYXlhdCIsImEiOiJja3U3OGNzZzQzNHVlMm9xaG9sZmtoOXI3In0.rF7GhHsrNL8YPMUCLCI92A";
-// const ReactWeather, { useOpenWeather } = require("react-open-weather");
 
-const API_KEY = "b22d00c2f91807b86822083ead929d76";
 export default function Dashboard(props) {
   var classes = useStyles();
 
@@ -26,34 +35,63 @@ export default function Dashboard(props) {
   const draw = useRef(null);
   const [lng, setLng] = useState(73.1386);
   const [lat, setLat] = useState(33.6762);
-  const [zoom, setZoom] = useState(13.39);
+  const [zoom, setZoom] = useState(15);
   const [roundedArea, setroundedArea] = useState(0);
   const [location, setLocation] = useState({
-    latitude: 34,
-    longitude: 45,
+    latitude: 73,
+    longitude: 32,
   });
-  const [weatherData, setweatherData] = useState({});
+  const [city, setCity] = useState("");
+  const [polygon, setPolygon] = useState({});
+  const [fromDate, setfromDate] = useState(new Date());
+  const [toDate, settoDate] = useState(new Date());
+  const [fromDateUNIX, setfromDateUNIX] = useState(0);
+  const [toDateUNIX, settoDateUNIX] = useState(0);
+  const [polygonName, setpolygonName] = useState("");
+  const [polygonId, setPolygonId] = useState();
 
   useEffect(() => {
-    console.log(navigator.geolocation);
     navigator.geolocation.getCurrentPosition((position) => {
       setLocation({
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
       });
     });
-    getList();
   }, []);
 
-  const getList = () => {
-    return fetch(
-      `https://api.agromonitoring.com/agro/1.0/weather?lat=${location.latitude}=&lon=${location.longitude}&appid=${API_KEY}`,
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        setweatherData(data);
-        console.log(weatherData);
-      });
+  useEffect(() => {
+    getCity();
+  }, [location.latitude, location.longitude]);
+
+  const getCity = () => {
+    return Geocode.fromLatLng(location.latitude, location.longitude).then(
+      (response) => {
+        let city, state, country;
+        for (
+          let i = 0;
+          i < response.results[0].address_components.length;
+          i++
+        ) {
+          for (
+            let j = 0;
+            j < response.results[0].address_components[i].types.length;
+            j++
+          ) {
+            switch (response.results[0].address_components[i].types[j]) {
+              case "locality":
+                city = response.results[0].address_components[i].long_name;
+                break;
+              default:
+                break;
+            }
+          }
+        }
+        setCity(city);
+      },
+      (error) => {
+        console.error(error);
+      },
+    );
   };
 
   useEffect(() => {
@@ -99,144 +137,82 @@ export default function Dashboard(props) {
 
   function updateArea(e) {
     const data = draw.current.getAll();
-    console.log(data);
+    const polygonData = turf.polygon(data.features[0].geometry.coordinates);
+    console.log(polygonData);
+
+    setPolygon(polygonData);
+
     if (data.features.length > 0) {
       const area = turf.area(data);
-      // Restrict the area to 2 decimal points.
       setroundedArea(Math.round(area * 100) / 100);
-      // rounded_area = Math.round(area * 100) / 100;
     } else {
       if (e.type !== "draw.delete") alert("Click the map to draw a polygon.");
     }
   }
 
-  // const [imageFile, setimageFile] = useState("");
+  const getNDVI = () => {
+    fetch(
+      "http://api.agromonitoring.com/agro/1.0/polygons?appid=b22d00c2f91807b86822083ead929d76",
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ geo_json: polygon, name: polygonName }),
+      },
+    )
+      .then((response) => response.json)
+      .then((data) => {
+        const content = data;
+        setPolygonId(content.id);
+        console.log("Polygon Data");
+        console.log(content);
+      });
 
-  // const getUploadParams = ({ file }) => {
-  //   // setimageFile("");
-  //   const body = new FormData();
-  //   body.append("dataFiles", file);
-  //   return { url: "http://localhost:3000/image-segment", body };
-  // };
+    setTimeout(() => {
+      fetch(
+        `https://api.agromonitoring.com/agro/1.0/ndvi/history?polyid=${polygonId}&start=${fromDateUNIX}&end=${toDateUNIX}&appid=b22d00c2f91807b86822083ead929d76`,
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("NDVI History");
+          console.log(data);
+        });
+    }, 1000);
+  };
 
-  // const handleChangeStatus = ({ xhr }) => {
-  //   if (xhr) {
-  //     xhr.onreadystatechange = () => {
-  //       if (xhr.readyState === 4) {
-  //         const result = JSON.parse(xhr.response);
-  //         console.log(result);
-  //         const new_image_file = result.filename.slice(0, -3) + "png";
-  //         // setimageFile(new_image_file);
-  //       }
-  //     };
-  //   }
-  // };
+  const handleFromDateChange = (date) => {
+    setfromDate(date);
+    const UNIX_dateFrom = date.getTime() / 1000;
+    setfromDateUNIX(UNIX_dateFrom);
+  };
 
-  // const { wdata, wisLoading, werrorMessage } = useOpenWeather({
-  //   key: "d7d19ea93799aae622120c139a522048",
-  //   lat: "48.137154",
-  //   lon: "11.576124",
-  //   lang: "en",
-  //   unit: "metric", // values are (metric, standard, imperial)
-  // });
+  const handleToDateChange = (date) => {
+    settoDate(date);
+    const UNIX_dateTo = date.getTime() / 1000;
+    settoDateUNIX(UNIX_dateTo);
+  };
 
-  // const customStyles = {
-  //   fontFamily: "Helvetica, sans-serif",
-  //   gradientStart: "#0181C2",
-  //   gradientMid: "#04A7F9",
-  //   gradientEnd: "#4BC4F7",
-  //   locationFontColor: "#FFF",
-  //   todayTempFontColor: "#FFF",
-  //   todayDateFontColor: "#B5DEF4",
-  //   todayRangeFontColor: "#B5DEF4",
-  //   todayDescFontColor: "#B5DEF4",
-  //   todayInfoFontColor: "#B5DEF4",
-  //   todayIconColor: "#FFF",
-  //   forecastBackgroundColor: "#FFF",
-  //   forecastSeparatorColor: "#DDD",
-  //   forecastDateColor: "#777",
-  //   forecastDescColor: "#777",
-  //   forecastRangeColor: "#777",
-  //   forecastIconColor: "#4BC4F7",
-  // };
+  const handlePolygonNameChange = (e) => {
+    setpolygonName(e.target.value);
+  };
 
   return (
     <Grid container spacing={1}>
-      {/* <Grid item md={12} sm={12} className={classes.intro_grid}>
-        <div className={classes.intro_content_grid}>
-          <h2>Wheat Stripe Rust</h2>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-            eiusmod tempor inc id est laborum. Lorem ipsum dolor sit amet,
-            consectetur adipisicing elit, sed do eiusmod tempor inc id est
-            laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-            sed do eiusmod tempor inc id est laborum. Lorem ipsum dolor sit
-            amet, consectetur adipisicing elit, sed do eiusmod tempor inc id est
-            laborum.
-          </p>
-        </div>
-      </Grid> */}
-      {/* <Grid item md={6} className={classes.image_picker_grid}>
-        <Dropzone
-          getUploadParams={getUploadParams}
-          onChangeStatus={handleChangeStatus}
-          accept="image/*"
-          maxFiles={1}
-          multiple={false}
-          canCancel={false}
-          inputContent="Drop A File"
-          styles={{
-            dropzone: {
-              width: 300,
-              height: 150,
-              // marginRight: 30,
-              border: "3px dashed black",
-            },
-            dropzoneActive: { borderColor: "green" },
-          }}
-        />
-      </Grid> */}
-      {/* <Grid item md={6} sm={12} m={2} className={classes.results_grid}>
-        <Audio_Player />
-        <div className={classes.results_container}>
-          <h3>Symptoms</h3>
-          <ul>
-            <li>Tiny, rusty pustules arranged in stripes</li>
-            <li>Stem and heads can be affected also</li>
-          </ul>
-        </div>
-      </Grid>
-      <Grid item md={12} sm={12}>
-        <div className={classes.intro_content_grid}>
-          <h2>Remedial Actions</h2>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-            eiusmod tempor inc id est laborum. Lorem ipsum dolor sit amet,
-            consectetur adipisicing elit, sed do eiusmod tempor inc id est
-            laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-            sed do eiusmod tempor inc id est laborum. Lorem ipsum dolor sit
-            amet, consectetur adipisicing elit, sed do eiusmod tempor inc id est
-            laborum.
-          </p>
-        </div>
-      </Grid> */}
       <Grid item xs={12} md={6}>
         <Grid item md={12} style={{ position: "relative" }}>
-          {/* <ReactWeather
-            forecast="today"
-            isLoading={wisLoading}
-            errorMessage={werrorMessage}
-            data={wdata}
-            lang="en"
-            locationLabel="Munich"
-            unitsLabels={{ temperature: "C", windSpeed: "Km/h" }}
-            showForecast
-            theme={customStyles}
-          />{" "} */}
-          {/* <div className={classes.sidebar}>
-            Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
-          </div> */}
-          <div className="calculation-box">
+          <div
+            style={{
+              position: "absolute",
+              top: "10px",
+              left: "10px",
+              zIndex: "2",
+              backgroundColor: "white",
+              borderRadius: "5px",
+              padding: "5px",
+            }}
+          >
             <p>Click the map to draw a polygon.</p>
             <div> {roundedArea} square meters</div>
           </div>
@@ -246,11 +222,43 @@ export default function Dashboard(props) {
           Locate Me
         </button>
       </Grid>
-      {/* <Grid item xs={12} md={6}>
-<div>
-  <h2>{}</h2>
-</div>
-      </Grid> */}
+      <Grid item xs={12} md={6}>
+        <WeatherWidget city={city} />
+      </Grid>
+      <Grid item md={12}>
+        <TextField
+          id="outlined-basic"
+          label="Enter polygon name"
+          variant="outlined"
+          value={polygonName}
+          onChange={handlePolygonNameChange}
+        />
+        <Button onClick={getNDVI}>Get NDVI</Button>
+        <h3>{fromDateUNIX}</h3>
+        <h3>{toDateUNIX}</h3>
+        <div>
+          {" "}
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <KeyboardDatePicker
+              label="From"
+              variant="inline"
+              format="dd/MM/yyyy"
+              value={fromDate}
+              onChange={handleFromDateChange}
+            />
+          </MuiPickersUtilsProvider>
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <KeyboardDatePicker
+              label="To"
+              variant="inline"
+              format="dd/MM/yyyy"
+              value={toDate}
+              onChange={handleToDateChange}
+              maxDate={new Date()}
+            />
+          </MuiPickersUtilsProvider>
+        </div>
+      </Grid>
     </Grid>
   );
 }
