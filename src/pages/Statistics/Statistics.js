@@ -1,0 +1,95 @@
+import React, { useRef, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { Grid } from "@material-ui/core";
+
+import useStyles from "./styles.js";
+
+import Geocode from "react-geocode";
+import Demo from "../../components/NDVI_Chart/chart";
+import PolygonTable from "../../components/PolygonsTable/PolygonsTable";
+import Button from "@material-ui/core/Button";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from "@material-ui/pickers";
+
+import "date-fns";
+import DateFnsUtils from "@date-io/date-fns";
+
+export default function Statistics(props) {
+  const [fromDate, setfromDate] = useState(new Date());
+  const [toDate, settoDate] = useState(new Date());
+  const [fromDateUNIX, setfromDateUNIX] = useState(0);
+  const [toDateUNIX, settoDateUNIX] = useState(0);
+  const [NDVI_data, setNDVI_data] = useState([]);
+  const [polygonId, setPolygonId] = useState("a");
+
+  const getNDVI = () => {
+    (async () => {
+      const rawResponse = await fetch(
+        `https://api.agromonitoring.com/agro/1.0/ndvi/history?polyid=${polygonId}&start=${fromDateUNIX}&end=${toDateUNIX}&appid=b22d00c2f91807b86822083ead929d76`,
+      );
+      const data = await rawResponse.json();
+      setNDVI_data(data);
+    })();
+  };
+
+  const handleFromDateChange = (date) => {
+    setfromDate(date);
+    const UNIX_dateFrom = date.getTime() / 1000;
+    setfromDateUNIX(UNIX_dateFrom);
+    setTimeout(() => {
+      getNDVI();
+    }, 500);
+  };
+
+  const handleToDateChange = (date) => {
+    settoDate(date);
+    const UNIX_dateTo = date.getTime() / 1000;
+    settoDateUNIX(UNIX_dateTo);
+    setTimeout(() => {
+      getNDVI();
+    }, 500);
+  };
+
+  const handleChange = (value) => {
+    setPolygonId(value);
+    console.log("Retrived data from child");
+    console.log(value);
+  };
+
+  return (
+    <Grid container spacing={2}>
+      <Grid item md={12}>
+        <PolygonTable onChange={handleChange} value={polygonId} />
+      </Grid>
+      <Grid item md={12}>
+        <div>
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <KeyboardDatePicker
+              label="From"
+              variant="inline"
+              format="dd/MM/yyyy"
+              value={fromDate}
+              onChange={handleFromDateChange}
+            />
+          </MuiPickersUtilsProvider>
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <KeyboardDatePicker
+              label="To"
+              variant="inline"
+              format="dd/MM/yyyy"
+              value={toDate}
+              onChange={handleToDateChange}
+              maxDate={new Date()}
+            />
+          </MuiPickersUtilsProvider>
+        </div>
+        <Button onClick={getNDVI} variant="contained" color="primary">
+          Get NDVI
+        </Button>
+        {NDVI_data.length > 0 && <Demo data={NDVI_data} />}
+      </Grid>
+    </Grid>
+  );
+}

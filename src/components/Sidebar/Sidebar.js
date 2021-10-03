@@ -30,26 +30,27 @@ import {
 
 const structure = [
   { id: 0, label: "Dashboard", link: "/app/dashboard", icon: <HomeIcon /> },
+  { id: 1, label: "Statistics", link: "/app/statistics", icon: <HomeIcon /> },
   {
-    id: 1,
+    id: 2,
     label: "Image Segmentation",
     link: "/app/segmentation",
     icon: <HomeIcon />,
   },
   {
-    id: 2,
+    id: 3,
     label: "Vari  Calculation",
     link: "/app/vari",
     icon: <HomeIcon />,
   },
   {
-    id: 3,
+    id: 4,
     label: "Demo page",
     // link: "/app/dashboard",
     icon: <HomeIcon />,
   },
   {
-    id: 4,
+    id: 5,
     label: "Demo page",
     // link: "/app/dashboard",
     icon: <HomeIcon />,
