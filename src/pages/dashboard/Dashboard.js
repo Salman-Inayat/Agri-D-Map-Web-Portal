@@ -14,11 +14,11 @@ import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 import * as turf from "@turf/turf";
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import WeatherWidget from "../../components/Weather_Widget/WeatherWidget";
+import Demo from "../../components/NDVI_Chart/chart";
+import PolygonTable from "../../components/PolygonsTable/PolygonsTable";
+
 import Button from "@material-ui/core/Button";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from "@material-ui/pickers";
+
 import TextField from "@material-ui/core/TextField";
 
 import "date-fns";
@@ -35,7 +35,7 @@ export default function Dashboard(props) {
   const draw = useRef(null);
   const [lng, setLng] = useState(73.1386);
   const [lat, setLat] = useState(33.6762);
-  const [zoom, setZoom] = useState(15);
+  const [zoom, setZoom] = useState(13);
   const [roundedArea, setroundedArea] = useState(0);
   const [location, setLocation] = useState({
     latitude: 73,
@@ -43,12 +43,14 @@ export default function Dashboard(props) {
   });
   const [city, setCity] = useState("");
   const [polygon, setPolygon] = useState({});
-  const [fromDate, setfromDate] = useState(new Date());
-  const [toDate, settoDate] = useState(new Date());
-  const [fromDateUNIX, setfromDateUNIX] = useState(0);
-  const [toDateUNIX, settoDateUNIX] = useState(0);
+  // const [fromDate, setfromDate] = useState(new Date());
+  // const [toDate, settoDate] = useState(new Date());
+  // const [fromDateUNIX, setfromDateUNIX] = useState(0);
+  // const [toDateUNIX, settoDateUNIX] = useState(0);
   const [polygonName, setpolygonName] = useState("");
   const [polygonId, setPolygonId] = useState();
+  const [polygonCreatedAt, setPolygonCreatedAt] = useState();
+  // const [NDVI_data, setNDVI_data] = useState([]);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -66,7 +68,7 @@ export default function Dashboard(props) {
   const getCity = () => {
     return Geocode.fromLatLng(location.latitude, location.longitude).then(
       (response) => {
-        let city, state, country;
+        let city;
         for (
           let i = 0;
           i < response.results[0].address_components.length;
@@ -112,6 +114,7 @@ export default function Dashboard(props) {
       defaultMode: "draw_polygon",
     });
     map.current.addControl(draw.current);
+    map.current.addControl(new mapboxgl.NavigationControl());
 
     map.current.on("draw.create", updateArea);
     map.current.on("draw.delete", updateArea);
@@ -132,66 +135,101 @@ export default function Dashboard(props) {
     map.current.flyTo({
       center: [location.longitude, location.latitude],
       essential: true,
+      zoom: 13,
+      speed: 0.6, // make the flying slow
+      curve: 1,
     });
   };
 
   function updateArea(e) {
     const data = draw.current.getAll();
-    const polygonData = turf.polygon(data.features[0].geometry.coordinates);
-    console.log(polygonData);
+    const polygonData = turf.polygon(data.features[0].geometry.coordinates, {
+      name: { polygonName },
+    });
 
     setPolygon(polygonData);
 
     if (data.features.length > 0) {
       const area = turf.area(data);
-      setroundedArea(Math.round(area * 100) / 100);
+      setroundedArea(Math.round(area * 100) / 100 / 10000);
     } else {
       if (e.type !== "draw.delete") alert("Click the map to draw a polygon.");
     }
   }
 
-  const getNDVI = () => {
-    fetch(
-      "http://api.agromonitoring.com/agro/1.0/polygons?appid=b22d00c2f91807b86822083ead929d76",
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+  const createPolygon = () => {
+    (async () => {
+      const rawResponse = await fetch(
+        "http://api.agromonitoring.com/agro/1.0/polygons?appid=b22d00c2f91807b86822083ead929d76",
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ geo_json: polygon, name: polygonName }),
         },
-        body: JSON.stringify({ geo_json: polygon, name: polygonName }),
-      },
-    )
-      .then((response) => response.json)
-      .then((data) => {
-        const content = data;
+      );
+      const content = await rawResponse.json();
+      console.log(content);
+
+      const ProcessingData = () => {
         setPolygonId(content.id);
-        console.log("Polygon Data");
-        console.log(content);
-      });
-
-    setTimeout(() => {
-      fetch(
-        `https://api.agromonitoring.com/agro/1.0/ndvi/history?polyid=${polygonId}&start=${fromDateUNIX}&end=${toDateUNIX}&appid=b22d00c2f91807b86822083ead929d76`,
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("NDVI History");
-          console.log(data);
+        const unixTimestamp = content.created_at;
+        var date = new Date(unixTimestamp * 1000);
+        const standard_date =
+          date.getDate() +
+          "-" +
+          (date.getMonth() + 1) +
+          "-" +
+          date.getFullYear();
+        setPolygonCreatedAt(standard_date);
+      };
+      async function myFunc() {
+        // Await for the promise to resolve
+        await new Promise((resolve) => {
+          setTimeout(() => {
+            resolve(ProcessingData());
+            // Resolve the promise
+            // resolve: {
+            //   setPolygonId(content.id);
+            //   const unixTimestamp = content.created_at;
+            //   var date = new Date(unixTimestamp * 1000);
+            //   const standard_date =
+            //     date.getDate() +
+            //     "-" +
+            //     (date.getMonth() + 1) +
+            //     "-" +
+            //     date.getFullYear();
+            //   setPolygonCreatedAt(standard_date);
+            // }
+          }, 50);
         });
-    }, 1000);
+        // Once the promise gets resolved continue on
+        AddPolygonsToJSON();
+      }
+
+      myFunc();
+    })();
   };
 
-  const handleFromDateChange = (date) => {
-    setfromDate(date);
-    const UNIX_dateFrom = date.getTime() / 1000;
-    setfromDateUNIX(UNIX_dateFrom);
-  };
-
-  const handleToDateChange = (date) => {
-    settoDate(date);
-    const UNIX_dateTo = date.getTime() / 1000;
-    settoDateUNIX(UNIX_dateTo);
+  const AddPolygonsToJSON = () => {
+    console.log("Called after computation");
+    fetch("http://localhost:5005/polygons/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        polygon_id: polygonId,
+        name: polygonName,
+        created_at: polygonCreatedAt,
+        area: roundedArea,
+      }),
+    }).then((res) => {
+      const rs = res.json();
+      console.log(rs);
+    });
   };
 
   const handlePolygonNameChange = (e) => {
@@ -199,8 +237,8 @@ export default function Dashboard(props) {
   };
 
   return (
-    <Grid container spacing={1}>
-      <Grid item xs={12} md={6}>
+    <Grid container spacing={2}>
+      <Grid item xs={12} md={7}>
         <Grid item md={12} style={{ position: "relative" }}>
           <div
             style={{
@@ -214,15 +252,16 @@ export default function Dashboard(props) {
             }}
           >
             <p>Click the map to draw a polygon.</p>
-            <div> {roundedArea} square meters</div>
+            <div> {roundedArea} ha</div>
           </div>
           <div ref={mapContainer} className={classes.map_container} />
         </Grid>
-        <button className="btn btn-primary" onClick={showMyLocation}>
+
+        <Button onClick={showMyLocation} variant="contained" color="primary">
           Locate Me
-        </button>
+        </Button>
       </Grid>
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={5}>
         <WeatherWidget city={city} />
       </Grid>
       <Grid item md={12}>
@@ -233,31 +272,12 @@ export default function Dashboard(props) {
           value={polygonName}
           onChange={handlePolygonNameChange}
         />
-        <Button onClick={getNDVI}>Get NDVI</Button>
-        <h3>{fromDateUNIX}</h3>
-        <h3>{toDateUNIX}</h3>
-        <div>
-          {" "}
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <KeyboardDatePicker
-              label="From"
-              variant="inline"
-              format="dd/MM/yyyy"
-              value={fromDate}
-              onChange={handleFromDateChange}
-            />
-          </MuiPickersUtilsProvider>
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <KeyboardDatePicker
-              label="To"
-              variant="inline"
-              format="dd/MM/yyyy"
-              value={toDate}
-              onChange={handleToDateChange}
-              maxDate={new Date()}
-            />
-          </MuiPickersUtilsProvider>
-        </div>
+        <Button onClick={createPolygon} variant="contained" color="primary">
+          Create polygon
+        </Button>
+      </Grid>
+      <Grid item md={12}>
+        <PolygonTable />
       </Grid>
     </Grid>
   );
