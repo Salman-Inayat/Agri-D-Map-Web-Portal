@@ -55,4 +55,13 @@ export default makeStyles((theme) => ({
     margin: "12px",
     borderRadius: "4px",
   },
+  container: {
+    display: "flex",
+    flexWrap: "wrap",
+  },
+  textField: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    width: 200,
+  },
 }));
