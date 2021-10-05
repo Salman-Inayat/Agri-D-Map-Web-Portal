@@ -14,7 +14,7 @@ import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 import * as turf from "@turf/turf";
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import WeatherWidget from "../../components/Weather_Widget/WeatherWidget";
-import PolygonTable from "../../components/PolygonsTable/PolygonsTable";
+import DashboardPolygonTable from "../../components/PolygonsTable/DashboardPolygonTable";
 
 import Button from "@material-ui/core/Button";
 
@@ -42,14 +42,10 @@ export default function Dashboard(props) {
   });
   const [city, setCity] = useState("");
   const [polygon, setPolygon] = useState({});
-  // const [fromDate, setfromDate] = useState(new Date());
-  // const [toDate, settoDate] = useState(new Date());
-  // const [fromDateUNIX, setfromDateUNIX] = useState(0);
-  // const [toDateUNIX, settoDateUNIX] = useState(0);
+
   const [polygonName, setpolygonName] = useState("");
   const [polygonId, setPolygonId] = useState();
   const [polygonCreatedAt, setPolygonCreatedAt] = useState();
-  // const [NDVI_data, setNDVI_data] = useState([]);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -170,87 +166,8 @@ export default function Dashboard(props) {
         },
       );
       const content = await rawResponse.json();
-      console.log(content);
-      console.log("processing polygon data");
-      setPolygonId(content.id);
-      console.log("Id: ", content.id);
-      console.log("Created_at: ", content.created_at);
-      const unixTimestamp = content.created_at;
-      var date = new Date(unixTimestamp * 1000);
-      const standard_date =
-        date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear();
-      console.log("Standard Date: ", standard_date);
-      setPolygonCreatedAt(standard_date);
-
-      console.log("Called after computation");
-      console.log("Polygon created at Standard Date: ", standard_date);
-      console.log("Polygon id: ", content.id);
-      fetch("http://localhost:5005/polygons/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          polygon_id: content.id,
-          name: polygonName,
-          created_at: standard_date,
-          area: roundedArea,
-        }),
-      }).then((res) => {
-        const rs = res.json();
-        console.log(rs);
-      });
-      // const ProcessingData = () => {
-      //   console.log("processing polygon data");
-      //   setPolygonId(content.id);
-      //   console.log("Id: ", content.id);
-      //   console.log("Created_at: ", content.created_at);
-      //   const unixTimestamp = content.created_at;
-      //   var date = new Date(unixTimestamp * 1000);
-      //   const standard_date =
-      //     date.getDate() +
-      //     "-" +
-      //     (date.getMonth() + 1) +
-      //     "-" +
-      //     date.getFullYear();
-      //   console.log("Standard Date: ", standard_date);
-      //   setPolygonCreatedAt(standard_date);
-      // };
-      // async function myFunc() {
-      //   // Await for the promise to resolve
-      //   await new Promise((resolve) => {
-      //     setTimeout(() => {
-      //       resolve(AddPolygonsToJSON());
-      //     }, 5000);
-      //   });
-      //   // Once the promise gets resolved continue on
-      //   console.log("Done");
-      // }
-
-      // myFunc();
     })();
   };
-
-  // const AddPolygonsToJSON = () => {
-  //   console.log("Called after computation");
-  //   console.log("Polygon created at Standard Date: ", polygonCreatedAt);
-  //   console.log("Polygon id: ", polygonId);
-  //   fetch("http://localhost:5005/polygons/", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({
-  //       polygon_id: polygonId,
-  //       name: polygonName,
-  //       created_at: polygonCreatedAt,
-  //       area: roundedArea,
-  //     }),
-  //   }).then((res) => {
-  //     const rs = res.json();
-  //     console.log(rs);
-  //   });
-  // };
 
   const handlePolygonNameChange = (e) => {
     setpolygonName(e.target.value);
@@ -297,7 +214,7 @@ export default function Dashboard(props) {
         </Button>
       </Grid>
       <Grid item md={12}>
-        <PolygonTable />
+        <DashboardPolygonTable />
       </Grid>
     </Grid>
   );
