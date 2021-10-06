@@ -5,8 +5,10 @@ import { Grid } from "@material-ui/core";
 import useStyles from "./styles.js";
 
 import Geocode from "react-geocode";
-import Demo from "../../components/NDVI_Chart/chart";
+import NDVIChart from "../../components/Charts/NDVI_Chart";
+import WeatherChart from "../../components/WeatherChart/WeatherChart";
 import PolygonTable from "../../components/PolygonsTable/PolygonsTable";
+
 import Button from "@material-ui/core/Button";
 import {
   MuiPickersUtilsProvider,
@@ -17,22 +19,28 @@ import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
 
 export default function Statistics(props) {
-  const [fromDate, setfromDate] = useState(new Date());
-  const [toDate, settoDate] = useState(new Date());
-  const [fromDateUNIX, setfromDateUNIX] = useState(0);
-  const [toDateUNIX, settoDateUNIX] = useState(0);
-  const [NDVI_data, setNDVI_data] = useState([]);
-  const [polygonId, setPolygonId] = useState("a");
+  const initialToDate = new Date();
+  const UNIX_initialToDate = initialToDate.getTime() / 1000;
 
-  const getNDVI = () => {
-    (async () => {
-      const rawResponse = await fetch(
-        `https://api.agromonitoring.com/agro/1.0/ndvi/history?polyid=${polygonId}&start=${fromDateUNIX}&end=${toDateUNIX}&appid=b22d00c2f91807b86822083ead929d76`,
-      );
-      const data = await rawResponse.json();
-      setNDVI_data(data);
-    })();
-  };
+  const priorDate = new Date();
+  priorDate.setDate(priorDate.getDate() - 30);
+
+  const UNIX_initialFromDate = priorDate.getTime() / 1000;
+
+  const initialDate = new Date();
+  initialDate.setDate(initialDate.getDate() - 30);
+
+  const [fromDate, setfromDate] = useState(initialDate);
+  const [toDate, settoDate] = useState(new Date());
+  const [fromDateUNIX, setfromDateUNIX] = useState(UNIX_initialFromDate);
+  const [toDateUNIX, settoDateUNIX] = useState(UNIX_initialToDate);
+  const [NDVI_data, setNDVI_data] = useState([]);
+  const [polygonId, setPolygonId] = useState("61599fe9a81b76539f681074");
+
+  useEffect(() => {
+    console.log("Calling UseEffect");
+    getNDVI();
+  }, []);
 
   const handleFromDateChange = (date) => {
     setfromDate(date);
@@ -56,6 +64,17 @@ export default function Statistics(props) {
     setPolygonId(value);
     console.log("Retrived data from child");
     console.log(value);
+  };
+
+  const getNDVI = () => {
+    console.log("Calling the graph data");
+    (async () => {
+      const rawResponse = await fetch(
+        `https://api.agromonitoring.com/agro/1.0/ndvi/history?polyid=${polygonId}&start=${fromDateUNIX}&end=${toDateUNIX}&appid=b22d00c2f91807b86822083ead929d76`,
+      );
+      const data = await rawResponse.json();
+      setNDVI_data(data);
+    })();
   };
 
   return (
@@ -88,7 +107,8 @@ export default function Statistics(props) {
         <Button onClick={getNDVI} variant="contained" color="primary">
           Get NDVI
         </Button>
-        {NDVI_data.length > 0 && <Demo data={NDVI_data} />}
+        {NDVI_data.length > 0 && <NDVIChart data={NDVI_data} />}
+        <WeatherChart />
       </Grid>
     </Grid>
   );
