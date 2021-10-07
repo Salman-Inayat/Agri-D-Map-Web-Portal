@@ -167,6 +167,7 @@ export default function Dashboard(props) {
       );
       const content = await rawResponse.json();
     })();
+    setpolygonName("");
   };
 
   const handlePolygonNameChange = (e) => {
