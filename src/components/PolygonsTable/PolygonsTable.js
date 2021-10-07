@@ -1,20 +1,36 @@
 import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
 import { Table, Column, HeaderCell, Cell } from "rsuite-table";
 import "rsuite-table/dist/css/rsuite-table.css";
 import Radio from "@material-ui/core/Radio";
+
+const API_KEY = "b22d00c2f91807b86822083ead929d76";
 
 const PolygonTable = (props) => {
   const [data, setdata] = useState([]);
   const [sortColumn, setSortColumn] = useState();
   const [sortType, setSortType] = useState();
   const [loading, setLoading] = useState(false);
-  const [value, setValue] = useState("a");
+  const [value, setValue] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:5005/polygons")
+    fetch(`http://api.agromonitoring.com/agro/1.0/polygons?appid=${API_KEY}`)
       .then((res) => res.json())
-      .then((data) => setdata(data))
+      .then((data) => {
+        setValue(data[0].id);
+        data.map((item, i) => {
+          const unixTimestamp = data[i].created_at;
+          var date = new Date(unixTimestamp * 1000);
+          const standard_date =
+            date.getDate() +
+            "-" +
+            (date.getMonth() + 1) +
+            "-" +
+            date.getFullYear();
+          data[i].created_at = standard_date;
+          data[i].area.toFixed(1);
+        });
+        setdata(data);
+      })
       .catch((err) => console.log(err));
   }, []);
 
@@ -55,11 +71,11 @@ const PolygonTable = (props) => {
 
   const CheckCell = ({ rowData, onChange, checkedKeys, dataKey, ...props }) => (
     <Cell {...props} style={{ padding: 0 }}>
-      <div style={{ lineHeight: "46px" }}>
+      <div>
         <Radio
-          checked={value === rowData.polygon_id}
+          checked={value === rowData.id}
           onChange={handleChange}
-          value={rowData.polygon_id}
+          value={rowData.id}
           name="radio-button"
           inputProps={{ "aria-label": "A" }}
         />
