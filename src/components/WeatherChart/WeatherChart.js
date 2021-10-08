@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
+import Button from "@material-ui/core/Button";
 
-function WeatherChart() {
+function WeatherChart(props) {
+  const [changedPolygonID, setChangedPolygonID] = useState();
+  console.log("Weather polygon ID: ", changedPolygonID);
   const [location, setLocation] = useState({
-    latitude: 73,
-    longitude: 32,
+    latitude: null,
+    longitude: null,
   });
   const [temperature, setTemperature] = useState([]);
   const [humidity, setHumidity] = useState([]);
@@ -15,55 +18,101 @@ function WeatherChart() {
   const [date, setDate] = useState([]);
 
   useEffect(() => {
-    console.log("useEffect");
-    navigator.geolocation.getCurrentPosition((position) => {
-      setLocation({
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-      });
-    });
+    setChangedPolygonID(props.polygonId);
 
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          `https://api.agromonitoring.com/agro/1.0/weather/forecast?lat=${location.latitude}&lon=${location.longitude}&appid=b22d00c2f91807b86822083ead929d76`,
-        );
-        const json = await response.json();
-        console.log(json);
-        json.map((item, i) => {
-          const unixTimestamp = item.dt;
-
-          var dateObj = new Date(unixTimestamp * 1000);
-          var utcString = dateObj.toUTCString();
-
-          var time = utcString.slice(-12, -7);
-
-          setTemperature((prevarr) => [...prevarr, item.main.temp]);
-          setTempMax((prevarr) => [...prevarr, item.main.temp_max]);
-          setTempMin((prevarr) => [...prevarr, item.main.temp_min]);
-          setPressure((prevarr) => [...prevarr, item.main.pressure]);
-          setHumidity((prevarr) => [...prevarr, item.main.humidity]);
-          setFeelsLike((prevarr) => [...prevarr, item.main.feels_like]);
-          setDate((prevarr) => [...prevarr, time]);
+    let coordinates = [];
+    let latitudes;
+    let longitudes;
+    fetch(
+      `http://api.agromonitoring.com/agro/1.0/polygons/${props.firstPolygon}?appid=b22d00c2f91807b86822083ead929d76`,
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        coordinates = data.geo_json.geometry.coordinates[0][0];
+        latitudes = coordinates[1];
+        longitudes = coordinates[0];
+        setLocation({
+          latitude: latitudes,
+          longitude: longitudes,
         });
-      } catch (error) {
-        console.log("error", error);
-      }
-    };
+      });
 
-    fetchData();
+    setTimeout(() => {
+      fetch(
+        `https://api.agromonitoring.com/agro/1.0/weather/forecast?lat=${latitudes}&lon=${longitudes}&appid=b22d00c2f91807b86822083ead929d76`,
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          data.map((item, i) => {
+            const unixTimestamp = item.dt;
+
+            var dateObj = new Date(unixTimestamp * 1000);
+            var utcString = dateObj.toUTCString();
+
+            var time = utcString.slice(-12, -7);
+
+            setTemperature((prevarr) => [...prevarr, item.main.temp]);
+            setTempMax((prevarr) => [...prevarr, item.main.temp_max]);
+            setTempMin((prevarr) => [...prevarr, item.main.temp_min]);
+            setPressure((prevarr) => [...prevarr, item.main.pressure]);
+            setHumidity((prevarr) => [...prevarr, item.main.humidity]);
+            setFeelsLike((prevarr) => [...prevarr, item.main.feels_like]);
+            setDate((prevarr) => [...prevarr, time]);
+          });
+        });
+    }, 1000);
   }, []);
+
+  const refreshWeather = () => {
+    console.log("Called when polygon id is changed");
+    let coordinates = [];
+    let latitudes;
+    let longitudes;
+    fetch(
+      `http://api.agromonitoring.com/agro/1.0/polygons/${props.polygonId}?appid=b22d00c2f91807b86822083ead929d76`,
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        coordinates = data.geo_json.geometry.coordinates[0][0];
+        latitudes = coordinates[1];
+        longitudes = coordinates[0];
+        setLocation({
+          latitude: latitudes,
+          longitude: longitudes,
+        });
+      });
+
+    console.log("Latitude: ", latitudes, "Longitude: ", longitudes);
+    setTimeout(() => {
+      fetch(
+        `https://api.agromonitoring.com/agro/1.0/weather/forecast?lat=${latitudes}&lon=${longitudes}&appid=b22d00c2f91807b86822083ead929d76`,
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          data.map((item, i) => {
+            const unixTimestamp = item.dt;
+
+            var dateObj = new Date(unixTimestamp * 1000);
+            var utcString = dateObj.toUTCString();
+
+            var time = utcString.slice(-12, -7);
+
+            setTemperature((prevarr) => [...prevarr, item.main.temp]);
+            setTempMax((prevarr) => [...prevarr, item.main.temp_max]);
+            setTempMin((prevarr) => [...prevarr, item.main.temp_min]);
+            setPressure((prevarr) => [...prevarr, item.main.pressure]);
+            setHumidity((prevarr) => [...prevarr, item.main.humidity]);
+            setFeelsLike((prevarr) => [...prevarr, item.main.feels_like]);
+            setDate((prevarr) => [...prevarr, time]);
+          });
+        });
+    }, 500);
+  };
 
   let chartData = {
     labels: date,
     datasets: [
-      // {
-      //   label: "Temperature",
-      //   yaxisID: "temperature",
-      //   borderColor: "rgb(54, 162, 235)",
-      //   borderWidth: 2,
-      //   data: temperature,
-      // },
       {
         label: "Temperature",
         yAxisID: "temperature",
@@ -101,33 +150,34 @@ function WeatherChart() {
 
   return (
     <div>
+      <Button onClick={refreshWeather}>Refresh Weather</Button>
       <Line
         data={chartData}
         width={2000}
         height={500}
         options={{
           scales: {
-            yAxes: [
-              {
-                id: "temperature",
-                display: false,
-                position: "left",
-                barPercentage: 1.6,
-                gridLines: {
-                  drawBorder: false,
-                  color: "rgba(29,140,248,0.0)",
-                  zeroLineColor: "transparent",
-                },
-                ticks: {
-                  fontColor: "#9a9a9a",
-                  maxTicksLimit: 6,
-                  callback: function (value) {
-                    return value + "°";
-                  },
-                  padding: 25,
-                },
-              },
-            ],
+            // yAxes: [
+            //   {
+            //     id: "temperature",
+            //     display: false,
+            //     position: "left",
+            //     barPercentage: 1.6,
+            //     gridLines: {
+            //       drawBorder: false,
+            //       color: "rgba(29,140,248,0.0)",
+            //       zeroLineColor: "transparent",
+            //     },
+            //     ticks: {
+            //       fontColor: "#9a9a9a",
+            //       maxTicksLimit: 6,
+            //       callback: function (value) {
+            //         return value + "°";
+            //       },
+            //       padding: 25,
+            //     },
+            //   },
+            // ],
             xAxes: [
               {
                 // barPercentage: 1.6,
