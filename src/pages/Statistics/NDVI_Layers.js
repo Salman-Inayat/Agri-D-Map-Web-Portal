@@ -25,10 +25,9 @@ function NDVILayers(props) {
   const [metric, setMetric] = useState("ndvi");
   const [layersData, setLayersData] = useState([]);
   const [tableData, setTableData] = useState({});
-  const [statsURL, setStatsURL] = useState("");
   const [metricDate, setMetricDate] = useState("");
-  const [required_layer_object, setrequired_layer_object] = useState([]);
   const [imageURL, setImageURL] = useState();
+  const [imageLoading, setImageLoading] = useState();
 
   useEffect(() => {
     fetch(
@@ -39,7 +38,6 @@ function NDVILayers(props) {
       .then((data) => {
         const dataB = data;
         setLayersData(dataB);
-        console.log("Layers data: ", data);
       })
       .catch((error) => {
         console.log("error: ", error);
@@ -48,12 +46,11 @@ function NDVILayers(props) {
 
   const handleDateChange = (event) => {
     setMetricDate(event.target.value);
-    console.log("Date changed: ", event.target.value);
     const required_layer_object = layersData.filter(
       (layer) => layer.dt === event.target.value,
     );
-    setrequired_layer_object(required_layer_object);
     switchFunction(metric, required_layer_object);
+    setImageLoading(true);
   };
 
   const handleMetricChange = (event) => {
@@ -61,52 +58,45 @@ function NDVILayers(props) {
     const required_layer_object = layersData.filter(
       (layer) => layer.dt === metricDate,
     );
-    setrequired_layer_object(required_layer_object);
     switchFunction(event.target.value, required_layer_object);
   };
 
   const switchFunction = (value, required_layer_object) => {
     switch (value) {
       case "ndvi":
-        // setStatsURL(required_layer_object[0].stats.ndvi);
         setImageURL(required_layer_object[0].image.ndvi);
         fetchStatsData(required_layer_object[0].stats.ndvi);
         break;
       case "evi":
-        // setStatsURL(required_layer_object[0].stats.evi);
         setImageURL(required_layer_object[0].image.evi);
         fetchStatsData(required_layer_object[0].stats.evi);
         break;
       case "evi2":
-        // setStatsURL(required_layer_object[0].stats.evi2);
         setImageURL(required_layer_object[0].image.evi2);
         fetchStatsData(required_layer_object[0].stats.evi2);
         break;
       case "ndwi":
-        // setStatsURL(required_layer_object[0].stats.ndwi);
         setImageURL(required_layer_object[0].image.ndwi);
         fetchStatsData(required_layer_object[0].stats.ndwi);
         break;
       case "nri":
-        // setStatsURL(required_layer_object[0].stats.nri);
         setImageURL(required_layer_object[0].image.nri);
         fetchStatsData(required_layer_object[0].stats.nri);
         break;
       case "dswi":
-        // setStatsURL(required_layer_object[0].stats.dswi);
         setImageURL(required_layer_object[0].image.dswi);
         fetchStatsData(required_layer_object[0].stats.dswi);
         break;
       default:
         console.log("Incorrect choice");
     }
+    setImageLoading(false);
   };
 
   const fetchStatsData = (url) => {
     fetch(url)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setTableData(data);
       });
   };
@@ -249,12 +239,7 @@ function NDVILayers(props) {
         </Grid>
         <Grid item md={6}>
           {tableData.max && (
-            <img
-              src={imageURL}
-              alt="image_crop "
-              height="300"
-              width="300"
-            ></img>
+            <img src={imageURL} alt="loading" height="300" width="400"></img>
           )}
         </Grid>
       </Grid>
