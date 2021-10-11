@@ -55,7 +55,7 @@ function NDVIChart(props) {
       foreColor: "#373d3f",
       height: "auto",
       type: "line",
-      background: "#373368",
+      // background: "#373368",
       zoom: {
         enabled: true,
       },
@@ -104,14 +104,14 @@ function NDVIChart(props) {
       offsetX: 0,
       offsetY: 0,
       labels: {
-        colors: "#fff",
+        // colors: "#fff",
         useSeriesColors: false,
       },
       markers: {
         width: 12,
         height: 12,
         strokeWidth: 0,
-        strokeColor: "#fff",
+        // strokeColor: "#fff",
         fillColors: undefined,
         radius: 12,
         customHTML: undefined,
@@ -135,35 +135,36 @@ function NDVIChart(props) {
       categories: chartDate,
       labels: {
         style: {
-          colors: "#fff",
+          // colors: "#fff",
         },
       },
     },
     yaxis: {
       labels: {
         style: {
-          colors: "#fff",
+          // colors: "#fff",
         },
       },
     },
-    grid: {
-      borderColor: "red",
-      strokeDashArray: 0,
-      position: "back",
-      show: true,
-      xaxis: {
-        lines: {
-          show: false,
-        },
-      },
-      yaxis: {
-        lines: {
-          show: false,
-        },
-      },
-    },
+    // grid: {
+    //   borderColor: "red",
+    //   strokeDashArray: 0,
+    //   position: "back",
+    //   show: true,
+    //   xaxis: {
+    //     lines: {
+    //       show: false,
+    //     },
+    //   },
+    //   yaxis: {
+    //     lines: {
+    //       show: false,
+    //     },
+    //   },
+    // },
     theme: {
       pallete: "palette1",
+      // mode: "dark",
     },
     tooltip: {
       theme: false,
