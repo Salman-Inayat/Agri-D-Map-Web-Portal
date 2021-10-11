@@ -10,10 +10,7 @@ import PolygonTable from "../../components/PolygonsTable/PolygonsTable";
 import NDVILayers from "./NDVI_Layers";
 
 import Button from "@material-ui/core/Button";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from "@material-ui/pickers";
+import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
@@ -55,6 +52,7 @@ export default function Statistics(props) {
       });
 
     setTimeout(() => {
+      console.log(firstPolygon);
       fetch(
         `https://api.agromonitoring.com/agro/1.0/ndvi/history?polyid=${firstPolygon}&start=${fromDateUNIX}&end=${toDateUNIX}&appid=b22d00c2f91807b86822083ead929d76`,
       )
@@ -106,38 +104,76 @@ export default function Statistics(props) {
 
   return (
     <Grid container spacing={2}>
-      <Grid item md={12}>
+      <Grid
+        item
+        md={12}
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          margin: "10px",
+          padding: "20px",
+        }}
+      >
         <PolygonTable onChange={handleChange} value={polygonId} />
       </Grid>
-      <Grid item md={12}>
-        <div>
+      <Grid
+        container
+        style={{
+          margin: "10px",
+          padding: "20px",
+          // backgroundColor: "#373368",
+          // color: "white",
+          borderRadius: "10px",
+        }}
+      >
+        <Grid item md={5}>
+          <h4>Historical</h4>
+          <h2>NDVI</h2>
+        </Grid>
+        <Grid item md={3}></Grid>
+        <Grid
+          item
+          md={4}
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <KeyboardDatePicker
+            <DatePicker
+              style={{ margin: "5px", width: "130px", color: "white" }}
               label="From"
               variant="inline"
+              openTo="date"
+              views={["year", "month", "date"]}
               format="dd/MM/yyyy"
               value={fromDate}
               onChange={handleFromDateChange}
             />
           </MuiPickersUtilsProvider>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <KeyboardDatePicker
+            <DatePicker
               label="To"
+              style={{ margin: "5px", width: "130px", color: "white" }}
               variant="inline"
+              openTo="date"
+              views={["year", "month", "date"]}
               format="dd/MM/yyyy"
               value={toDate}
               onChange={handleToDateChange}
               maxDate={new Date()}
             />
           </MuiPickersUtilsProvider>
-        </div>
-        <Button onClick={getNDVI} variant="contained" color="primary">
-          Get NDVI
-        </Button>
-        {NDVI_data.length > 0 && <NDVIChart data={NDVI_data} />}
-        {/* {mountComponent && (
-          <WeatherChart firstPolygon={firstPolygonId} polygonId={polygonId} />
-        )} */}
+        </Grid>
+        <Grid item md={12}>
+          {" "}
+          {NDVI_data.length > 0 && <NDVIChart data={NDVI_data} />}
+        </Grid>
+      </Grid>
+
+      <Grid item md={12}>
         {mountComponent && (
           <NDVILayers
             fromDateUNIX={fromDateUNIX}
@@ -146,6 +182,9 @@ export default function Statistics(props) {
           />
         )}
       </Grid>
+      {/* {mountComponent && (
+          <WeatherChart firstPolygon={firstPolygonId} polygonId={polygonId} />
+        )} */}
     </Grid>
   );
 }
