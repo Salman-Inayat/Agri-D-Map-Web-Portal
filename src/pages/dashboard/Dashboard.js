@@ -34,7 +34,7 @@ export default function Dashboard(props) {
   const draw = useRef(null);
   const [lng, setLng] = useState(73.1386);
   const [lat, setLat] = useState(33.6762);
-  const [zoom, setZoom] = useState(13);
+  const [zoom, setZoom] = useState(8);
   const [roundedArea, setroundedArea] = useState(0);
   const [location, setLocation] = useState({
     latitude: 73,
@@ -44,8 +44,6 @@ export default function Dashboard(props) {
   const [polygon, setPolygon] = useState({});
 
   const [polygonName, setpolygonName] = useState("");
-  const [polygonId, setPolygonId] = useState();
-  const [polygonCreatedAt, setPolygonCreatedAt] = useState();
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -130,8 +128,8 @@ export default function Dashboard(props) {
     map.current.flyTo({
       center: [location.longitude, location.latitude],
       essential: true,
-      zoom: 13,
-      speed: 0.6, // make the flying slow
+      zoom: zoom,
+      speed: 0.8, // make the flying slow
       curve: 1,
     });
   };
@@ -195,14 +193,15 @@ export default function Dashboard(props) {
           </div>
           <div ref={mapContainer} className={classes.map_container} />
         </Grid>
-
         <Button onClick={showMyLocation} variant="contained" color="primary">
           Locate Me
         </Button>
       </Grid>
+
       <Grid item xs={12} md={5}>
         <WeatherWidget city={city} />
       </Grid>
+
       <Grid item md={12}>
         <TextField
           id="outlined-basic"
