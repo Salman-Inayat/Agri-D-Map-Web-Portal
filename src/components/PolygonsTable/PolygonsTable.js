@@ -13,6 +13,7 @@ const PolygonTable = (props) => {
   const [value, setValue] = useState("");
 
   useEffect(() => {
+    setLoading(true);
     fetch(`http://api.agromonitoring.com/agro/1.0/polygons?appid=${API_KEY}`)
       .then((res) => res.json())
       .then((data) => {
@@ -30,6 +31,7 @@ const PolygonTable = (props) => {
           data[i].area.toFixed(1);
         });
         setdata(data);
+        setLoading(false);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -70,7 +72,7 @@ const PolygonTable = (props) => {
   };
 
   const CheckCell = ({ rowData, onChange, checkedKeys, dataKey, ...props }) => (
-    <Cell {...props} style={{ padding: 0 }}>
+    <Cell {...props} sstyle={{ padding: "auto 0px" }}>
       <div>
         <Radio
           checked={value === rowData.id}
@@ -83,7 +85,15 @@ const PolygonTable = (props) => {
     </Cell>
   );
 
-  return (
+  return loading ? (
+    <div style={{ height: "200px" }}>
+      <img
+        src="/horizontal-loader.gif"
+        alt="loader"
+        style={{ display: "block", margin: "auto" }}
+      ></img>
+    </div>
+  ) : (
     <Table
       height={420}
       data={getData()}
@@ -92,24 +102,40 @@ const PolygonTable = (props) => {
       onSortColumn={handleSortColumn}
       loading={loading}
       autoHeight={true}
+      hover={false}
+      rowHeight={60}
+      headerHeight={50}
+      // cellBordered={false}
+      // bordered={false}
+      style={{
+        width: "80%",
+      }}
     >
       <Column width={200} align="center" fixed>
-        <HeaderCell>Select a polygon</HeaderCell>
+        <HeaderCell style={{ backgroundColor: "#373368", color: "white" }}>
+          Select a polygon
+        </HeaderCell>
         <CheckCell dataKey="id" />
       </Column>
 
-      <Column width={200} fixed sortable>
-        <HeaderCell>Polygon Name</HeaderCell>
+      <Column width={250} fixed sortable>
+        <HeaderCell style={{ backgroundColor: "#373368", color: "white" }}>
+          Polygon Name
+        </HeaderCell>
         <Cell dataKey="name" />
       </Column>
 
       <Column width={200} sortable>
-        <HeaderCell>Created at</HeaderCell>
+        <HeaderCell style={{ backgroundColor: "#373368", color: "white" }}>
+          Created at
+        </HeaderCell>
         <Cell dataKey="created_at" />
       </Column>
 
-      <Column width={200} sortable>
-        <HeaderCell>Area</HeaderCell>
+      <Column width={150} sortable>
+        <HeaderCell style={{ backgroundColor: "#373368", color: "white" }}>
+          Area
+        </HeaderCell>
         <Cell dataKey="area" />
       </Column>
     </Table>
