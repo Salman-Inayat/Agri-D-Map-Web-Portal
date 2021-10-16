@@ -69,7 +69,7 @@ const DashboardPolygonTable = (props) => {
       setLoading(false);
       setSortColumn(sortColumn);
       setSortType(sortType);
-    }, 10);
+    }, 5);
   };
 
   const ModalClick = (id) => {
@@ -137,7 +137,8 @@ const DashboardPolygonTable = (props) => {
   return (
     <div>
       <Table
-        height={420}
+        height={300}
+        width={900}
         data={getData()}
         sortColumn={sortColumn}
         sortType={sortType}
@@ -145,22 +146,22 @@ const DashboardPolygonTable = (props) => {
         loading={loading}
         autoHeight={true}
       >
-        <Column width={250} fixed sortable>
+        <Column width={250} fixed sortable align="center">
           <HeaderCell>Polygon Name </HeaderCell>
           <Cell dataKey="name" />
         </Column>
 
-        <Column width={250} sortable>
+        <Column width={250} sortable align="center">
           <HeaderCell>Created at</HeaderCell>
           <Cell dataKey="created_at" />
         </Column>
 
-        <Column width={250} sortable>
+        <Column width={250} sortable align="center">
           <HeaderCell>Area</HeaderCell>
           <Cell dataKey="area" />
         </Column>
 
-        <Column width={150}>
+        <Column width={150} align="center">
           <HeaderCell>
             <Button onClick={() => fetchPolygons()}>
               <RefreshIcon />
@@ -181,6 +182,13 @@ const DashboardPolygonTable = (props) => {
             top: "50%",
             left: "50%",
             backgroundColor: "white",
+            transform: "translate(-50%, -50%)",
+            width: "500px",
+            height: "200px",
+            display: "flex",
+            justifyContent: "space-around",
+            alignItems: "center",
+            borderRadius: "10px",
           }}
         >
           <TextField
