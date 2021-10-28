@@ -22,6 +22,9 @@ import Paper from "@material-ui/core/Paper";
 const API_KEY = "b22d00c2f91807b86822083ead929d76";
 
 function NDVILayers(props) {
+  const initialDate = new Date();
+  initialDate.setDate(initialDate.getDate() - 30);
+
   const [metric, setMetric] = useState("ndvi");
   const [layersData, setLayersData] = useState([]);
   const [tableData, setTableData] = useState({});
