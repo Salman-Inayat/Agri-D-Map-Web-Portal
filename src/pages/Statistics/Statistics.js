@@ -1,11 +1,10 @@
-import React, { useRef, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import { Grid } from "@material-ui/core";
 
-import useStyles from "./styles.js";
+// import useStyles from "./styles.js";
 
 import NDVIChart from "../../components/Charts/NDVI_Chart";
-import WeatherChart from "../../components/WeatherChart/WeatherChart";
+// import WeatherChart from "../../components/WeatherChart/WeatherChart";
 import PolygonTable from "../../components/PolygonsTable/PolygonsTable";
 import NDVILayers from "./NDVI_Layers";
 
