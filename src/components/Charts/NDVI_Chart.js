@@ -28,26 +28,10 @@ function NDVIChart(props) {
     result[0].data.push(item.data.max.toFixed(2));
     result[1].data.push(item.data.min.toFixed(2));
     result[2].data.push(item.data.mean.toFixed(2));
+    // setChartDate((prevState) => [...prevState, standard_date]);
     chartDate.push(standard_date);
-
-    // result.push({
-    //   label: "max",
-    //   value: props.data[i].data.max.toFixed(2),
-    //   date: standard_date,
-    // });
-    // result.push({
-    //   label: "min",
-    //   value: props.data[i].data.min.toFixed(2),
-    //   date: standard_date,
-    // });
-    // result.push({
-    //   label: "mean",
-    //   value: props.data[i].data.mean,
-    //   date: standard_date,
-    // });
+    console.log("result array: " + result);
   });
-
-  // result.reverse();
 
   const options = {
     chart: {
@@ -132,7 +116,7 @@ function NDVIChart(props) {
     },
 
     xaxis: {
-      categories: chartDate,
+      categories: chartDate.reverse(),
       labels: {
         style: {
           // colors: "#fff",
