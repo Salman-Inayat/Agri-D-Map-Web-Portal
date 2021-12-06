@@ -1,5 +1,5 @@
 import React from "react";
-import Image_Picker from "../../components/Image_Picker/Image_Picker";
+import ImagePicker from "../../components/Image_Picker/Image_Picker";
 import Grid from "@material-ui/core/Grid";
 import useStyles from "./styles";
 
@@ -13,7 +13,7 @@ function Vari() {
           <h3>Vari Calculation</h3>
         </Grid>
         <Grid item md={12} sm={12} className={classes.ind_grid}>
-          <Image_Picker url="http://localhost:3000/vari" />
+          <ImagePicker url="http://localhost:5000/vari" />
         </Grid>
         <Grid item md={6} sm={12} className={classes.ind_grid}>
           {/* <div>

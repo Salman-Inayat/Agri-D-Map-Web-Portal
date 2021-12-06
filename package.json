@@ -29,6 +29,7 @@
     "mapbox-gl": "^2.5.0",
     "material-ui-audio-player": "^1.6.6",
     "mui-datatables": "^3.7.4",
+    "node-geocoder": "^3.28.0",
     "nodemon": "^2.0.13",
     "react": "^16.14.0",
     "react-apexcharts": "^1.3.7",
@@ -50,7 +51,7 @@
     "tinycolor2": "^1.4.2"
   },
   "scripts": {
-    "start": "concurrently \"PORT=3001 react-scripts start\" \"cd AgriDMap_Server && nodemon start\"",
+    "start": "concurrently \"react-scripts start\" \"cd AgriDMap_Server && nodemon start\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

@@ -1,5 +1,5 @@
 import React from "react";
-import Image_Picker from "../../components/Image_Picker/Image_Picker";
+import ImagePicker from "../../components/Image_Picker/Image_Picker";
 import Grid from "@material-ui/core/Grid";
 import useStyles from "./styles";
 
@@ -10,7 +10,7 @@ function Image_Segmentation() {
     <div>
       <Grid container spacing={3} className={classes.grid_container}>
         <Grid item md={12} sm={12} className={classes.ind_grid}>
-          <Image_Picker url="http://localhost:3000/image-segment" />
+          <ImagePicker url="http://localhost:5000/image-segment" />
         </Grid>
         <Grid item md={6} sm={12} className={classes.ind_grid}>
           {/* <div>

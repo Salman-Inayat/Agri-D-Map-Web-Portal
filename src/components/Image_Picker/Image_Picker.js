@@ -3,7 +3,7 @@ import Dropzone from "react-dropzone-uploader";
 import useStyles from "./styles.js";
 import "react-dropzone-uploader/dist/styles.css";
 
-function Image_Picker(props) {
+function ImagePicker(props) {
   const [imageFile, setimageFile] = useState("");
   const [loading, setLoading] = useState();
 
@@ -57,7 +57,7 @@ function Image_Picker(props) {
         )}
         {imageFile && (
           <img
-            src={`http://localhost:3000/${imageFile}`}
+            src={`http://localhost:5000/${imageFile}`}
             className={classes.preview_image}
             alt=""
           />
@@ -67,4 +67,4 @@ function Image_Picker(props) {
   );
 }
 
-export default Image_Picker;
+export default ImagePicker;

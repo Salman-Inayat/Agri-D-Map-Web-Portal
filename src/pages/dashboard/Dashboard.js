@@ -37,8 +37,8 @@ export default function Dashboard(props) {
   const [zoom, setZoom] = useState(8);
   const [roundedArea, setroundedArea] = useState(0);
   const [location, setLocation] = useState({
-    latitude: 73,
-    longitude: 32,
+    latitude: 32,
+    longitude: 73,
   });
   const [city, setCity] = useState("");
   const [polygon, setPolygon] = useState({});
@@ -54,9 +54,9 @@ export default function Dashboard(props) {
     });
   }, []);
 
-  useEffect(() => {
-    getCity();
-  }, [location.latitude, location.longitude]);
+  // useEffect(() => {
+  //   getCity();
+  // }, [location.latitude, location.longitude]);
 
   const getCity = () => {
     return Geocode.fromLatLng(location.latitude, location.longitude).then(
@@ -199,7 +199,7 @@ export default function Dashboard(props) {
       </Grid>
 
       <Grid item xs={12} md={5}>
-        <WeatherWidget city={city} />
+        <WeatherWidget location={location} />
       </Grid>
 
       <Grid item md={12}>
