@@ -36,6 +36,11 @@ router.get("/", (req, res) => {
   res.send("Hello again");
 });
 
+// Function to convert an Uint8Array to a string
+var uint8arrayToString = function (data) {
+  return String.fromCharCode.apply(null, data);
+};
+
 router.post(
   "/image-segment",
   segmentation_upload.single("dataFiles"),
@@ -48,41 +53,55 @@ router.post(
 
     const { spawn } = require("child_process");
 
-    const python = spawn("python", ["segment.py"]);
+    const segmentation = spawn("python", ["segment.py"]);
 
-    python.on("close", (code) => {
+    segmentation.on("close", (code) => {
       res.send(file);
       console.log("File name sent");
       console.log(`child process close all stdio with code ${code}`);
 
-      const images_folder = process.cwd() + "/u2net/images";
-      const results_folder = process.cwd() + "/u2net/results";
-      const output_folder = process.cwd() + "/output";
+      const classification = spawn("python", ["inference.py"]);
 
-      fse.emptyDir(images_folder, (err) => {
-        if (err) return console.error(err);
-        console.log("Images folder deleted!");
+      classification.stdout.on("data", (data) => {
+        console.log(`${data.toString()}`);
       });
 
-      fse.emptyDir(results_folder, (err) => {
-        if (err) return console.error(err);
-        console.log("Results folder deleted!");
-      });
+      classification.on("close", (code) => {
+        console.log("Executed");
 
-      fse.readdir(output_folder, (err, files) => {
-        if (err) {
-          console.log(err);
-        }
+        const images_folder = process.cwd() + "/u2net/images";
+        const results_folder = process.cwd() + "/u2net/results";
+        const output_folder = process.cwd() + "/output";
 
-        files.forEach((f) => {
-          const fileDir = path.join(output_folder, f);
-          const image_file = file.filename.slice(0, -3) + "png";
-
-          if (f !== image_file) {
-            fse.unlinkSync(fileDir);
-          }
+        fse.emptyDir(images_folder, (err) => {
+          if (err) return console.error(err);
+          console.log("Images folder deleted!");
         });
-        console.log("Output folder cleaned");
+
+        fse.emptyDir(results_folder, (err) => {
+          if (err) return console.error(err);
+          console.log("Results folder deleted!");
+        });
+
+        fse.emptyDir(output_folder, (err) => {
+          if (err) return console.error(err);
+          console.log("Output folder deleted!");
+        });
+        // fse.readdir(output_folder, (err, files) => {
+        //   if (err) {
+        //     console.log(err);
+        //   }
+
+        //   files.forEach((f) => {
+        //     const fileDir = path.join(output_folder, f);
+        //     const image_file = file.filename.slice(0, -3) + "png";
+
+        //     if (f !== image_file) {
+        //       fse.unlinkSync(fileDir);
+        //     }
+        //   });
+        //   console.log("Output folder cleaned");
+        // });
       });
     });
   },
