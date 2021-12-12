@@ -12,13 +12,13 @@ import argparse
 import sys
 import os
 
-folder_path = "./Inference/data/"
+folder_path = "./u2net/images"
 
 files = os.listdir(folder_path)
 for f in files:
     image_name = f
 
-image_path = "./Inference/data/" + image_name
+image_path = "./u2net/images/" + image_name
 
 
 model_path = "./Inference/model/model.pt"

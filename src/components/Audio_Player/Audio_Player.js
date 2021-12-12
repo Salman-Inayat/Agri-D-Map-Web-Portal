@@ -58,31 +58,8 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-function Audio_Player() {
-  const [counter, setCounter] = useState(0);
-  const [audio, setAudio] = useState();
-  const [audioToggle, setAudioToggle] = useState(false);
-
-  const handleCounter = function () {
-    setAudioToggle(true);
-    setCounter(counter + 1);
-    if (counter === 1) {
-      setAudio("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3");
-    } else if (counter === 2) {
-      setAudio(
-        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3",
-      );
-    }
-  };
-
-  return (
-    <div>
-      <Button onClick={handleCounter}>current value = {counter}</Button>
-      {audioToggle && (
-        <AudioPlayer width="300px" useStyles={useStyles} src={audio} />
-      )}
-    </div>
-  );
+function Audio(props) {
+  return <AudioPlayer width="300px" useStyles={useStyles} src={props.audio} />;
 }
 
-export default Audio_Player;
+export default Audio;

@@ -2,7 +2,7 @@ import { makeStyles } from "@material-ui/styles";
 
 export default makeStyles((theme) => ({
   grid_container: {
-    padding: "50px",
+    padding: "0px",
   },
   segmented_image: {
     height: "300px",

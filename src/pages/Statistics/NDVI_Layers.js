@@ -202,6 +202,9 @@ function NDVILayers(props) {
             id="demo-simple-select"
             value={metricDate}
             label="date"
+            defaultValue={
+              layersData.length > 0 ? formatDate(layersData[1].dt) : ""
+            }
             onChange={(e) => handleDateChange(e)}
           >
             {layersData.map(
