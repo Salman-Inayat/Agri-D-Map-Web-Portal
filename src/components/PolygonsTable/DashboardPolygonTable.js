@@ -147,24 +147,37 @@ const DashboardPolygonTable = (props) => {
         autoHeight={true}
       >
         <Column width={250} fixed sortable align="center">
-          <HeaderCell>Polygon Name </HeaderCell>
+          <HeaderCell style={{ backgroundColor: "#3f4257", color: "white" }}>
+            Polygon Name{" "}
+          </HeaderCell>
           <Cell dataKey="name" />
         </Column>
 
         <Column width={250} sortable align="center">
-          <HeaderCell>Created at</HeaderCell>
+          <HeaderCell style={{ backgroundColor: "#3f4257", color: "white" }}>
+            Created at
+          </HeaderCell>
           <Cell dataKey="created_at" />
         </Column>
 
         <Column width={250} sortable align="center">
-          <HeaderCell>Area</HeaderCell>
+          <HeaderCell style={{ backgroundColor: "#3f4257", color: "white" }}>
+            Area
+          </HeaderCell>
           <Cell dataKey="area" />
         </Column>
 
         <Column width={150} align="center">
-          <HeaderCell>
+          <HeaderCell
+            style={{
+              backgroundColor: "#3f4257",
+              color: "white",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
             <Button onClick={() => fetchPolygons()}>
-              <RefreshIcon />
+              <RefreshIcon style={{ color: "white" }} />
             </Button>
           </HeaderCell>
           <EditPolygonsCell />
@@ -184,9 +197,10 @@ const DashboardPolygonTable = (props) => {
             backgroundColor: "white",
             transform: "translate(-50%, -50%)",
             width: "500px",
-            height: "200px",
+            height: "180px",
             display: "flex",
             justifyContent: "space-around",
+            flexDirection: "column",
             alignItems: "center",
             borderRadius: "10px",
           }}
@@ -195,10 +209,22 @@ const DashboardPolygonTable = (props) => {
             id="outlined-basic"
             label="Enter polygon name"
             variant="outlined"
+            defaultValue={editName}
             value={editName}
             onChange={handleEditNameChange}
+            required
           />
-          <Button onClick={EditPolygon} variant="contained" color="primary">
+          <Button
+            onClick={EditPolygon}
+            variant="contained"
+            color="primary"
+            type="submit"
+            style={{
+              borderRadius: "30px",
+              width: "50%",
+              backgroundColor: " #3f4257",
+            }}
+          >
             Update Polygon
           </Button>
         </div>

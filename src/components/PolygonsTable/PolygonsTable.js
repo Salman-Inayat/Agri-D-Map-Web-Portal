@@ -108,35 +108,35 @@ const PolygonTable = (props) => {
       // cellBordered={false}
       // bordered={false}
       style={{
-        width: "80%",
+        width: "100%",
       }}
     >
       <Column width={200} align="center" fixed>
-        <HeaderCell style={{ backgroundColor: "#373368", color: "white" }}>
+        <HeaderCell style={{ backgroundColor: "#3f4257", color: "white" }}>
           Select a polygon
         </HeaderCell>
         <CheckCell dataKey="id" />
       </Column>
 
       <Column width={250} fixed sortable>
-        <HeaderCell style={{ backgroundColor: "#373368", color: "white" }}>
+        <HeaderCell style={{ backgroundColor: "#3f4257", color: "white" }}>
           Polygon Name
         </HeaderCell>
-        <Cell dataKey="name" />
+        <Cell dataKey="name" style={{ padding: "20px" }} />
       </Column>
 
-      <Column width={200} sortable>
-        <HeaderCell style={{ backgroundColor: "#373368", color: "white" }}>
+      <Column width={250} sortable>
+        <HeaderCell style={{ backgroundColor: "#3f4257", color: "white" }}>
           Created at
         </HeaderCell>
-        <Cell dataKey="created_at" />
+        <Cell dataKey="created_at" style={{ padding: "20px" }} />
       </Column>
 
       <Column width={150} sortable>
-        <HeaderCell style={{ backgroundColor: "#373368", color: "white" }}>
+        <HeaderCell style={{ backgroundColor: "#3f4257", color: "white" }}>
           Area
         </HeaderCell>
-        <Cell dataKey="area" />
+        <Cell dataKey="area" style={{ padding: "20px" }} />
       </Column>
     </Table>
   );
