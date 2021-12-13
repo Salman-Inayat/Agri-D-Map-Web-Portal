@@ -9,6 +9,7 @@ import PolygonTable from "../../components/PolygonsTable/PolygonsTable";
 import NDVILayers from "./NDVI_Layers";
 
 import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
 import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 
 import "date-fns";
@@ -127,8 +128,14 @@ export default function Statistics(props) {
         }}
       >
         <Grid item md={5}>
-          <h4>Historical</h4>
-          <h2>NDVI</h2>
+          <Typography variant="h5" style={{ color: "#3f4257" }}>
+            Historical
+          </Typography>
+          <Typography variant="h1" style={{ color: "#3f4257" }}>
+            NDVI
+          </Typography>
+          {/* <h4>Historical</h4>
+          <h2>NDVI</h2> */}
         </Grid>
         <Grid item md={3}></Grid>
         <Grid
