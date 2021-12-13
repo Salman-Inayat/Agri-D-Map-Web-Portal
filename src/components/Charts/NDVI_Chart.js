@@ -147,7 +147,7 @@ function NDVIChart(props) {
     //   },
     // },
     theme: {
-      pallete: "palette1",
+      pallete: "palette2",
       // mode: "dark",
     },
     tooltip: {
