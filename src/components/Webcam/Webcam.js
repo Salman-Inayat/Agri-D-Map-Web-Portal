@@ -1,8 +1,12 @@
 import React, { useState, useRef } from "react";
 import Webcam from "react-webcam";
 import { Button } from "@material-ui/core";
+import useStyles from "./styles.js";
+import CameraAltIcon from "@material-ui/icons/CameraAlt";
 
 const WebcamCapture = (props) => {
+  const classes = useStyles();
+
   const [image, setImage] = useState("");
   const webcamRef = useRef(null);
 
@@ -44,11 +48,13 @@ const WebcamCapture = (props) => {
           <Button
             variant="contained"
             color="primary"
+            size="small"
             onClick={(e) => {
               e.preventDefault();
               retake();
             }}
-            className="webcam-btn"
+            className={classes.webcamBtn}
+            startIcon={<CameraAltIcon />}
           >
             Retake Image
           </Button>
@@ -56,11 +62,13 @@ const WebcamCapture = (props) => {
           <Button
             variant="contained"
             color="primary"
+            size="small"
             onClick={(e) => {
               e.preventDefault();
               capture();
             }}
-            className="webcam-btn"
+            className={classes.webcamBtn}
+            startIcon={<CameraAltIcon />}
           >
             Capture
           </Button>

@@ -17,6 +17,8 @@ import WeatherWidget from "../../components/Weather_Widget/WeatherWidget";
 import DashboardPolygonTable from "../../components/PolygonsTable/DashboardPolygonTable";
 
 import Button from "@material-ui/core/Button";
+import LocationOnIcon from "@material-ui/icons/LocationOn";
+import AddIcon from "@material-ui/icons/Add";
 
 import TextField from "@material-ui/core/TextField";
 
@@ -128,8 +130,8 @@ export default function Dashboard(props) {
     map.current.flyTo({
       center: [location.longitude, location.latitude],
       essential: true,
-      zoom: zoom,
-      speed: 0.8, // make the flying slow
+      zoom: 13,
+      speed: 2, // make the flying slow
       curve: 1,
     });
   };
@@ -175,7 +177,16 @@ export default function Dashboard(props) {
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={12} md={7}>
+      <Grid
+        item
+        xs={12}
+        md={7}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+        }}
+      >
         <Grid item md={12} style={{ position: "relative" }}>
           <div
             style={{
@@ -189,11 +200,18 @@ export default function Dashboard(props) {
             }}
           >
             <p>Click the map to draw a polygon.</p>
-            <div> {roundedArea} ha</div>
+            <div> {roundedArea.toFixed(2)} ha</div>
           </div>
           <div ref={mapContainer} className={classes.map_container} />
         </Grid>
-        <Button onClick={showMyLocation} variant="contained" color="primary">
+        <Button
+          onClick={showMyLocation}
+          variant="contained"
+          color="primary"
+          size="small"
+          className={classes.locateButton}
+          startIcon={<LocationOnIcon />}
+        >
           Locate Me
         </Button>
       </Grid>
@@ -202,19 +220,26 @@ export default function Dashboard(props) {
         <WeatherWidget location={location} />
       </Grid>
 
-      <Grid item md={12}>
+      <Grid item md={12} m={20} className={classes.addPolygonContainer}>
         <TextField
           id="outlined-basic"
           label="Enter polygon name"
           variant="outlined"
           value={polygonName}
           onChange={handlePolygonNameChange}
+          className={classes.addPolygonInput}
         />
-        <Button onClick={createPolygon} variant="contained" color="primary">
+        <Button
+          onClick={createPolygon}
+          variant="contained"
+          color="primary"
+          className={classes.createPolygonButon}
+          startIcon={<AddIcon />}
+        >
           Create polygon
         </Button>
       </Grid>
-      <Grid item md={12}>
+      <Grid item md={12} style={{ marginTop: "50px" }}>
         <DashboardPolygonTable />
       </Grid>
     </Grid>

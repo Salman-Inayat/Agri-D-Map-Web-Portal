@@ -24,8 +24,8 @@ function ImagePicker(props) {
         withIcon={true}
         buttonText="Choose an image"
         onChange={onDrop}
-        imgExtension={[".jpg", ".png"]}
-        label="Max file size: 10MB, accepted: JPG, PNG"
+        imgExtension={[".jpg", ".jpeg", ".png"]}
+        label="Max file size: 10MB, accepted: JPG, PNG, JPEG"
         // maxFileSize={10242880}
       />
     </div>

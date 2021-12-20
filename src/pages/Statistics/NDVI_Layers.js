@@ -187,15 +187,14 @@ function NDVILayers(props) {
     <div>
       <Box
         style={{
-          width: "400px",
+          width: "30%",
           margin: "50px 20px",
           display: "flex",
-          justifyContent: "center",
-          alignItems: "space-around",
+          justifyContent: "space-between",
         }}
       >
         {" "}
-        <FormControl fullWidth>
+        <FormControl style={{ width: "40%" }}>
           <InputLabel id="demo-simple-select-label">Select Date</InputLabel>
           <Select
             labelId="demo-simple-select-label"
@@ -219,7 +218,7 @@ function NDVILayers(props) {
             )}
           </Select>
         </FormControl>
-        <FormControl fullWidth>
+        <FormControl style={{ width: "40%" }}>
           <InputLabel id="demo-simple-select-label">Select Metric</InputLabel>
           <Select
             labelId="demo-simple-select-label"

@@ -37,24 +37,24 @@ const structure = [
     link: "/app/segmentation",
     icon: <HomeIcon />,
   },
-  {
-    id: 3,
-    label: "Vari  Calculation",
-    link: "/app/vari",
-    icon: <HomeIcon />,
-  },
-  {
-    id: 4,
-    label: "Demo page",
-    // link: "/app/dashboard",
-    icon: <HomeIcon />,
-  },
-  {
-    id: 5,
-    label: "Demo page",
-    // link: "/app/dashboard",
-    icon: <HomeIcon />,
-  },
+  // {
+  //   id: 3,
+  //   label: "Vari  Calculation",
+  //   link: "/app/vari",
+  //   icon: <HomeIcon />,
+  // },
+  // {
+  //   id: 4,
+  //   label: "Demo page",
+  //   // link: "/app/dashboard",
+  //   icon: <HomeIcon />,
+  // },
+  // {
+  //   id: 5,
+  //   label: "Demo page",
+  //   // link: "/app/dashboard",
+  //   icon: <HomeIcon />,
+  // },
   // {
   //   id: 2,
   //   label: "Typography",
@@ -128,7 +128,7 @@ function Sidebar({ location }) {
       </div>
       <div className={classes.userArea}>
         <img src="/person.png" className={classes.sideBarImage} alt="" />
-        <h3>John Doe</h3>
+        <h3>Salman Inayat</h3>
       </div>
       <List className={classes.sidebarList}>
         {structure.map((link) => (

@@ -4,7 +4,7 @@ export default makeStyles((theme) => ({
   link: {
     textDecoration: "none",
     // color: "white",
-    background: "linear-gradient(to right, #373368, #373368)",
+    background: "linear-gradient(to right, #3F4257, #3F4257)",
     backgroundRepeat: "no-repeat",
     transition: "background-size 1s 0s",
     transform: "perspective(1px) translateZ(0)",
@@ -13,10 +13,10 @@ export default makeStyles((theme) => ({
     "&:hover": {
       color: "black",
       "& $linkIcon": {
-        color: "#373368",
+        color: "#3F4257",
       },
       "& $linkText": {
-        color: "#373368",
+        color: "#3F4257",
       },
     },
     "&:focus": {
@@ -65,7 +65,7 @@ export default makeStyles((theme) => ({
   },
   linkIconActive: {
     // color: theme.palette.primary.main,
-    color: "#373368",
+    color: "#3F4257",
   },
   linkText: {
     padding: 0,
@@ -75,7 +75,7 @@ export default makeStyles((theme) => ({
     fontSize: 16,
   },
   linkTextActive: {
-    color: "#373368",
+    color: "#3F4257",
   },
   linkTextHidden: {
     opacity: 0,

@@ -14,4 +14,14 @@ export default makeStyles((theme) => ({
     justifyContent: "center",
     alignItems: "center",
   },
+  submitButton: {
+    marginTop: "20px",
+    marginBottom: "20px",
+    backgroundColor: " #3f4257",
+    borderRadius: "20px",
+
+    "&:hover": {
+      backgroundColor: "#51556f",
+    },
+  },
 }));

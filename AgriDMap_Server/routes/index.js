@@ -4,20 +4,6 @@ const path = require("path");
 const multer = require("multer");
 var fse = require("fs-extra");
 
-// var segmentation_storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, "u2net/images");
-//   },
-//   filename: function (req, file, cb) {
-//     cb(
-//       null,
-//       `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`,
-//     );
-//   },
-// });
-
-// var segmentation_upload = multer({ storage: segmentation_storage });
-
 var vari_storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "vari/input");
@@ -79,21 +65,18 @@ router.post("/image-segment", base64ToImage, (req, res, next) => {
 
       const images_folder = process.cwd() + "/u2net/images";
       const results_folder = process.cwd() + "/u2net/results";
-      const output_folder = process.cwd() + "/output";
+      // const output_folder = process.cwd() + "/output";
 
-      // fse.emptyDir(images_folder, (err) => {
-      //   if (err) return console.error(err);
-      //   console.log("Images folder deleted!");
-      // });
+      fse.emptyDir(images_folder, (err) => {
+        if (err) return console.error(err);
+      });
 
-      // fse.emptyDir(results_folder, (err) => {
-      //   if (err) return console.error(err);
-      //   console.log("Results folder deleted!");
-      // });
+      fse.emptyDir(results_folder, (err) => {
+        if (err) return console.error(err);
+      });
 
       // fse.emptyDir(output_folder, (err) => {
       //   if (err) return console.error(err);
-      //   console.log("Output folder deleted!");
       // });
 
       // fse.readdir(output_folder, (err, files) => {

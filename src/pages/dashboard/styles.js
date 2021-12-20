@@ -64,4 +64,28 @@ export default makeStyles((theme) => ({
     marginRight: theme.spacing(1),
     width: 200,
   },
+  locateButton: {
+    margin: theme.spacing(1),
+    borderRadius: theme.spacing(2),
+    width: "25%",
+    backgroundColor: " #3f4257",
+
+    "&:hover": {
+      backgroundColor: "#51556f",
+    },
+  },
+  createPolygonButon: {
+    margin: theme.spacing(1),
+    borderRadius: theme.spacing(2),
+    width: "20%",
+    backgroundColor: " #3f4257",
+
+    "&:hover": {
+      backgroundColor: "#51556f",
+    },
+  },
+
+  addPolygonInput: {
+    width: "40%",
+  },
 }));

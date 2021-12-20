@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ImagePicker from "../../components/Image_Picker/Image_Picker";
 import Grid from "@material-ui/core/Grid";
 import useStyles from "./styles";
@@ -13,11 +13,52 @@ function Image_Segmentation() {
   const classes = useStyles();
   const [image, setImage] = React.useState(null);
   const [result, setResult] = React.useState(null);
-  const [resultImage, setResultImage] = React.useState(null);
+  const [resultImage, setResultImage] = React.useState();
   const [loading, setLoading] = React.useState(false);
   const [imagePresent, setImagePresent] = React.useState(false);
   const [isResult, setIsResult] = React.useState(false);
   const [resultAudio, setResultAudio] = React.useState();
+
+  const [tabData, setTabData] = useState();
+
+  const remedialActions = {
+    healthy: {
+      title: "Healthy: Healthy Plant",
+      description:
+        "Fertilize with the right fertilizer mixture and a balanced nutrient supply. Do not over-water the crop during the season. Do not touch healthy plants after touching infected plants. Maintain a high number of different varieties of plants around fields. If treating against an infestation, use specific products that do not affect beneficial insects. Remove diseased leaves, fruit or branches at the right time during the growing season. After the harvest, clean up plant debris from the field or orchard and burn them. In case of pests and diseases, always consider an integrated approach. with preventive measures together with biological treatments if available. As long as preventive measures are followed and care is taken to give plants and trees what they need, no chemical control should be needed!",
+      symptoms: [
+        "Dark green colored plant",
+        "Firm leaves",
+        "Brightly colored flowers",
+        "Well shaped, good-colored leaves, nutritious fruits and flowers",
+        "Root system is well developed",
+      ],
+      // recommendations:{
+      //   title: "Recommendations",
+
+      // }
+    },
+    resistant: {
+      title: "Resistant: Mild Yellow Stripe Rust",
+      description:
+        "The severity of the disease depends on the susceptibility of the plant. In vulnerable varieties, the fungus produces tiny, yellow to orange (rusty) pustules that are arranged in rows forming narrow stripes parallel to the leaf veins. They eventually merge and can engulf the whole leaf, a feature that appears earlier in young plants. These pustules (0.5 to 1 mm in diameter) can sometimes also be found on stems and heads. At later stages of the disease, long, necrotic, light brown stripes or blotches are visible on leaves, often covered with rusty pustules. In severe infections, the growth of plants is seriously compromised and tissues are damaged. The reduced leaf area leads to lower productivity, fewer spikes per plant and fewer grains per spike. Overall, the disease can lead to severe crop losses.",
+      symptoms: [
+        "Yellow colored plant",
+        "Tiny, rusty pustules arranged in stripes",
+        "Stems and heads can alse be affected",
+      ],
+    },
+    susceptible: {
+      title: "Susceptible: Severe Yellow Stripe Rust",
+      description:
+        "The severity of the disease depends on the susceptibility of the plant. In vulnerable varieties, the fungus produces tiny, yellow to orange (rusty) pustules that are arranged in rows forming narrow stripes parallel to the leaf veins. They eventually merge and can engulf the whole leaf, a feature that appears earlier in young plants. These pustules (0.5 to 1 mm in diameter) can sometimes also be found on stems and heads. At later stages of the disease, long, necrotic, light brown stripes or blotches are visible on leaves, often covered with rusty pustules. In severe infections, the growth of plants is seriously compromised and tissues are damaged. The reduced leaf area leads to lower productivity, fewer spikes per plant and fewer grains per spike. Overall, the disease can lead to severe crop losses.",
+      symptoms: [
+        "Yellow colored plant with severe rust spots",
+        "Tiny, rusty pustules arranged in stripes",
+        "Stems and heads can alse be affected",
+      ],
+    },
+  };
 
   const handleImage = (result) => {
     const slug = result.split("base64,").pop();
@@ -30,8 +71,8 @@ function Image_Segmentation() {
   };
 
   const handleSubmit = () => {
-    setResult("");
-    setResultImage("");
+    setResult();
+    setResultImage();
     setIsResult(false);
     if (imagePresent) {
       setLoading(true);
@@ -52,21 +93,27 @@ function Image_Segmentation() {
           var responseArray = response.split(/(\s+)/);
           setResult(responseArray[2]);
           setResultImage(responseArray[0]);
-          setLoading(false);
-          setIsResult(true);
+
           switch (responseArray[2]) {
             case "Healthy":
               setResultAudio("/healthy_english.mp3");
+              setTabData(remedialActions.healthy);
               break;
             case "Resistant":
               setResultAudio("/resistant_english.mp3");
+              setTabData(remedialActions.resistant);
               break;
             case "Susceptible":
               setResultAudio("/susceptible_english.mp3");
+              setTabData(remedialActions.susceptible);
               break;
             default:
+              setResultAudio("/healthy_english.mp3");
+              setTabData(remedialActions.healthy);
               break;
           }
+          setLoading(false);
+          setIsResult(true);
         })
         .catch((err) => {
           console.log(err);
@@ -94,30 +141,36 @@ function Image_Segmentation() {
             />
           </Grid>
 
-          <Grid item md={12} sm={12}>
+          <Grid
+            item
+            md={12}
+            sm={12}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <Button
               variant="contained"
               disabled={imagePresent ? false : true}
               color="primary"
-              className={classes.button}
+              size="large"
+              className={classes.submitButton}
               onClick={handleSubmit}
             >
               Submit
             </Button>
           </Grid>
-          {isResult && (
+          {isResult && tabData && resultImage === "image.png" && (
             <Grid item md={12} sm={12}>
               <div className={classes.result_container}>
-                <div>
-                  <ResultTab audio={resultAudio} />
-                </div>
-                <div className={classes.result_image}>
-                  <img
-                    src={`http://localhost:5000/${resultImage}`}
-                    alt="result"
-                    className={classes.result_image_img}
-                  />
-                </div>
+                <ResultTab
+                  audio={resultAudio}
+                  result={result}
+                  image={resultImage}
+                  data={tabData}
+                />
               </div>
             </Grid>
           )}

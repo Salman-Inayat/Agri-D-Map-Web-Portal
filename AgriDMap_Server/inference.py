@@ -1,27 +1,18 @@
 
-from os import stat
-import torch
-import torch.nn as nn
-import torch.optim as optim
-from torchvision import datasets, models, transforms
-from PIL import Image
-from torch.autograd import Variable
-from matplotlib import pyplot as plt
-import time
-import argparse
-import sys
 import os
+import torch
+from torchvision import models, transforms
+from PIL import Image
+import sys
 
-folder_path = "./u2net/images"
+
+folder_path = "./output"
 
 files = os.listdir(folder_path)
 for f in files:
     image_name = f
 
-image_path = "./u2net/images/" + image_name
-
-
-model_path = "./Inference/model/model.pt"
+image_path = "./output/" + image_name
 
 model = models.resnet18(pretrained=True)
 
@@ -29,57 +20,33 @@ model.fc = torch.nn.Linear(in_features=512, out_features=3)
 loss_fn = torch.nn.CrossEntropyLoss()
 
 model.load_state_dict(torch.load(
-    model_path, map_location=torch.device('cpu')))
+    "Inference/model/model.pt", map_location=torch.device('cpu')))
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-# device = torch.device('cpu')
 model = model.to(device)
 
-#optimizer = torch.optim.Adam(model.parameters(), lr=3e-5)
 
-imsize = 256
-loader = transforms.Compose(
-    [transforms.Scale(imsize), transforms.ToTensor()])
+classes = ['Healthy', 'Resistant', 'Susceptible']
 
-
-def image_loader(image_name):
-    """load image, returns cuda tensor"""
-
-    image = Image.open(image_name)
-    image = loader(image).float()
-    image = Variable(image, requires_grad=True)
-    # this is for VGG, may not be needed for ResNet
-    image = image.unsqueeze(0)
-
-    return image.cpu()  # assumes that you're using GPU
-
-# image = image_loader('./C_78.jpg')
-
-# s = time.time()
-# op = model(image)
-# pred = op.data.max(1, keepdim=True)[1]
-# e = time.time()
-
-# e-s
-
-#test_healthy = './data/1.jpg'
+test_transform = transforms.Compose([
+    transforms.Resize(size=(224, 224)),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                         std=[0.229, 0.224, 0.225])])
 
 
-def inference(img_path):
+def classify(model, test_transform, image_path, classes):
+    model.eval()
+    image = Image.open(image_path)
+    image = image.convert("RGB")
+    image = test_transform(image).float()
+    image = image.unsqueeze_(0)
 
-    image = image_loader(img_path)
+    output = model(image.cpu())
+    _, predicted = torch.max(output.data, 1)
 
-    op = model(image)
-    pred = int(op.data.max(1, keepdim=True)[1])
-
-    if (pred == 0):
-        return "Healthy"
-    elif (pred == 1):
-        return "Resistant"
-    else:
-        return "Susceptible"
+    print(classes[predicted.item()])
+    sys.stdout.flush()
 
 
-result = inference(image_path)
-print(result)
-sys.stdout.flush()
+classify(model, test_transform, image_path, classes)

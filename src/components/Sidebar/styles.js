@@ -14,12 +14,12 @@ export default makeStyles((theme) => ({
     width: drawerWidth,
     flexShrink: 0,
     whiteSpace: "nowrap",
-    background: "#373368",
+    background: "#3F4257",
     color: "white",
   },
   drawerOpen: {
     width: drawerWidth,
-    background: "#373368",
+    background: "#3F4257",
     color: "white",
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
@@ -27,7 +27,7 @@ export default makeStyles((theme) => ({
     }),
   },
   drawerClose: {
-    background: "#373368",
+    background: "#3F4257",
     color: "white",
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
