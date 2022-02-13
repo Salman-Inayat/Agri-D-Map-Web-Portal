@@ -26,7 +26,7 @@ function ImagePicker(props) {
         onChange={onDrop}
         imgExtension={[".jpg", ".jpeg", ".png"]}
         label="Max file size: 10MB, accepted: JPG, PNG, JPEG"
-        // maxFileSize={10242880}
+        maxFileSize={10485760}
       />
     </div>
   );

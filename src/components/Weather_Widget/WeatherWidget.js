@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import ReactWeather from "react-open-weather-widget";
 import "react-open-weather-widget/lib/css/ReactWeather.css";
+import axios from "axios";
 
 // mapbox access token
 var ACCESS_TOKEN =
@@ -47,36 +48,15 @@ export default function WeatherWidget(props) {
       });
   };
 
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-
-  var requestOptions = {
-    method: "GET",
-    headers: myHeaders,
-    redirect: "follow",
-  };
-
-  const getData = async () => {
-    const res = await fetch("/json/");
-    console.log(res);
-    //  setIP(res.data.IPv4);
-  };
-
   useEffect(() => {
-    // var url = `https://cors-anywhere.herokuapp.com/https://geolocation-db.com/json/${token}`;
-
-    setStatus("Fetching location...");
-    // getData();
-    // fetch(`/json/${token}/111.68.97.206`)
-    //   .then((response) => response.text())
-    //   .then((result) => console.log(result))
-    //   .catch((error) => console.log("error", error));
-
-    navigator.geolocation.getCurrentPosition((position) => {
-      console.log(position.coords.latitude, position.coords.longitude);
-
-      reverseGeocoding(position.coords.latitude, position.coords.longitude);
-    });
+    axios
+      .get("https://geolocation-db.com/json/")
+      .then((response) => {
+        reverseGeocoding(response.data.latitude, response.data.longitude);
+      })
+      .catch((error) => {
+        setStatus("Please disable adblocker to view weather");
+      });
   }, []);
 
   return (

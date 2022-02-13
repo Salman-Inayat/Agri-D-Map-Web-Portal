@@ -118,21 +118,21 @@ const PolygonTable = (props) => {
         <CheckCell dataKey="id" />
       </Column>
 
-      <Column width={150} fixed sortable>
+      <Column width={200} fixed sortable>
         <HeaderCell style={{ backgroundColor: "#3f4257", color: "white" }}>
           Polygon Name
         </HeaderCell>
         <Cell dataKey="name" style={{ padding: "20px" }} />
       </Column>
 
-      <Column width={150} sortable>
+      <Column width={200} sortable>
         <HeaderCell style={{ backgroundColor: "#3f4257", color: "white" }}>
           Created at
         </HeaderCell>
         <Cell dataKey="created_at" style={{ padding: "20px" }} />
       </Column>
 
-      <Column width={110} sortable>
+      <Column width={150} sortable>
         <HeaderCell style={{ backgroundColor: "#3f4257", color: "white" }}>
           Area
         </HeaderCell>

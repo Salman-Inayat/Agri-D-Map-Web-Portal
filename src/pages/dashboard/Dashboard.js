@@ -42,54 +42,21 @@ export default function Dashboard(props) {
     latitude: 32,
     longitude: 73,
   });
-  const [city, setCity] = useState("");
   const [polygon, setPolygon] = useState({});
 
   const [polygonName, setpolygonName] = useState("");
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      setLocation({
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-      });
-    });
+    // fetch("https://geolocation-db.com/json/")
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     console.log(data);
+    //     setLocation({
+    //       latitude: data.latitude,
+    //       longitude: data.longitude,
+    //     });
+    //   });
   }, []);
-
-  // useEffect(() => {
-  //   getCity();
-  // }, [location.latitude, location.longitude]);
-
-  const getCity = () => {
-    return Geocode.fromLatLng(location.latitude, location.longitude).then(
-      (response) => {
-        let city;
-        for (
-          let i = 0;
-          i < response.results[0].address_components.length;
-          i++
-        ) {
-          for (
-            let j = 0;
-            j < response.results[0].address_components[i].types.length;
-            j++
-          ) {
-            switch (response.results[0].address_components[i].types[j]) {
-              case "locality":
-                city = response.results[0].address_components[i].long_name;
-                break;
-              default:
-                break;
-            }
-          }
-        }
-        setCity(city);
-      },
-      (error) => {
-        console.error(error);
-      },
-    );
-  };
 
   useEffect(() => {
     if (map.current) return; // initialize map only once
@@ -138,16 +105,18 @@ export default function Dashboard(props) {
 
   function updateArea(e) {
     const data = draw.current.getAll();
-    const polygonData = turf.polygon(data.features[0].geometry.coordinates, {
-      name: { polygonName },
-    });
-
-    setPolygon(polygonData);
 
     if (data.features.length > 0) {
       const area = turf.area(data);
       setroundedArea(Math.round(area * 100) / 100 / 10000);
+
+      const polygonData = turf.polygon(data.features[0].geometry.coordinates, {
+        name: { polygonName },
+      });
+
+      setPolygon(polygonData);
     } else {
+      setroundedArea(0);
       if (e.type !== "draw.delete") alert("Click the map to draw a polygon.");
     }
   }
