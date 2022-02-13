@@ -51,13 +51,13 @@ export default function ReaultTab(props) {
   useEffect(() => {
     setImage(props.image);
     console.log(props.image);
-    setImageURL(`http://localhost:5000/${props.image}`);
+    setImageURL(`https://agri-vision-server.herokuapp.com/${props.image}`);
   }, []);
 
   useEffect(() => {
     setImage(props.image);
     console.log(props.image);
-    setImageURL(`http://localhost:5000/${props.image}`);
+    setImageURL(`https://agri-vision-server.herokuapp.com/${props.image}`);
   }, [props.image]);
 
   const handleChange = (event, newValue) => {
@@ -66,9 +66,11 @@ export default function ReaultTab(props) {
 
   const reloadSrc = (e) => {
     if (fallback) {
-      e.target.src = `http://localhost:5000/${props.image}`;
+      e.target.src = `https://agri-vision-server.herokuapp.com/${props.image}`;
     } else {
-      e.target.src = imageURL(`http://localhost:5000/${props.image}`);
+      e.target.src = imageURL(
+        `https://agri-vision-server.herokuapp.com/${props.image}`,
+      );
       setFallback(true);
     }
   };
@@ -156,7 +158,7 @@ export default function ReaultTab(props) {
           <Grid item md={5} xs={12}>
             <Audio audio={audio} />
             <img
-              src={`http://localhost:5000/${image}`}
+              src={`https://agri-vision-server.herokuapp.com/${image}`}
               alt="result"
               className={classes.resultImage}
               onError={reloadSrc}

@@ -89,7 +89,7 @@ function Vari() {
           <h3>Vari Calculation</h3>
         </Grid>
         <Grid item md={12} sm={12} className={classes.ind_grid}>
-          <ImagePicker url="http://localhost:5000/vari" />
+          <ImagePicker url="https://agri-vision-server.herokuapp.com/vari" />
         </Grid>
 
         <Grid item md={12} sm={12} className={classes.ind_grid}>

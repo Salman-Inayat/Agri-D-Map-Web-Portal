@@ -78,7 +78,7 @@ function Image_Segmentation() {
       setLoading(true);
       axios
         .post(
-          "http://localhost:5000/image-segment",
+          "https://agri-vision-server.herokuapp.com/image-segment",
           {
             image: image,
           },

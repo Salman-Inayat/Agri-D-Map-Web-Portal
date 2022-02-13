@@ -43,7 +43,7 @@ function Login(props) {
     };
 
     axios
-      .post("http://localhost:5000/register", data)
+      .post("https://agri-vision-server.herokuapp.com/register", data)
       .then((res) => {
         props.history.push("/");
         setIsLoading(true);
@@ -62,7 +62,7 @@ function Login(props) {
     };
 
     axios
-      .post("http://localhost:5000/login", data)
+      .post("https://agri-vision-server.herokuapp.com/login", data)
       .then((res) => {
         loginUser(
           userDispatch,
