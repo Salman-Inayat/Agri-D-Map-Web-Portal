@@ -47,15 +47,15 @@ export default function Dashboard(props) {
   const [polygonName, setpolygonName] = useState("");
 
   useEffect(() => {
-    // fetch("https://geolocation-db.com/json/")
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     console.log(data);
-    //     setLocation({
-    //       latitude: data.latitude,
-    //       longitude: data.longitude,
-    //     });
-    //   });
+    fetch("https://geolocation-db.com/json/")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setLocation({
+          latitude: data.latitude,
+          longitude: data.longitude,
+        });
+      });
   }, []);
 
   useEffect(() => {
