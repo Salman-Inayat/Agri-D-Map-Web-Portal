@@ -3,27 +3,19 @@ var router = express.Router();
 const path = require("path");
 const multer = require("multer");
 var fse = require("fs-extra");
-
-var vari_storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "vari/input");
-  },
-  filename: function (req, file, cb) {
-    cb(
-      null,
-      `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`,
-    );
-  },
-});
-
-var vari_upload = multer({ storage: vari_storage });
+const User = require("../models/user.modal.js");
 
 const image_name = "image.jpg";
 
 var base64ToImage = (req, res, next) => {
   var base64Data = req.body.image;
   require("fs").writeFile(
-    `u2net/images/${image_name}`,
+    // for windows development
+    process.cwd() + `\\u2net\\images\\${image_name}`,
+
+    // for linux development and final deployment
+    // `u2net/images/${image_name}`,
+
     base64Data,
     "base64",
     function (err) {
@@ -98,53 +90,41 @@ router.post("/image-segment", base64ToImage, (req, res, next) => {
   });
 });
 
-router.post("/vari", vari_upload.single("dataFiles"), (req, res, next) => {
-  const file = req.file;
+router.post("/login", (req, res) => {
+  console.log("req.body: ", req.body);
 
-  if (!file) {
-    return res.status(400).send({ message: "Please upload a file." });
-  }
+  const { email, password } = req.body;
+  // find the user by email in user table
 
-  const { spawn } = require("child_process");
-  console.log("Spawning child process...");
-  const python = spawn("python", ["vari.py", file.filename]);
-
-  python.stdout.on("data", (data) => {
-    console.log(data.toString());
-  });
-
-  python.stderr.on("data", (data) => {
-    console.log(data.toString());
-  });
-
-  python.on("close", (code) => {
-    res.send(file);
-    console.log("File name sent");
-    console.log(`child process close all stdio with code ${code}`);
-
-    const images_folder = process.cwd() + "/vari/input";
-    const output_folder = process.cwd() + "/output";
-
-    fse.emptyDir(images_folder, (err) => {
-      if (err) return console.error(err);
-      console.log("Input folder cleaned!");
-    });
-
-    fse.readdir(output_folder, (err, files) => {
-      if (err) {
-        console.log(err);
+  User.findOne({ email: email }, (err, user) => {
+    if (user) {
+      if (password === user.password) {
+        res.send({ message: "login sucess", user: user });
+      } else {
+        res.send({ message: "wrong credentials" });
       }
+    } else {
+      res.send("not register");
+    }
+  });
+});
 
-      files.forEach((f) => {
-        const fileDir = path.join(output_folder, f);
-        const image_file = file.filename.slice(0, -3) + "png";
-
-        if (f !== image_file) {
-          fse.unlinkSync(fileDir);
+router.post("/register", (req, res) => {
+  console.log(req.body);
+  const { name, email, password } = req.body;
+  User.findOne({ email: email }, (err, user) => {
+    if (user) {
+      res.send({ message: "user already exist" });
+    } else {
+      const user = new User({ name, email, password });
+      user.save((err) => {
+        if (err) {
+          res.send(err);
+        } else {
+          res.send({ message: "sucessfull" });
         }
       });
-      console.log("Output folder cleaned");
-    });
+    }
   });
 });
 

@@ -9,19 +9,18 @@ import {
   TextField,
   Fade,
 } from "@material-ui/core";
-import { withRouter } from "react-router-dom";
-import classnames from "classnames";
+import { withRouter, useHistory } from "react-router-dom";
+import axios from "axios";
 
 // styles
 import useStyles from "./styles";
 
-// context
 import { useUserDispatch, loginUser } from "../../context/UserContext";
 
 function Login(props) {
+  console.log(props);
   var classes = useStyles();
-
-  // global
+  const history = useHistory();
   var userDispatch = useUserDispatch();
 
   // local
@@ -35,12 +34,52 @@ function Login(props) {
   var [signupValue, setSignupValue] = useState("");
   var [signupPasswordValue, setSignupPasswordValue] = useState("");
 
+  const handleSignupUser = () => {
+    setIsLoading(true);
+    const data = {
+      name: nameValue,
+      email: signupValue,
+      password: signupPasswordValue,
+    };
+
+    axios
+      .post("http://localhost:5000/register", data)
+      .then((res) => {
+        props.history.push("/");
+        setIsLoading(true);
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
+      });
+  };
+
+  const handleLoginUser = () => {
+    setIsLoading(true);
+    const data = {
+      email: loginValue,
+      password: loginPasswordValue,
+    };
+
+    axios
+      .post("http://localhost:5000/login", data)
+      .then((res) => {
+        loginUser(
+          userDispatch,
+          loginValue,
+          loginPasswordValue,
+          props.history,
+          setIsLoading,
+          setError,
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <Grid container className={classes.container}>
-      {/* <div className={classes.logotypeContainer}>
-        <img src={logo} alt="logo" className={classes.logotypeImage} />
-        <Typography className={classes.logotypeText}>Material Admin</Typography>
-      </div> */}
       <div className={classes.formContainer}>
         <div className={classes.form}>
           <Tabs
@@ -58,15 +97,6 @@ function Login(props) {
               <Typography variant="h2" className={classes.greeting}>
                 Welcome Back!
               </Typography>
-              {/* <Button size="large" className={classes.googleButton}>
-                <img src={google} alt="google" className={classes.googleIcon} />
-                &nbsp;Sign in with Google
-              </Button>
-              <div className={classes.formDividerContainer}>
-                <div className={classes.formDivider} />
-                <Typography className={classes.formDividerWord}>or</Typography>
-                <div className={classes.formDivider} />
-              </div> */}
               <Fade in={error}>
                 <Typography color="secondary" className={classes.errorMessage}>
                   Something is wrong with your login or password :(
@@ -110,16 +140,7 @@ function Login(props) {
                     disabled={
                       loginValue.length === 0 || loginPasswordValue.length === 0
                     }
-                    onClick={() =>
-                      loginUser(
-                        userDispatch,
-                        loginValue,
-                        loginPasswordValue,
-                        props.history,
-                        setIsLoading,
-                        setError,
-                      )
-                    }
+                    onClick={handleLoginUser}
                     variant="contained"
                     color="primary"
                     size="large"
@@ -140,9 +161,6 @@ function Login(props) {
           )}
           {activeTabId === 1 && (
             <React.Fragment>
-              {/* <Typography variant="h2" className={classes.greeting}>
-                Welcome!
-              </Typography> */}
               <Typography variant="h2" className={classes.subGreeting}>
                 Create your account
               </Typography>
@@ -201,16 +219,7 @@ function Login(props) {
                   <CircularProgress size={26} />
                 ) : (
                   <Button
-                    onClick={() =>
-                      loginUser(
-                        userDispatch,
-                        signupValue,
-                        signupPasswordValue,
-                        props.history,
-                        setIsLoading,
-                        setError,
-                      )
-                    }
+                    onClick={handleSignupUser}
                     disabled={
                       signupValue.length === 0 ||
                       signupPasswordValue.length === 0 ||
@@ -226,21 +235,6 @@ function Login(props) {
                   </Button>
                 )}
               </div>
-              {/* <div className={classes.formDividerContainer}>
-                <div className={classes.formDivider} />
-                <Typography className={classes.formDividerWord}>or</Typography>
-                <div className={classes.formDivider} />
-              </div>
-              <Button
-                size="large"
-                className={classnames(
-                  classes.googleButton,
-                  classes.googleButtonCreating,
-                )}
-              >
-                <img src={google} alt="google" className={classes.googleIcon} />
-                &nbsp;Sign in with Google
-              </Button> */}
             </React.Fragment>
           )}
         </div>
