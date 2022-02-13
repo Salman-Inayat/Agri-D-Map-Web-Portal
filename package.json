@@ -55,7 +55,7 @@
     "tinycolor2": "^1.4.2"
   },
   "scripts": {
-    "start": "concurrently \"react-scripts start\" \"cd AgriDMap_Server && nodemon start\"",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
