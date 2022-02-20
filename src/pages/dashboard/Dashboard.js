@@ -45,6 +45,7 @@ export default function Dashboard(props) {
   const [polygon, setPolygon] = useState({});
 
   const [polygonName, setpolygonName] = useState("");
+  const [fieldHelperText, setFieldHelperText] = useState("");
 
   useEffect(() => {
     fetch("https://geolocation-db.com/json/")
@@ -109,6 +110,7 @@ export default function Dashboard(props) {
     if (data.features.length > 0) {
       const area = turf.area(data);
       setroundedArea(Math.round(area * 100) / 100 / 10000);
+      setFieldHelperText("");
 
       const polygonData = turf.polygon(data.features[0].geometry.coordinates, {
         name: { polygonName },
@@ -122,22 +124,26 @@ export default function Dashboard(props) {
   }
 
   const createPolygon = () => {
-    (async () => {
-      const rawResponse = await fetch(
-        "http://api.agromonitoring.com/agro/1.0/polygons?appid=b22d00c2f91807b86822083ead929d76",
-        {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
+    if (roundedArea > 250) {
+      setFieldHelperText("Area cannot exceed 200ha");
+    } else {
+      (async () => {
+        const rawResponse = await fetch(
+          "http://api.agromonitoring.com/agro/1.0/polygons?appid=b22d00c2f91807b86822083ead929d76",
+          {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ geo_json: polygon, name: polygonName }),
           },
-          body: JSON.stringify({ geo_json: polygon, name: polygonName }),
-        },
-      );
-      const content = await rawResponse.json();
-      console.log(content);
-    })();
-    setpolygonName("");
+        );
+        const content = await rawResponse.json();
+        console.log(content);
+      })();
+      setpolygonName("");
+    }
   };
 
   const handlePolygonNameChange = (e) => {
@@ -168,8 +174,14 @@ export default function Dashboard(props) {
               padding: "5px",
             }}
           >
-            <p>Click the map to draw a polygon.</p>
-            <div> {roundedArea.toFixed(2)} ha</div>
+            <p style={{ margin: "0px" }}>Click the map to draw a polygon.</p>{" "}
+            <p style={{ margin: "0px" }}>
+              Note: Area cannot be greater than 200ha
+            </p>
+            <p style={{ margin: "0px" }}>
+              {" "}
+              {roundedArea > 0 ? `${roundedArea.toFixed(2)} ha` : ""}
+            </p>
           </div>
           <div ref={mapContainer} className={classes.map_container} />
         </Grid>
@@ -189,7 +201,7 @@ export default function Dashboard(props) {
         <WeatherWidget location={location} />
       </Grid>
 
-      <Grid item md={12} m={20} className={classes.addPolygonContainer}>
+      <Grid item md={7} xs={12} m={20} className={classes.addPolygonContainer}>
         <TextField
           id="outlined-basic"
           label="Enter polygon name"
@@ -197,15 +209,22 @@ export default function Dashboard(props) {
           value={polygonName}
           onChange={handlePolygonNameChange}
           className={classes.addPolygonInput}
+          helperText={fieldHelperText}
+          FormHelperTextProps={{
+            classes: {
+              root: classes.root,
+            },
+          }}
         />
         <Button
           onClick={createPolygon}
           variant="contained"
           color="primary"
           className={classes.createPolygonButon}
-          startIcon={<AddIcon />}
+          // startIcon={<AddIcon />}
+          disabled={roundedArea > 0 ? false : true}
         >
-          Create polygon
+          Create field
         </Button>
       </Grid>
       <Grid item md={12} style={{ marginTop: "50px" }}>

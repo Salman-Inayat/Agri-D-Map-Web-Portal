@@ -8,6 +8,7 @@ import axios from "axios";
 import LoadingOverlay from "react-loading-overlay";
 import Audio from "../../components/Audio_Player/Audio_Player";
 import ResultTab from "../../components/Tab/Tab";
+import { useMediaQuery } from "react-responsive";
 
 function Image_Segmentation() {
   const classes = useStyles();
@@ -20,6 +21,7 @@ function Image_Segmentation() {
   const [resultAudio, setResultAudio] = React.useState();
 
   const [tabData, setTabData] = useState();
+  const isMobile = useMediaQuery({ maxWidth: 767 });
 
   const remedialActions = {
     healthy: {
@@ -78,7 +80,7 @@ function Image_Segmentation() {
       setLoading(true);
       axios
         .post(
-          "https://agri-vision-server.herokuapp.com/image-segment",
+          `${process.env.REACT_APP_SERVER_URL}/image-segment`,
           {
             image: image,
           },
@@ -125,26 +127,33 @@ function Image_Segmentation() {
     <div>
       <LoadingOverlay active={loading} spinner text="Processing the image">
         <Grid container spacing={3} className={classes.grid_container}>
-          <Grid item md={5} sm={12} className={classes.ind_grid}>
+          <Grid item md={5} sm={12} xs={12} className={classes.ind_grid}>
             <ImagePicker
               handleImage={handleImage}
               handleImagePresent={handleImagePresent}
             />
           </Grid>
-          <Grid item md={1} sm={12} className={classes.ind_grid}>
-            <h3>OR</h3>
-          </Grid>
-          <Grid item md={6} sm={12} className={classes.ind_grid}>
-            <WebcamCapture
-              handleImage={handleImage}
-              handleImagePresent={handleImagePresent}
-            />
-          </Grid>
+          {!isMobile && (
+            <Grid item md={7}>
+              <Grid container>
+                <Grid item md={1} sm={12} xs={12} className={classes.ind_grid}>
+                  <h3>OR</h3>
+                </Grid>
+                <Grid item md={6} sm={12} xs={12} className={classes.ind_grid}>
+                  <WebcamCapture
+                    handleImage={handleImage}
+                    handleImagePresent={handleImagePresent}
+                  />
+                </Grid>
+              </Grid>
+            </Grid>
+          )}
 
           <Grid
             item
             md={12}
             sm={12}
+            xs={12}
             style={{
               display: "flex",
               justifyContent: "center",

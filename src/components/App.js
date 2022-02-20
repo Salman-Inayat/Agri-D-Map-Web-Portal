@@ -37,19 +37,20 @@ export default function App() {
     return (
       <Route
         {...rest}
-        render={(props) =>
-          isAuthenticated ? (
+        render={
+          (props) =>
+            // isAuthenticated ? (
             React.createElement(component, props)
-          ) : (
-            <Redirect
-              to={{
-                pathname: "/login",
-                state: {
-                  from: props.location,
-                },
-              }}
-            />
-          )
+          // ) : (
+          //   <Redirect
+          //     to={{
+          //       pathname: "/login",
+          //       state: {
+          //         from: props.location,
+          //       },
+          //     }}
+          //   />
+          // )
         }
       />
     );

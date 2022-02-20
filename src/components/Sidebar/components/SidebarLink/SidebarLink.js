@@ -11,6 +11,14 @@ import {
 import { Inbox as InboxIcon } from "@material-ui/icons";
 import { Link } from "react-router-dom";
 import classnames from "classnames";
+import { useMediaQuery } from "react-responsive";
+
+// context
+import {
+  useLayoutState,
+  useLayoutDispatch,
+  toggleSidebar,
+} from "../../../../context/LayoutContext.js";
 
 // styles
 import useStyles from "./styles";
@@ -29,6 +37,8 @@ export default function SidebarLink({
   type,
 }) {
   var classes = useStyles();
+  var layoutDispatch = useLayoutDispatch();
+  const isMobile = useMediaQuery({ maxWidth: 767 });
 
   // local
   var [isOpen, setIsOpen] = useState(false);
@@ -96,6 +106,7 @@ export default function SidebarLink({
           }),
         }}
         disableRipple
+        onClick={() => (isMobile ? toggleSidebar(layoutDispatch) : "")}
       >
         <ListItemIcon
           className={classnames(classes.linkIcon, {

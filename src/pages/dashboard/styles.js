@@ -1,6 +1,9 @@
 import { makeStyles } from "@material-ui/styles";
 
 export default makeStyles((theme) => ({
+  root: {
+    color: "#FF4842",
+  },
   intro_grid: {
     marginBottom: theme.spacing(2),
     padding: theme.spacing(4),
@@ -73,19 +76,38 @@ export default makeStyles((theme) => ({
     "&:hover": {
       backgroundColor: "#51556f",
     },
+    [theme.breakpoints.down("sm")]: {
+      width: "100%",
+      margin: "0px",
+      marginTop: theme.spacing(1),
+    },
+  },
+  addPolygonContainer: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   createPolygonButon: {
     margin: theme.spacing(1),
     borderRadius: theme.spacing(2),
-    width: "20%",
+    width: "40%",
     backgroundColor: " #3f4257",
 
     "&:hover": {
       backgroundColor: "#51556f",
     },
+    [theme.breakpoints.down("sm")]: {
+      width: "40%",
+      borderRadius: theme.spacing(5),
+      padding: "0.5rem 0rem",
+    },
   },
 
   addPolygonInput: {
-    width: "40%",
+    width: "60%",
+
+    [theme.breakpoints.down("sm")]: {
+      width: "60%",
+    },
   },
 }));

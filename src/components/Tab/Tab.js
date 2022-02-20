@@ -18,7 +18,7 @@ function TabPanel(props) {
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
       className={classes.tabPanel}
-      style={{ padding: "50px" }}
+      // style={{ padding: "50px" }}
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
@@ -51,13 +51,13 @@ export default function ReaultTab(props) {
   useEffect(() => {
     setImage(props.image);
     console.log(props.image);
-    setImageURL(`https://agri-vision-server.herokuapp.com/${props.image}`);
+    setImageURL(`${process.env.REACT_APP_SERVER_URL}/${props.image}`);
   }, []);
 
   useEffect(() => {
     setImage(props.image);
     console.log(props.image);
-    setImageURL(`https://agri-vision-server.herokuapp.com/${props.image}`);
+    setImageURL(`${process.env.REACT_APP_SERVER_URL}/${props.image}`);
   }, [props.image]);
 
   const handleChange = (event, newValue) => {
@@ -66,10 +66,10 @@ export default function ReaultTab(props) {
 
   const reloadSrc = (e) => {
     if (fallback) {
-      e.target.src = `https://agri-vision-server.herokuapp.com/${props.image}`;
+      e.target.src = `${process.env.REACT_APP_SERVER_URL}/${props.image}`;
     } else {
       e.target.src = imageURL(
-        `https://agri-vision-server.herokuapp.com/${props.image}`,
+        `${process.env.REACT_APP_SERVER_URL}/${props.image}`,
       );
       setFallback(true);
     }
@@ -89,7 +89,7 @@ export default function ReaultTab(props) {
       </Box>
       <TabPanel value={value} index={0}>
         <Grid container spacing={4}>
-          <Grid item md={7} xs={12}>
+          <Grid item md={6} xs={12} style={{ padding: "0px" }}>
             <Typography
               variant="h4"
               component="h2"
@@ -97,7 +97,11 @@ export default function ReaultTab(props) {
             >
               {data.title}
             </Typography>
-            <Typography variant="body1" component="p">
+            <Typography
+              variant="body1"
+              component="p"
+              style={{ textAlign: "justify" }}
+            >
               {data.description}
             </Typography>
 
@@ -116,7 +120,17 @@ export default function ReaultTab(props) {
             </Typography>
           </Grid>
 
-          <Grid item md={4} xs={12}>
+          <Grid
+            item
+            md={6}
+            xs={12}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
             <Audio audio={audio} />
             <img
               src={imageURL}
@@ -129,7 +143,7 @@ export default function ReaultTab(props) {
       </TabPanel>
       <TabPanel value={value} index={1}>
         <Grid container spacing={4}>
-          <Grid item md={7} xs={12}>
+          <Grid item md={6} xs={12} style={{ padding: "0px" }}>
             <Typography
               variant="h4"
               component="h2"
@@ -137,7 +151,11 @@ export default function ReaultTab(props) {
             >
               {data.title}
             </Typography>
-            <Typography variant="body1" component="p">
+            <Typography
+              variant="body1"
+              component="p"
+              style={{ textAlign: "justify" }}
+            >
               {data.description}
             </Typography>
 
@@ -155,10 +173,20 @@ export default function ReaultTab(props) {
             </Typography>
           </Grid>
 
-          <Grid item md={5} xs={12}>
+          <Grid
+            item
+            md={6}
+            xs={12}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
             <Audio audio={audio} />
             <img
-              src={`https://agri-vision-server.herokuapp.com/${image}`}
+              src={`${process.env.REACT_APP_SERVER_URL}/${image}`}
               alt="result"
               className={classes.resultImage}
               onError={reloadSrc}

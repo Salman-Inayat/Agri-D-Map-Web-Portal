@@ -7,6 +7,7 @@ import NDVIChart from "../../components/Charts/NDVI_Chart";
 // import WeatherChart from "../../components/WeatherChart/WeatherChart";
 import PolygonTable from "../../components/PolygonsTable/PolygonsTable";
 import NDVILayers from "./NDVI_Layers";
+import useStyles from "./styles.js";
 
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
@@ -16,6 +17,8 @@ import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
 
 export default function Statistics(props) {
+  var classes = useStyles();
+
   const initialToDate = new Date();
   const UNIX_initialToDate = initialToDate.getTime() / 1000;
 
@@ -103,30 +106,11 @@ export default function Statistics(props) {
   };
 
   return (
-    <Grid container spacing={2}>
-      <Grid
-        item
-        md={12}
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          margin: "10px",
-          padding: "20px",
-        }}
-      >
+    <Grid container spacing={4} className={classes.container}>
+      <Grid item md={12} xs={12}>
         <PolygonTable onChange={handleChange} value={polygonId} />
       </Grid>
-      <Grid
-        container
-        style={{
-          margin: "10px",
-          padding: "20px",
-          // backgroundColor: "#373368",
-          // color: "white",
-          borderRadius: "10px",
-        }}
-      >
+      <Grid container className={classes.NDVIContainer}>
         <Grid item md={5}>
           <Typography variant="h5" style={{ color: "#3f4257" }}>
             Historical
@@ -173,13 +157,13 @@ export default function Statistics(props) {
             />
           </MuiPickersUtilsProvider>
         </Grid>
-        <Grid item md={12}>
+        <Grid item md={12} xs={12}>
           {" "}
           {NDVI_data.length > 0 && <NDVIChart data={NDVI_data} />}
         </Grid>
       </Grid>
 
-      <Grid item md={12}>
+      <Grid item md={12} xs={12}>
         {mountComponent && (
           <NDVILayers
             fromDateUNIX={fromDateUNIX}

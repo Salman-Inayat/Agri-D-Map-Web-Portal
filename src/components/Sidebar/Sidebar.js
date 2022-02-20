@@ -128,7 +128,7 @@ function Sidebar({ location }) {
       </div>
       <div className={classes.userArea}>
         <img src="/person.png" className={classes.sideBarImage} alt="" />
-        <h3>Salman Inayat</h3>
+        <h3>John Doe</h3>
       </div>
       <List className={classes.sidebarList}>
         {structure.map((link) => (

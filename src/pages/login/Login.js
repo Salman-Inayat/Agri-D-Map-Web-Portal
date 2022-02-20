@@ -43,7 +43,7 @@ function Login(props) {
     };
 
     axios
-      .post("https://agri-vision-server.herokuapp.com/register", data)
+      .post(`${process.env.REACT_APP_SERVER_URL}/register`, data)
       .then((res) => {
         props.history.push("/");
         setIsLoading(true);
@@ -62,7 +62,7 @@ function Login(props) {
     };
 
     axios
-      .post("https://agri-vision-server.herokuapp.com/login", data)
+      .post(`${process.env.REACT_APP_SERVER_URL}/login`, data)
       .then((res) => {
         loginUser(
           userDispatch,

@@ -49,11 +49,16 @@ export default makeStyles((theme) => ({
     borderRadius: "15px",
     alignItems: "center",
     [theme.breakpoints.down("md")]: {
-      width: "50%",
+      width: "90%",
+      height: "60%",
+      padding: "1rem",
     },
   },
   form: {
     width: 320,
+    [theme.breakpoints.down("md")]: {
+      width: "90%",
+    },
   },
   tab: {
     fontWeight: 400,
@@ -68,6 +73,9 @@ export default makeStyles((theme) => ({
     fontWeight: 500,
     textAlign: "center",
     marginTop: theme.spacing(2),
+    [theme.breakpoints.down("md")]: {
+      fontSize: "1.5rem",
+    },
   },
   googleButton: {
     marginTop: theme.spacing(6),

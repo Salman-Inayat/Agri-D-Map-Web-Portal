@@ -10,6 +10,7 @@ import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
+import useStyles from "./styles.js";
 
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -22,6 +23,8 @@ import Paper from "@material-ui/core/Paper";
 const API_KEY = "b22d00c2f91807b86822083ead929d76";
 
 function NDVILayers(props) {
+  var classes = useStyles();
+
   const initialDate = new Date();
   initialDate.setDate(initialDate.getDate() - 30);
 
@@ -184,71 +187,86 @@ function NDVILayers(props) {
   var dateToBeSelected;
 
   return (
-    <div>
-      <Box
-        style={{
-          width: "30%",
-          margin: "50px 20px",
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
-        {" "}
-        <FormControl style={{ width: "40%" }}>
-          <InputLabel id="demo-simple-select-label">Select Date</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={metricDate}
-            label="date"
-            defaultValue={
-              layersData.length > 0 ? formatDate(layersData[1].dt) : ""
-            }
-            onChange={(e) => handleDateChange(e)}
-          >
-            {layersData.map(
-              (layer, i) => (
-                (dateToBeSelected = formatDate(layer.dt)),
-                (
-                  <MenuItem value={layer.dt} key={i}>
-                    {dateToBeSelected}
-                  </MenuItem>
-                )
-              ),
-            )}
-          </Select>
-        </FormControl>
-        <FormControl style={{ width: "40%" }}>
-          <InputLabel id="demo-simple-select-label">Select Metric</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={metric}
-            label="metric"
-            onChange={(e) => handleMetricChange(e)}
-          >
-            <MenuItem value="ndvi">NDVI</MenuItem>
-            <MenuItem value="evi">EVI</MenuItem>
-            <MenuItem value="evi2">EVI2</MenuItem>
-            <MenuItem value="ndwi">NDWI</MenuItem>
-            <MenuItem value="nri">NRI</MenuItem>
-            <MenuItem value="dswi">DSWI</MenuItem>
-          </Select>
-        </FormControl>
-      </Box>
-
-      <Grid container spacing={3}>
-        <Grid item md={4}>
-          {" "}
-          {tableData.max && <Layers />}
-        </Grid>
-        <Grid item md={6}>
-          {tableData.max && (
-            <img src={imageURL} alt="loading" height="300" width="400"></img>
-          )}
+    <Grid container spacing={4}>
+      <Grid item md={6} xs={12}>
+        <Grid container spacing={2}>
+          <Grid item md={6} xs={5}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Select Date</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={metricDate}
+                label="date"
+                defaultValue={
+                  layersData.length > 0 ? formatDate(layersData[1].dt) : ""
+                }
+                onChange={(e) => handleDateChange(e)}
+              >
+                {layersData.map(
+                  (layer, i) => (
+                    (dateToBeSelected = formatDate(layer.dt)),
+                    (
+                      <MenuItem value={layer.dt} key={i}>
+                        {dateToBeSelected}
+                      </MenuItem>
+                    )
+                  ),
+                )}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item md={6} xs={5}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">
+                Select Metric
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={metric}
+                label="metric"
+                onChange={(e) => handleMetricChange(e)}
+              >
+                <MenuItem value="ndvi">NDVI</MenuItem>
+                <MenuItem value="evi">EVI</MenuItem>
+                <MenuItem value="evi2">EVI2</MenuItem>
+                <MenuItem value="ndwi">NDWI</MenuItem>
+                <MenuItem value="nri">NRI</MenuItem>
+                <MenuItem value="dswi">DSWI</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
         </Grid>
       </Grid>
-    </div>
+
+      <Grid item md={12}>
+        <Grid container spacing={3}>
+          <Grid item md={4} xs={12}>
+            {" "}
+            {tableData.max && <Layers />}
+          </Grid>
+          <Grid
+            item
+            md={6}
+            xs={12}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            {tableData.max && (
+              <img
+                src={imageURL}
+                alt="loading"
+                className={classes.layersImage}
+              ></img>
+            )}
+          </Grid>
+        </Grid>
+      </Grid>
+    </Grid>
   );
 }
 
