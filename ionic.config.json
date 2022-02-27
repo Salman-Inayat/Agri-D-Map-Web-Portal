@@ -1,0 +1,7 @@
+{
+  "name": "agrivision",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
