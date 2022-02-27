@@ -229,7 +229,7 @@ export default function Dashboard(props) {
           Create field
         </Button>
       </Grid>
-      <Grid item md={12} style={{ marginTop: "50px" }}>
+      <Grid item md={12} xs={12} style={{ marginTop: "50px" }}>
         <DashboardPolygonTable ref={childRef} />
       </Grid>
     </Grid>

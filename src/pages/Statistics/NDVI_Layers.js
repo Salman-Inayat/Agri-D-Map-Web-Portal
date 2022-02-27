@@ -259,7 +259,7 @@ function NDVILayers(props) {
           >
             {tableData.max && (
               <img
-                src={imageURL}
+                src={imageURL.replace("http", "https")}
                 alt="loading"
                 className={classes.layersImage}
               ></img>

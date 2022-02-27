@@ -176,16 +176,18 @@ const DashboardPolygonTable = forwardRef((props, ref) => {
   return (
     <div>
       <Table
-        height={300}
-        width={900}
+        height={420}
         data={getData()}
         sortColumn={sortColumn}
         sortType={sortType}
         onSortColumn={handleSortColumn}
         loading={loading}
         autoHeight={true}
+        style={{
+          width: "100%",
+        }}
       >
-        <Column width={isMobile ? 150 : 250} fixed sortable align="center">
+        <Column width={isMobile ? 150 : 250} sortable align="center">
           <HeaderCell style={{ backgroundColor: "#3f4257", color: "white" }}>
             Field Name
           </HeaderCell>
@@ -222,35 +224,7 @@ const DashboardPolygonTable = forwardRef((props, ref) => {
           <EditPolygonsCell />
         </Column>
       </Table>
-      {/* <Modal
-        open={open}
-        onClose={() => setOpen(false)}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <TextField
-          id="outlined-basic"
-          label="Enter polygon name"
-          variant="outlined"
-          defaultValue={editName}
-          value={editName}
-          onChange={handleEditNameChange}
-          required
-        />
-        <Button
-          onClick={EditPolygon}
-          variant="contained"
-          color="primary"
-          type="submit"
-          style={{
-            borderRadius: "30px",
-            width: "50%",
-            backgroundColor: " #3f4257",
-          }}
-        >
-          Update Polygon
-        </Button>
-      </Modal> */}
+
       <Dialog
         fullWidth
         open={open}
