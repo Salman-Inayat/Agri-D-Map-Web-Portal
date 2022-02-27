@@ -98,6 +98,9 @@ function NDVILayers(props) {
   };
 
   const fetchStatsData = (url) => {
+    if (url.includes("http")) {
+      url = url.replace("http", "https");
+    }
     fetch(url)
       .then((res) => res.json())
       .then((data) => {

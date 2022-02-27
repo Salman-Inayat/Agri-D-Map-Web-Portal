@@ -44,6 +44,8 @@ export default function Dashboard(props) {
   const [polygonName, setpolygonName] = useState("");
   const [fieldHelperText, setFieldHelperText] = useState("");
 
+  const childRef = useRef();
+
   useEffect(() => {
     fetch(`${process.env.REACT_APP_GEO_LOCATION_URL}`)
       .then((response) => response.json())
@@ -138,6 +140,7 @@ export default function Dashboard(props) {
         );
         const content = await rawResponse.json();
         console.log(content);
+        childRef.current.updateTable();
       })();
       setpolygonName("");
     }
@@ -203,6 +206,7 @@ export default function Dashboard(props) {
           id="outlined-basic"
           label="Enter polygon name"
           variant="outlined"
+          size="small"
           value={polygonName}
           onChange={handlePolygonNameChange}
           className={classes.addPolygonInput}
@@ -212,6 +216,7 @@ export default function Dashboard(props) {
               root: classes.root,
             },
           }}
+          style={{ backgroundColor: "rgba(255,255,255,0.2)", borderRadius: 25 }}
         />
         <Button
           onClick={createPolygon}
@@ -225,7 +230,7 @@ export default function Dashboard(props) {
         </Button>
       </Grid>
       <Grid item md={12} style={{ marginTop: "50px" }}>
-        <DashboardPolygonTable />
+        <DashboardPolygonTable ref={childRef} />
       </Grid>
     </Grid>
   );

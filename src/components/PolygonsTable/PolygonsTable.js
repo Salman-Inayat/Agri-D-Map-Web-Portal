@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Table, Column, HeaderCell, Cell } from "rsuite-table";
 import "rsuite-table/dist/css/rsuite-table.css";
 import Radio from "@material-ui/core/Radio";
+import { useMediaQuery } from "react-responsive";
 
 const PolygonTable = (props) => {
   const [data, setdata] = useState([]);
@@ -9,6 +10,8 @@ const PolygonTable = (props) => {
   const [sortType, setSortType] = useState();
   const [loading, setLoading] = useState(false);
   const [value, setValue] = useState("");
+
+  const isMobile = useMediaQuery({ maxWidth: 767 });
 
   useEffect(() => {
     setLoading(true);
@@ -104,35 +107,35 @@ const PolygonTable = (props) => {
       autoHeight={true}
       hover={false}
       rowHeight={60}
-      headerHeight={50}
+      headerHeight={40}
       // cellBordered={false}
       // bordered={false}
       style={{
         width: "100%",
       }}
     >
-      <Column width={100} align="center" fixed>
+      <Column width={isMobile ? 60 : 100} align="center">
         <HeaderCell style={{ backgroundColor: "#3f4257", color: "white" }}>
           Select
         </HeaderCell>
         <CheckCell dataKey="id" />
       </Column>
 
-      <Column width={200} fixed sortable>
+      <Column width={isMobile ? 150 : 250} sortable align="center">
         <HeaderCell style={{ backgroundColor: "#3f4257", color: "white" }}>
           Polygon Name
         </HeaderCell>
         <Cell dataKey="name" style={{ padding: "20px" }} />
       </Column>
 
-      <Column width={200} sortable>
+      <Column width={isMobile ? 150 : 250} sortable align="center">
         <HeaderCell style={{ backgroundColor: "#3f4257", color: "white" }}>
           Created at
         </HeaderCell>
         <Cell dataKey="created_at" style={{ padding: "20px" }} />
       </Column>
 
-      <Column width={150} sortable>
+      <Column width={isMobile ? 100 : 200} sortable align="center">
         <HeaderCell style={{ backgroundColor: "#3f4257", color: "white" }}>
           Area
         </HeaderCell>

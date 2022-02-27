@@ -1,6 +1,6 @@
 {
-  "name":"agrivision",
-  "version":"1.0.0",  
+  "name": "agrivision",
+  "version": "1.0.0",
   "private": true,
   "homepage": "./",
   "engines": {

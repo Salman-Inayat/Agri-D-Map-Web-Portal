@@ -1,14 +1,35 @@
-import React, { useState, useEffect } from "react";
+import React, {
+  useState,
+  useEffect,
+  forwardRef,
+  useRef,
+  useImperativeHandle,
+} from "react";
 import { Table, Column, HeaderCell, Cell } from "rsuite-table";
 import "rsuite-table/dist/css/rsuite-table.css";
-import Button from "@material-ui/core/Button";
+import {
+  Dialog,
+  Button,
+  TextField,
+  Modal,
+  DialogActions,
+  Typography,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import RefreshIcon from "@material-ui/icons/Refresh";
-import Modal from "@material-ui/core/Modal";
-import TextField from "@material-ui/core/TextField";
+import { useMediaQuery } from "react-responsive";
 
-const DashboardPolygonTable = (props) => {
+const useStyles = makeStyles((theme) => ({}));
+
+const DashboardPolygonTable = forwardRef((props, ref) => {
+  const classes = useStyles();
+
   const [data, setdata] = useState([]);
   const [sortColumn, setSortColumn] = useState();
   const [sortType, setSortType] = useState();
@@ -16,6 +37,11 @@ const DashboardPolygonTable = (props) => {
   const [open, setOpen] = useState(false);
   const [editName, setEditName] = useState("");
   const [polygonId, setPolygonId] = useState();
+
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [polygonToDelete, setPolygonToDelete] = useState();
+
+  const isMobile = useMediaQuery({ maxWidth: 767 });
 
   useEffect(() => {
     fetchPolygons();
@@ -42,6 +68,12 @@ const DashboardPolygonTable = (props) => {
       })
       .catch((err) => console.log(err));
   };
+
+  useImperativeHandle(ref, () => ({
+    updateTable() {
+      fetchPolygons();
+    },
+  }));
 
   const getData = () => {
     if (sortColumn && sortType) {
@@ -108,6 +140,7 @@ const DashboardPolygonTable = (props) => {
     console.log("Delete polygon id: ", id);
     setTimeout(() => {
       fetchPolygons();
+      setDialogOpen(false);
     }, 500);
   };
 
@@ -124,7 +157,12 @@ const DashboardPolygonTable = (props) => {
           <EditIcon onClick={() => ModalClick(rowData.id)} />
         </Button>
         |
-        <Button onClick={() => DeletePolygon(rowData.id)}>
+        <Button
+          onClick={() => {
+            setDialogOpen(true);
+            setPolygonToDelete(rowData.id);
+          }}
+        >
           <DeleteIcon />
         </Button>
       </div>
@@ -147,28 +185,28 @@ const DashboardPolygonTable = (props) => {
         loading={loading}
         autoHeight={true}
       >
-        <Column width={250} fixed sortable align="center">
+        <Column width={isMobile ? 150 : 250} fixed sortable align="center">
           <HeaderCell style={{ backgroundColor: "#3f4257", color: "white" }}>
-            Polygon Name{" "}
+            Field Name
           </HeaderCell>
           <Cell dataKey="name" />
         </Column>
 
-        <Column width={250} sortable align="center">
+        <Column width={isMobile ? 150 : 250} sortable align="center">
           <HeaderCell style={{ backgroundColor: "#3f4257", color: "white" }}>
             Created at
           </HeaderCell>
           <Cell dataKey="created_at" />
         </Column>
 
-        <Column width={250} sortable align="center">
+        <Column width={isMobile ? 150 : 250} sortable align="center">
           <HeaderCell style={{ backgroundColor: "#3f4257", color: "white" }}>
             Area
           </HeaderCell>
           <Cell dataKey="area" />
         </Column>
 
-        <Column width={150} align="center">
+        <Column width={isMobile ? 150 : 150} align="center">
           <HeaderCell
             style={{
               backgroundColor: "#3f4257",
@@ -184,54 +222,99 @@ const DashboardPolygonTable = (props) => {
           <EditPolygonsCell />
         </Column>
       </Table>
-      <Modal
+      {/* <Modal
         open={open}
         onClose={() => setOpen(false)}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <div
+        <TextField
+          id="outlined-basic"
+          label="Enter polygon name"
+          variant="outlined"
+          defaultValue={editName}
+          value={editName}
+          onChange={handleEditNameChange}
+          required
+        />
+        <Button
+          onClick={EditPolygon}
+          variant="contained"
+          color="primary"
+          type="submit"
           style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            backgroundColor: "white",
-            transform: "translate(-50%, -50%)",
-            width: "500px",
-            height: "180px",
-            display: "flex",
-            justifyContent: "space-around",
-            flexDirection: "column",
-            alignItems: "center",
-            borderRadius: "10px",
+            borderRadius: "30px",
+            width: "50%",
+            backgroundColor: " #3f4257",
           }}
         >
-          <TextField
-            id="outlined-basic"
-            label="Enter polygon name"
-            variant="outlined"
-            defaultValue={editName}
-            value={editName}
-            onChange={handleEditNameChange}
-            required
-          />
+          Update Polygon
+        </Button>
+      </Modal> */}
+      <Dialog
+        fullWidth
+        open={open}
+        onClose={() => setOpen(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        BackdropProps={{ style: { backgroundColor: "rgba(0,0,0,0.5)" } }}
+      >
+        <DialogTitle id="alert-dialog-title">Edit field name</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <TextField
+              id="outlined-basic"
+              label="Enter field name"
+              variant="outlined"
+              defaultValue={editName}
+              value={editName}
+              fullWidth
+              onChange={handleEditNameChange}
+              required
+            />
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button color="primary" onClick={() => setOpen(false)}>
+            Cancel
+          </Button>
           <Button
             onClick={EditPolygon}
-            variant="contained"
             color="primary"
-            type="submit"
-            style={{
-              borderRadius: "30px",
-              width: "50%",
-              backgroundColor: " #3f4257",
-            }}
+            disabled={editName === "" ? true : false}
           >
             Update Polygon
           </Button>
-        </div>
-      </Modal>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        fullWidth
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        BackdropProps={{ style: { backgroundColor: "rgba(0,0,0,0.5)" } }}
+      >
+        <DialogTitle id="alert-dialog-title">Confirm delete</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to delete this field?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button color="primary" onClick={() => setDialogOpen(false)}>
+            Cancel
+          </Button>
+          <Button
+            color="primary"
+            onClick={() => DeletePolygon(polygonToDelete)}
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
-};
+});
 
 export default DashboardPolygonTable;

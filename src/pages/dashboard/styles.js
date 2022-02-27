@@ -105,9 +105,12 @@ export default makeStyles((theme) => ({
 
   addPolygonInput: {
     width: "60%",
-
+    borderRadius: theme.spacing(2),
     [theme.breakpoints.down("sm")]: {
       width: "60%",
+    },
+    [`& fieldset`]: {
+      borderRadius: 50,
     },
   },
 }));

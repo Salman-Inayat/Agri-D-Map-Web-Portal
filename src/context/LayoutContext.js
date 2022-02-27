@@ -1,4 +1,5 @@
 import React from "react";
+import { useMediaQuery } from "react-responsive";
 
 var LayoutStateContext = React.createContext();
 var LayoutDispatchContext = React.createContext();
@@ -14,8 +15,10 @@ function layoutReducer(state, action) {
 }
 
 function LayoutProvider({ children }) {
+  const isMobile = useMediaQuery({ maxWidth: 767 });
+
   var [state, dispatch] = React.useReducer(layoutReducer, {
-    isSidebarOpened: true,
+    isSidebarOpened: isMobile ? false : true,
   });
   return (
     <LayoutStateContext.Provider value={state}>
