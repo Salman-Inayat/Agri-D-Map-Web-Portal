@@ -1,10 +1,6 @@
 {
-<<<<<<< HEAD
-  "name": "agri-vision",
-=======
-  "name": "agrivision",
->>>>>>> 558fa002cc4fa6b2487c601b44a29e6b2c128810
-  "version": "1.1.0",
+  "name":"agrivision",
+  "version":"1.0.0",  
   "private": true,
   "homepage": "./",
   "engines": {
