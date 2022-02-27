@@ -4,16 +4,6 @@ import ReactWeather from "react-open-weather-widget";
 import "react-open-weather-widget/lib/css/ReactWeather.css";
 import axios from "axios";
 
-// mapbox access token
-var ACCESS_TOKEN =
-  "pk.eyJ1Ijoic2FsbWFuLWluYXlhdCIsImEiOiJja3U3OGNzZzQzNHVlMm9xaG9sZmtoOXI3In0.rF7GhHsrNL8YPMUCLCI92A";
-
-// LocationIQ access token
-var access_token = "pk.e83540a57ec2bee941bf85a4d0a2186c";
-
-// geolocation-db access token
-var token = "8dd79c70-0801-11ec-a29f-e381a788c2c0";
-
 export default function WeatherWidget(props) {
   const customStyles = {
     fontFamily: "Helvetica, sans-serif",
@@ -39,18 +29,20 @@ export default function WeatherWidget(props) {
   const [status, setStatus] = useState(null);
 
   const reverseGeocoding = function (latitude, longitude) {
-    var url = `https://us1.locationiq.com/v1/reverse.php?key=${access_token}&lat=${latitude}&lon=${longitude}&format=json`;
+    var url = `https://us1.locationiq.com/v1/reverse.php?key=${process.env.REACT_APP_LOCATION_IQ_ACCESS_TOKEN}&lat=${latitude}&lon=${longitude}&format=json`;
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         setCity(data.address.city);
         console.log(data.address.city);
       });
   };
 
   useEffect(() => {
+    console.log("useEffect", process.env.REACT_APP_GEO_LOCATION_URL);
     axios
-      .get("https://geolocation-db.com/json/")
+      .get(`${process.env.REACT_APP_GEO_LOCATION_URL}`)
       .then((response) => {
         reverseGeocoding(response.data.latitude, response.data.longitude);
       })
@@ -64,7 +56,7 @@ export default function WeatherWidget(props) {
       {city ? (
         <ReactWeather
           forecast="5days"
-          apikey="f6973195b3a29969a6ad7e393d2ac38b"
+          apikey={`${process.env.REACT_APP_REACT_WEATHER_API_KEY}`}
           type="city"
           city={city}
           theme={customStyles}

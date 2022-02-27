@@ -6,8 +6,6 @@ import useStyles from "./styles.js";
 import "react-dropzone-uploader/dist/styles.css";
 // import Audio_Player from "../../components/Audio_Player/Audio_Player";
 
-import Geocode from "react-geocode";
-
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import "mapbox-gl/dist/mapbox-gl.css";
 import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
@@ -25,8 +23,7 @@ import TextField from "@material-ui/core/TextField";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
 
-mapboxgl.accessToken =
-  "pk.eyJ1Ijoic2FsbWFuLWluYXlhdCIsImEiOiJja3U3OGNzZzQzNHVlMm9xaG9sZmtoOXI3In0.rF7GhHsrNL8YPMUCLCI92A";
+mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_GL_ACCESS_TOKEN;
 
 export default function Dashboard(props) {
   var classes = useStyles();
@@ -48,7 +45,7 @@ export default function Dashboard(props) {
   const [fieldHelperText, setFieldHelperText] = useState("");
 
   useEffect(() => {
-    fetch("https://geolocation-db.com/json/")
+    fetch(`${process.env.REACT_APP_GEO_LOCATION_URL}`)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -63,7 +60,7 @@ export default function Dashboard(props) {
     if (map.current) return; // initialize map only once
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: "mapbox://styles/salman-inayat/cku817f1m079d18mqqh70gguw",
+      style: process.env.REACT_APP_MAPBOX_GL_STYLE,
       center: [lng, lat],
       zoom: zoom,
     });
@@ -129,7 +126,7 @@ export default function Dashboard(props) {
     } else {
       (async () => {
         const rawResponse = await fetch(
-          "http://api.agromonitoring.com/agro/1.0/polygons?appid=b22d00c2f91807b86822083ead929d76",
+          `${process.env.REACT_APP_AGROMONITORING_API_URL}polygons?appid=${process.env.REACT_APP_AGROMONITORING_API_KEY}`,
           {
             method: "POST",
             headers: {

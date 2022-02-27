@@ -17,13 +17,14 @@ const DashboardPolygonTable = (props) => {
   const [editName, setEditName] = useState("");
   const [polygonId, setPolygonId] = useState();
 
-  const API_KEY = "b22d00c2f91807b86822083ead929d76";
   useEffect(() => {
     fetchPolygons();
   }, []);
 
   const fetchPolygons = () => {
-    fetch(`http://api.agromonitoring.com/agro/1.0/polygons?appid=${API_KEY}`)
+    fetch(
+      `${process.env.REACT_APP_AGROMONITORING_API_URL}polygons?appid=${process.env.REACT_APP_AGROMONITORING_API_KEY}`,
+    )
       .then((res) => res.json())
       .then((data) => {
         data.map((item, i) => {
@@ -79,7 +80,7 @@ const DashboardPolygonTable = (props) => {
 
   const EditPolygon = () => {
     fetch(
-      `http://api.agromonitoring.com/agro/1.0/polygons/${polygonId}?appid=${API_KEY}`,
+      `${process.env.REACT_APP_AGROMONITORING_API_URL}polygons/${polygonId}?appid=${process.env.REACT_APP_AGROMONITORING_API_KEY}`,
       {
         method: "PUT",
         headers: {
@@ -99,7 +100,7 @@ const DashboardPolygonTable = (props) => {
 
   const DeletePolygon = (id) => {
     fetch(
-      `http://api.agromonitoring.com/agro/1.0/polygons/${id}?appid=${API_KEY}`,
+      `${process.env.REACT_APP_AGROMONITORING_API_URL}polygons/${id}?appid=${process.env.REACT_APP_AGROMONITORING_API_KEY}`,
       {
         method: "DELETE",
       },

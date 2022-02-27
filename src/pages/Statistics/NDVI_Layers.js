@@ -20,8 +20,6 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 
-const API_KEY = "b22d00c2f91807b86822083ead929d76";
-
 function NDVILayers(props) {
   var classes = useStyles();
 
@@ -37,7 +35,7 @@ function NDVILayers(props) {
 
   useEffect(() => {
     fetch(
-      `http://api.agromonitoring.com/agro/1.0/image/search?start=${props.fromDateUNIX}&end=${props.toDateUNIX}&polyid=${props.polygonId}&appid=${API_KEY}`,
+      `${process.env.REACT_APP_AGROMONITORING_API_URL}image/search?start=${props.fromDateUNIX}&end=${props.toDateUNIX}&polyid=${props.polygonId}&appid=${process.env.REACT_APP_AGROMONITORING_API_KEY}`,
     )
       .then((response) => response.json())
 

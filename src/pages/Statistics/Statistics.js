@@ -9,7 +9,6 @@ import PolygonTable from "../../components/PolygonsTable/PolygonsTable";
 import NDVILayers from "./NDVI_Layers";
 import useStyles from "./styles.js";
 
-import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 
@@ -42,7 +41,7 @@ export default function Statistics(props) {
   useEffect(() => {
     let firstPolygon;
     fetch(
-      `http://api.agromonitoring.com/agro/1.0/polygons?appid=b22d00c2f91807b86822083ead929d76`,
+      `${process.env.REACT_APP_AGROMONITORING_API_URL}polygons?appid=${process.env.REACT_APP_AGROMONITORING_API_KEY}`,
     )
       .then((response) => response.json())
       .then((data) => {
@@ -57,7 +56,7 @@ export default function Statistics(props) {
     setTimeout(() => {
       console.log(firstPolygon);
       fetch(
-        `https://api.agromonitoring.com/agro/1.0/ndvi/history?polyid=${firstPolygon}&start=${fromDateUNIX}&end=${toDateUNIX}&appid=b22d00c2f91807b86822083ead929d76`,
+        `${process.env.REACT_APP_AGROMONITORING_API_URL}ndvi/history?polyid=${firstPolygon}&start=${fromDateUNIX}&end=${toDateUNIX}&appid=${process.env.REACT_APP_AGROMONITORING_API_KEY}`,
       )
         .then((res) => res.json())
         .then((data) => {
@@ -98,7 +97,7 @@ export default function Statistics(props) {
   const getNDVI = () => {
     (async () => {
       const rawResponse = await fetch(
-        `https://api.agromonitoring.com/agro/1.0/ndvi/history?polyid=${polygonId}&start=${fromDateUNIX}&end=${toDateUNIX}&appid=b22d00c2f91807b86822083ead929d76`,
+        `${process.env.REACT_APP_AGROMONITORING_API_URL}ndvi/history?polyid=${polygonId}&start=${fromDateUNIX}&end=${toDateUNIX}&appid=${process.env.REACT_APP_AGROMONITORING_API_KEY}`,
       );
       const data = await rawResponse.json();
       setNDVI_data(data);

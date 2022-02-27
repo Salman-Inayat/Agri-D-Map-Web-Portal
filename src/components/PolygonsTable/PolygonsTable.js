@@ -3,8 +3,6 @@ import { Table, Column, HeaderCell, Cell } from "rsuite-table";
 import "rsuite-table/dist/css/rsuite-table.css";
 import Radio from "@material-ui/core/Radio";
 
-const API_KEY = "b22d00c2f91807b86822083ead929d76";
-
 const PolygonTable = (props) => {
   const [data, setdata] = useState([]);
   const [sortColumn, setSortColumn] = useState();
@@ -14,7 +12,9 @@ const PolygonTable = (props) => {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`http://api.agromonitoring.com/agro/1.0/polygons?appid=${API_KEY}`)
+    fetch(
+      `${process.env.REACT_APP_AGROMONITORING_API_URL}polygons?appid=${process.env.REACT_APP_AGROMONITORING_API_KEY}`,
+    )
       .then((res) => res.json())
       .then((data) => {
         setValue(data[0].id);

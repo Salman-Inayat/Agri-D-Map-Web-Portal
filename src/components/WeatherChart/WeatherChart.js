@@ -24,7 +24,7 @@ function WeatherChart(props) {
     let latitudes;
     let longitudes;
     fetch(
-      `http://api.agromonitoring.com/agro/1.0/polygons/${props.firstPolygon}?appid=b22d00c2f91807b86822083ead929d76`,
+      `${process.env.REACT_APP_AGROMONITORING_API_URL}polygons/${props.firstPolygon}?appid=${process.env.REACT_APP_AGROMONITORING_API_KEY}`,
     )
       .then((response) => response.json())
       .then((data) => {
@@ -39,7 +39,7 @@ function WeatherChart(props) {
 
     setTimeout(() => {
       fetch(
-        `https://api.agromonitoring.com/agro/1.0/weather/forecast?lat=${latitudes}&lon=${longitudes}&appid=b22d00c2f91807b86822083ead929d76`,
+        `${process.env.REACT_APP_AGROMONITORING_API_URL}weather/forecast?lat=${latitudes}&lon=${longitudes}&appid=${process.env.REACT_APP_AGROMONITORING_API_KEY}`,
       )
         .then((response) => response.json())
         .then((data) => {
@@ -69,7 +69,7 @@ function WeatherChart(props) {
     let latitudes;
     let longitudes;
     fetch(
-      `http://api.agromonitoring.com/agro/1.0/polygons/${props.polygonId}?appid=b22d00c2f91807b86822083ead929d76`,
+      `${process.env.REACT_APP_AGROMONITORING_API_URL}polygons/${props.polygonId}?appid=${process.env.REACT_APP_AGROMONITORING_API_KEY}`,
     )
       .then((response) => response.json())
       .then((data) => {
@@ -85,7 +85,7 @@ function WeatherChart(props) {
     console.log("Latitude: ", latitudes, "Longitude: ", longitudes);
     setTimeout(() => {
       fetch(
-        `https://api.agromonitoring.com/agro/1.0/weather/forecast?lat=${latitudes}&lon=${longitudes}&appid=b22d00c2f91807b86822083ead929d76`,
+        `${process.env.REACT_APP_AGROMONITORING_API_URL}weather/forecast?lat=${latitudes}&lon=${longitudes}&appid=${process.env.REACT_APP_AGROMONITORING_API_KEY}`,
       )
         .then((response) => response.json())
         .then((data) => {
