@@ -1,9 +1,11 @@
 {
-  "name": "AGRI-D-Map-Web-Portal",
-  "proxy": "https://geolocation-db.com/",
+  "name": "agri-vision",
   "version": "1.1.0",
   "private": true,
   "homepage": "./",
+  "engines": {
+    "node": "14.17.0"
+  },
   "resolutions": {
     "websocket-extensions": "^0.1.4",
     "node-forge": "^0.10.0",
