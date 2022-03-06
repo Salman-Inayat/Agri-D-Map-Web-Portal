@@ -17,6 +17,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogContentText,
+  IconButton,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -151,20 +152,24 @@ const DashboardPolygonTable = forwardRef((props, ref) => {
     dataKey,
     ...props
   }) => (
-    <Cell {...props} style={{ padding: 0 }}>
-      <div style={{ lineHeight: "46px" }}>
-        <Button>
-          <EditIcon onClick={() => ModalClick(rowData.id)} />
-        </Button>
+    <Cell {...props}>
+      <div>
+        <IconButton size="small">
+          <EditIcon
+            style={{ color: "#fff" }}
+            onClick={() => ModalClick(rowData.id)}
+          />
+        </IconButton>
         |
-        <Button
+        <IconButton
+          size="small"
           onClick={() => {
             setDialogOpen(true);
             setPolygonToDelete(rowData.id);
           }}
         >
-          <DeleteIcon />
-        </Button>
+          <DeleteIcon style={{ color: "#fff" }} />
+        </IconButton>
       </div>
     </Cell>
   );
@@ -183,32 +188,55 @@ const DashboardPolygonTable = forwardRef((props, ref) => {
         onSortColumn={handleSortColumn}
         loading={loading}
         autoHeight={true}
+        cellBordered={false}
         style={{
           width: "100%",
+          backgroundColor: "transparent",
+          borderRadius: "1rem",
+          border: "1px solid #fff",
         }}
       >
-        <Column width={isMobile ? 150 : 250} sortable align="center">
+        <Column
+          sortable
+          align="center"
+          flexGrow={2}
+          style={{ backgroundColor: " #3f4257", color: "white" }}
+        >
           <HeaderCell style={{ backgroundColor: "#3f4257", color: "white" }}>
             Field Name
           </HeaderCell>
           <Cell dataKey="name" />
         </Column>
 
-        <Column width={isMobile ? 150 : 250} sortable align="center">
+        <Column
+          sortable
+          align="center"
+          flexGrow={1}
+          style={{ backgroundColor: " #3f4257", color: "white" }}
+        >
           <HeaderCell style={{ backgroundColor: "#3f4257", color: "white" }}>
             Created at
           </HeaderCell>
           <Cell dataKey="created_at" />
         </Column>
 
-        <Column width={isMobile ? 150 : 250} sortable align="center">
+        <Column
+          sortable
+          align="center"
+          flexGrow={1}
+          style={{ backgroundColor: " #3f4257", color: "white" }}
+        >
           <HeaderCell style={{ backgroundColor: "#3f4257", color: "white" }}>
             Area
           </HeaderCell>
           <Cell dataKey="area" />
         </Column>
 
-        <Column width={isMobile ? 150 : 150} align="center">
+        <Column
+          align="center"
+          flexGrow={1}
+          style={{ backgroundColor: " #3f4257", color: "white" }}
+        >
           <HeaderCell
             style={{
               backgroundColor: "#3f4257",
@@ -257,7 +285,7 @@ const DashboardPolygonTable = forwardRef((props, ref) => {
             color="primary"
             disabled={editName === "" ? true : false}
           >
-            Update Polygon
+            Update
           </Button>
         </DialogActions>
       </Dialog>

@@ -111,14 +111,12 @@ export default function Statistics(props) {
       </Grid>
       <Grid container className={classes.NDVIContainer}>
         <Grid item md={5}>
-          <Typography variant="h5" style={{ color: "#3f4257" }}>
+          <Typography variant="h5" style={{ color: "#fff" }}>
             Historical
           </Typography>
-          <Typography variant="h1" style={{ color: "#3f4257" }}>
+          <Typography variant="h1" style={{ color: "#fff" }}>
             NDVI
           </Typography>
-          {/* <h4>Historical</h4>
-          <h2>NDVI</h2> */}
         </Grid>
         <Grid item md={3}></Grid>
         <Grid
@@ -140,6 +138,7 @@ export default function Statistics(props) {
               format="dd/MM/yyyy"
               value={fromDate}
               onChange={handleFromDateChange}
+              disableFuture
             />
           </MuiPickersUtilsProvider>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>

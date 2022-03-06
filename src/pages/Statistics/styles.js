@@ -5,7 +5,7 @@ export default makeStyles((theme) => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    margin: "10px",
+    // margin: "10px",
     padding: "20px",
     [theme.breakpoints.down("sm")]: {
       padding: "0px",

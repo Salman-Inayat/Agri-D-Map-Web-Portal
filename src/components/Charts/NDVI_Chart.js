@@ -36,7 +36,7 @@ function NDVIChart(props) {
   const options = {
     chart: {
       borderRadius: 10,
-      foreColor: "#373d3f",
+      foreColor: "#fff",
       height: "auto",
       type: "line",
       // background: "#373368",

@@ -238,62 +238,6 @@ const Header = ({ classes, isSidebarOpened, toggleSidebar, ...props }) => (
           </MenuItem>
         ))}
       </Menu>
-      <Menu
-        id="profile-menu"
-        open={Boolean(props.profileMenu)}
-        anchorEl={props.profileMenu}
-        onClose={props.closeProfileMenu}
-        className={classes.headerMenu}
-        classes={{ paper: classes.profileMenu }}
-        disableAutoFocusItem
-      >
-        <div className={classes.profileMenuUser}>
-          <Typography variant="h4" weight="medium">
-            John Smith
-          </Typography>
-          <Typography
-            className={classes.profileMenuLink}
-            component="a"
-            color="primary"
-            href="https://flatlogic.com"
-          >
-            Flalogic.com
-          </Typography>
-        </div>
-        <MenuItem
-          className={classNames(
-            classes.profileMenuItem,
-            classes.headerMenuItem,
-          )}
-        >
-          <AccountIcon className={classes.profileMenuIcon} /> Profile
-        </MenuItem>
-        <MenuItem
-          className={classNames(
-            classes.profileMenuItem,
-            classes.headerMenuItem,
-          )}
-        >
-          <AccountIcon className={classes.profileMenuIcon} /> Tasks
-        </MenuItem>
-        <MenuItem
-          className={classNames(
-            classes.profileMenuItem,
-            classes.headerMenuItem,
-          )}
-        >
-          <AccountIcon className={classes.profileMenuIcon} /> Messages
-        </MenuItem>
-        <div className={classes.profileMenuUser}>
-          <Typography
-            className={classes.profileMenuLink}
-            color="primary"
-            onClick={props.signOut}
-          >
-            Sign Out
-          </Typography>
-        </div>
-      </Menu>
     </Toolbar>
   </AppBar>
 );

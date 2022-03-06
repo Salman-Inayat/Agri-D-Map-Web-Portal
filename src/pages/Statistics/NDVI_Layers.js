@@ -19,6 +19,13 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+import { withStyles } from "@material-ui/core/styles";
+
+const StyledTableCell = withStyles({
+  root: {
+    color: "#fff",
+  },
+})(TableCell);
 
 function NDVILayers(props) {
   var classes = useStyles();
@@ -110,77 +117,110 @@ function NDVILayers(props) {
 
   const formatDate = (d) => {
     const date = new Date(d * 1000);
-    return (
-      date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear()
-    );
+    // return (
+    //   date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear()
+    // );
+
+    return date.toDateString();
   };
 
   const Layers = () => {
     const standard_date = formatDate(metricDate);
     return (
-      <Card>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>{standard_date}</TableCell>
-                <TableCell align="right">{metric.toUpperCase()}</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  Maximum
-                </TableCell>
-                <TableCell align="right">{tableData.max.toFixed(2)}</TableCell>
-              </TableRow>
-              <TableRow
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  Minimum
-                </TableCell>
-                <TableCell align="right">{tableData.min.toFixed(2)}</TableCell>
-              </TableRow>
-              <TableRow
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  Mean
-                </TableCell>
-                <TableCell align="right">{tableData.mean.toFixed(2)}</TableCell>
-              </TableRow>
-              <TableRow
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  Median
-                </TableCell>
-                <TableCell align="right">
-                  {tableData.median.toFixed(2)}
-                </TableCell>
-              </TableRow>
-              <TableRow
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  Deviation
-                </TableCell>
-                <TableCell align="right">{tableData.std.toFixed(2)}</TableCell>
-              </TableRow>
-              <TableRow
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  Number of pixels
-                </TableCell>
-                <TableCell align="right">{tableData.num.toFixed(0)}</TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
+      <Card
+        style={{
+          backgroundColor: "#3F4257",
+          borderRadius: "10px",
+        }}
+      >
+        <CardContent>
+          <TableContainer
+            // component={Card}
+            style={{ backgroundColor: "transparent", color: "white" }}
+            sx={{
+              ".MuiTableBody-root": {
+                backgroundColor: "transparent",
+                color: "white",
+              },
+            }}
+          >
+            <Table
+              sx={{ minWidth: 650, color: "#fff" }}
+              aria-label="simple table"
+            >
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell>{standard_date}</StyledTableCell>
+                  <StyledTableCell align="right">
+                    {metric.toUpperCase()}
+                  </StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableRow
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <StyledTableCell component="th" scope="row">
+                    Maximum
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    {tableData.max.toFixed(2)}
+                  </StyledTableCell>
+                </TableRow>
+                <TableRow
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <StyledTableCell component="th" scope="row">
+                    Minimum
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    {tableData.min.toFixed(2)}
+                  </StyledTableCell>
+                </TableRow>
+                <TableRow
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <StyledTableCell component="th" scope="row">
+                    Mean
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    {tableData.mean.toFixed(2)}
+                  </StyledTableCell>
+                </TableRow>
+                <TableRow
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <StyledTableCell component="th" scope="row">
+                    Median
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    {tableData.median.toFixed(2)}
+                  </StyledTableCell>
+                </TableRow>
+                <TableRow
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <StyledTableCell component="th" scope="row">
+                    Deviation
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    {tableData.std.toFixed(2)}
+                  </StyledTableCell>
+                </TableRow>
+                <TableRow
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <StyledTableCell component="th" scope="row">
+                    Number of pixels
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    {tableData.num.toFixed(0)}
+                  </StyledTableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </CardContent>
       </Card>
     );
   };
@@ -193,7 +233,12 @@ function NDVILayers(props) {
         <Grid container spacing={2}>
           <Grid item md={6} xs={5}>
             <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Select Date</InputLabel>
+              <InputLabel
+                id="demo-simple-select-label"
+                style={{ color: "#fff" }}
+              >
+                Select Date
+              </InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
@@ -203,6 +248,7 @@ function NDVILayers(props) {
                   layersData.length > 0 ? formatDate(layersData[1].dt) : ""
                 }
                 onChange={(e) => handleDateChange(e)}
+                style={{ color: "#fff" }}
               >
                 {layersData.map(
                   (layer, i) => (
@@ -219,7 +265,10 @@ function NDVILayers(props) {
           </Grid>
           <Grid item md={6} xs={5}>
             <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">
+              <InputLabel
+                id="demo-simple-select-label"
+                style={{ color: "#fff" }}
+              >
                 Select Metric
               </InputLabel>
               <Select
@@ -228,6 +277,7 @@ function NDVILayers(props) {
                 value={metric}
                 label="metric"
                 onChange={(e) => handleMetricChange(e)}
+                style={{ color: "#fff" }}
               >
                 <MenuItem value="ndvi">NDVI</MenuItem>
                 <MenuItem value="evi">EVI</MenuItem>
@@ -243,8 +293,14 @@ function NDVILayers(props) {
 
       <Grid item md={12}>
         <Grid container spacing={3}>
-          <Grid item md={4} xs={12}>
-            {" "}
+          <Grid
+            item
+            md={4}
+            xs={12}
+            style={{
+              backgroundColor: "transparent",
+            }}
+          >
             {tableData.max && <Layers />}
           </Grid>
           <Grid

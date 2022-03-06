@@ -3,25 +3,28 @@ import ImagePicker from "../../components/Image_Picker/Image_Picker";
 import Grid from "@material-ui/core/Grid";
 import useStyles from "./styles";
 import WebcamCapture from "../../components/Webcam/Webcam.js";
-import { Button } from "@material-ui/core";
+import { Button, Backdrop, Typography } from "@material-ui/core";
 import axios from "axios";
 import LoadingOverlay from "react-loading-overlay";
 import Audio from "../../components/Audio_Player/Audio_Player";
 import ResultTab from "../../components/Tab/Tab";
 import { useMediaQuery } from "react-responsive";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 function Image_Segmentation() {
   const classes = useStyles();
-  const [image, setImage] = React.useState(null);
-  const [result, setResult] = React.useState(null);
-  const [resultImage, setResultImage] = React.useState();
-  const [loading, setLoading] = React.useState(false);
-  const [imagePresent, setImagePresent] = React.useState(false);
-  const [isResult, setIsResult] = React.useState(false);
-  const [resultAudio, setResultAudio] = React.useState();
+  const [image, setImage] = useState(null);
+  const [result, setResult] = useState(null);
+  const [resultImage, setResultImage] = useState();
+  const [loading, setLoading] = useState(false);
+  const [imagePresent, setImagePresent] = useState(false);
+  const [isResult, setIsResult] = useState(false);
+  const [resultAudio, setResultAudio] = useState();
+  const [open, setOpen] = useState(false);
 
-  const [tabData, setTabData] = useState();
-  const isMobile = useMediaQuery({ maxWidth: 767 });
+  const [englishTabData, setEnglishTabData] = useState();
+  const [urduTabData, setUrduTabData] = useState();
+  // const isMobile = useMediaQuery({ maxWidth: 767 });
 
   const remedialActions = {
     healthy: {
@@ -62,6 +65,45 @@ function Image_Segmentation() {
     },
   };
 
+  const urduRemedialActions = {
+    healthy: {
+      title: "صحت مند: صحت مند پودا",
+      description:
+        "کھاد کے صحیح مرکب اور متوازن غذائی اجزاء کے ساتھ کھاد ڈالیں۔ موسم کے دوران فصل کو زیادہ پانی نہ دیں۔ متاثرہ پودوں کو چھونے کے بعد صحت مند پودوں کو مت چھونا۔ کھیتوں کے ارد گرد پودوں کی مختلف اقسام کی بڑی تعداد کو برقرار رکھیں۔ اگر انفیکشن کے خلاف علاج کر رہے ہیں تو، مخصوص مصنوعات استعمال کریں جو فائدہ مند کیڑوں کو متاثر نہیں کرتی ہیں۔ بڑھتے ہوئے موسم کے دوران صحیح وقت پر بیمار پتے، پھل یا شاخیں ہٹا دیں۔ کٹائی کے بعد، کھیت یا باغ سے پودوں کا ملبہ صاف کر کے جلا دیں۔ کیڑوں اور بیماریوں کی صورت میں، ہمیشہ ایک مربوط نقطہ نظر پر غور کریں۔ اگر دستیاب ہو تو حیاتیاتی علاج کے ساتھ احتیاطی تدابیر کے ساتھ۔ جب تک احتیاطی تدابیر کی پیروی کی جاتی ہے اور پودوں اور درختوں کو ان کی ضرورت کے مطابق احتیاط برتی جاتی ہے، کسی کیمیائی کنٹرول کی ضرورت نہیں ہوگی!",
+      symptoms: [
+        "گہرے سبز رنگ کا پودا",
+        "پختہ پتے",
+        "چمکدار رنگ کے پھول",
+        "اچھی شکل، اچھے رنگ کے پتے، غذائیت سے بھرپور پھل اور پھول",
+        "جڑ کا نظام اچھی طرح سے تیار ہے",
+      ],
+      // recommendations:{
+      //   title: "Recommendations",
+
+      // }
+    },
+    resistant: {
+      title: "مزاحم: ہلکی پیلی پٹی زنگ",
+      description:
+        "بیماری کی شدت پودے کی حساسیت پر منحصر ہے۔ کمزور قسموں میں، فنگس چھوٹے، پیلے سے نارنجی (زنگ آلود) آبلے پیدا کرتی ہے جو پتوں کی رگوں کے متوازی تنگ دھاریوں کی شکل میں قطاروں میں ترتیب دی جاتی ہے۔ وہ آخرکار ضم ہو جاتے ہیں اور پورے پتے کو گھیر لیتے ہیں، یہ ایک خصوصیت جو جوان پودوں میں پہلے ظاہر ہوتی ہے۔ یہ آبلے (قطر میں 0.5 سے 1 ملی میٹر) بعض اوقات تنوں اور سروں پر بھی پائے جاتے ہیں۔ بیماری کے بعد کے مراحل میں، پتوں پر لمبی، نیکروٹک، ہلکی بھوری دھاریاں یا دھبے نظر آتے ہیں، جو اکثر زنگ آلود آبلوں سے ڈھکے ہوتے ہیں۔ شدید انفیکشن میں، پودوں کی نشوونما میں سنجیدگی سے سمجھوتہ ہوتا ہے اور بافتوں کو نقصان پہنچتا ہے۔ پتوں کا کم رقبہ کم پیداوری کا باعث بنتا ہے، فی پودا کم سپائیکس اور کم اناج فی سپائیک۔ مجموعی طور پر، بیماری فصلوں کو شدید نقصان پہنچا سکتی ہے۔",
+      symptoms: [
+        "پیلے رنگ کا پودا",
+        "چھوٹے، زنگ آلود آبلوں کو دھاریوں میں ترتیب دیا گیا ہے۔",
+        "تنوں اور سروں کو بھی متاثر کیا جا سکتا ہے۔",
+      ],
+    },
+    susceptible: {
+      title: "حساس: شدید پیلی پٹی زنگ",
+      description:
+        "بیماری کی شدت پودے کی حساسیت پر منحصر ہے۔ کمزور قسموں میں، فنگس چھوٹے، پیلے سے نارنجی (زنگ آلود) آبلے پیدا کرتی ہے جو پتوں کی رگوں کے متوازی تنگ دھاریوں کی شکل میں قطاروں میں ترتیب دی جاتی ہے۔ وہ آخرکار ضم ہو جاتے ہیں اور پورے پتے کو گھیر لیتے ہیں، یہ ایک خصوصیت جو جوان پودوں میں پہلے ظاہر ہوتی ہے۔ یہ آبلے (قطر میں 0.5 سے 1 ملی میٹر) بعض اوقات تنوں اور سروں پر بھی پائے جاتے ہیں۔ بیماری کے بعد کے مراحل میں، پتوں پر لمبی، نیکروٹک، ہلکی بھوری دھاریاں یا دھبے نظر آتے ہیں، جو اکثر زنگ آلود آبلوں سے ڈھکے ہوتے ہیں۔ شدید انفیکشن میں، پودوں کی نشوونما میں سنجیدگی سے سمجھوتہ ہوتا ہے اور بافتوں کو نقصان پہنچتا ہے۔ پتوں کا کم رقبہ کم پیداوری کا باعث بنتا ہے، فی پودا کم سپائیکس اور کم اناج فی سپائیک۔ مجموعی طور پر، بیماری فصلوں کو شدید نقصان پہنچا سکتی ہے۔",
+      symptoms: [
+        "پیلے رنگ کا پودا جس میں زنگ کے شدید دھبے ہوتے ہیں۔",
+        "چھوٹے، زنگ آلود آبلوں کو دھاریوں میں ترتیب دیا گیا ہے۔",
+        "تنوں اور سروں کو بھی متاثر کیا جا سکتا ہے۔",
+      ],
+    },
+  };
+
   const handleImage = (result) => {
     const slug = result.split("base64,").pop();
     setImage(slug);
@@ -73,6 +115,7 @@ function Image_Segmentation() {
   };
 
   const handleSubmit = () => {
+    setOpen(true);
     setResult();
     setResultImage();
     setIsResult(false);
@@ -99,23 +142,31 @@ function Image_Segmentation() {
           switch (responseArray[2]) {
             case "Healthy":
               setResultAudio("/healthy_english.mp3");
-              setTabData(remedialActions.healthy);
+              setEnglishTabData(remedialActions.healthy);
+              setUrduTabData(urduRemedialActions.healthy);
               break;
             case "Resistant":
               setResultAudio("/resistant_english.mp3");
-              setTabData(remedialActions.resistant);
+              setEnglishTabData(remedialActions.resistant);
+              setUrduTabData(urduRemedialActions.resistant);
+
               break;
             case "Susceptible":
               setResultAudio("/susceptible_english.mp3");
-              setTabData(remedialActions.susceptible);
+              setEnglishTabData(remedialActions.susceptible);
+              setUrduTabData(urduRemedialActions.susceptible);
+
               break;
             default:
               setResultAudio("/healthy_english.mp3");
-              setTabData(remedialActions.healthy);
+              setEnglishTabData(remedialActions.healthy);
+              setUrduTabData(urduRemedialActions.healthy);
+
               break;
           }
           setLoading(false);
           setIsResult(true);
+          setOpen(false);
         })
         .catch((err) => {
           console.log(err);
@@ -124,67 +175,104 @@ function Image_Segmentation() {
   };
 
   return (
-    <div>
-      <LoadingOverlay active={loading} spinner text="Processing the image">
-        <Grid container spacing={3} className={classes.grid_container}>
-          <Grid item md={5} sm={12} xs={12} className={classes.ind_grid}>
-            <ImagePicker
-              handleImage={handleImage}
-              handleImagePresent={handleImagePresent}
-            />
-          </Grid>
-          {!isMobile && (
-            <Grid item md={7}>
-              <Grid container>
-                <Grid item md={1} sm={12} xs={12} className={classes.ind_grid}>
-                  <h3>OR</h3>
-                </Grid>
-                <Grid item md={6} sm={12} xs={12} className={classes.ind_grid}>
-                  <WebcamCapture
-                    handleImage={handleImage}
-                    handleImagePresent={handleImagePresent}
-                  />
-                </Grid>
-              </Grid>
+    <div style={{ backgroundColor: "#27293d" }}>
+      {/* <LoadingOverlay active={loading} spinner text="Processing the image"> */}
+      <Grid container spacing={3} className={classes.grid_container}>
+        <Grid item md={5} sm={12} xs={12} className={classes.ind_grid}>
+          <ImagePicker
+            handleImage={handleImage}
+            handleImagePresent={handleImagePresent}
+          />
+        </Grid>
+        {/* {!isMobile && ( */}
+        <Grid item md={7}>
+          <Grid container>
+            <Grid item md={3} sm={12} xs={12} className={classes.ind_grid}>
+              <Typography variant="h5" style={{ color: "#fff" }}>
+                OR
+              </Typography>
             </Grid>
-          )}
-
-          <Grid
-            item
-            md={12}
-            sm={12}
-            xs={12}
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Button
-              variant="contained"
-              disabled={imagePresent ? false : true}
-              color="primary"
-              size="large"
-              className={classes.submitButton}
-              onClick={handleSubmit}
-            >
-              Submit
-            </Button>
+            <Grid item md={9} sm={12} xs={12} className={classes.ind_grid}>
+              <WebcamCapture
+                handleImage={handleImage}
+                handleImagePresent={handleImagePresent}
+              />
+            </Grid>
           </Grid>
-          {isResult && tabData && resultImage === "image.png" && (
+        </Grid>
+        <Grid
+          item
+          md={12}
+          sm={12}
+          xs={12}
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Button
+            variant="contained"
+            disabled={imagePresent ? false : true}
+            color="primary"
+            size="large"
+            className={classes.submitButton}
+            onClick={handleSubmit}
+          >
+            Submit
+          </Button>
+        </Grid>
+        {isResult &&
+          englishTabData &&
+          urduTabData &&
+          resultImage === "image.png" && (
             <Grid item md={12} sm={12}>
               <div className={classes.result_container}>
                 <ResultTab
                   audio={resultAudio}
                   result={result}
                   image={resultImage}
-                  data={tabData}
+                  englishData={englishTabData}
+                  urduData={urduTabData}
                 />
               </div>
             </Grid>
           )}
-        </Grid>
-      </LoadingOverlay>
+      </Grid>
+      <Backdrop
+        style={{
+          zIndex: "100",
+          backgroundColor: "rgba(0,0,0,0.8)",
+        }}
+        open={open}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <CircularProgress
+            style={{
+              margin: "auto",
+              color: "#fff",
+            }}
+          />
+          <Typography
+            style={{
+              color: "white",
+              fontSize: "1.2rem",
+              marginTop: "1rem",
+              fontWeight: "lighter",
+            }}
+          >
+            Processing the image. Please wait.
+          </Typography>
+        </div>
+      </Backdrop>
+      {/* </LoadingOverlay> */}
     </div>
   );
 }

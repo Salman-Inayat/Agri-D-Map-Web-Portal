@@ -86,5 +86,6 @@ export default makeStyles((theme) => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    padding: "1rem",
   },
 }));

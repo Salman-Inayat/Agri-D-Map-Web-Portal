@@ -3,6 +3,7 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
+import Card from "@material-ui/core/Card";
 import PropTypes from "prop-types";
 
 import Typography from "@material-ui/core/Typography";
@@ -18,7 +19,7 @@ function TabPanel(props) {
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
       className={classes.tabPanel}
-      // style={{ padding: "50px" }}
+      style={{ padding: "50px 20px" }}
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
@@ -43,7 +44,7 @@ function a11yProps(index) {
 export default function ReaultTab(props) {
   const [value, setValue] = React.useState(0);
   const classes = useStyles();
-  const { audio, data } = props;
+  const { audio, englishData, urduData } = props;
   const [image, setImage] = useState();
   const [imageURL, setImageURL] = useState();
   const [fallback, setFallback] = useState(false);
@@ -76,7 +77,14 @@ export default function ReaultTab(props) {
   };
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Card
+      style={{
+        width: "100%",
+        padding: "1rem",
+        backgroundColor: "#3f4257",
+        color: "#fff",
+      }}
+    >
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs
           value={value}
@@ -95,14 +103,14 @@ export default function ReaultTab(props) {
               component="h2"
               style={{ fontWeight: "bold" }}
             >
-              {data.title}
+              {englishData.title}
             </Typography>
             <Typography
               variant="body1"
               component="p"
               style={{ textAlign: "justify" }}
             >
-              {data.description}
+              {englishData.description}
             </Typography>
 
             <Typography
@@ -114,7 +122,7 @@ export default function ReaultTab(props) {
               Symptoms
             </Typography>
             <Typography variant="body1" component="p">
-              {data.symptoms.map((symptom, index) => (
+              {englishData.symptoms.map((symptom, index) => (
                 <li key={index}>{symptom}</li>
               ))}
             </Typography>
@@ -147,27 +155,37 @@ export default function ReaultTab(props) {
             <Typography
               variant="h4"
               component="h2"
-              style={{ fontWeight: "bold" }}
+              style={{ fontWeight: "bold", direction: "rtl" }}
             >
-              {data.title}
+              {urduData.title}
             </Typography>
             <Typography
               variant="body1"
               component="p"
-              style={{ textAlign: "justify" }}
+              style={{ textAlign: "justify", direction: "rtl" }}
             >
-              {data.description}
+              {urduData.description}
             </Typography>
 
             <Typography
               variant="h5"
               component="h2"
-              style={{ fontWeight: "bold", marginTop: "20px" }}
+              style={{
+                fontWeight: "bold",
+                marginTop: "20px",
+                direction: "rtl",
+              }}
             >
-              Symptoms
+              علامات
             </Typography>
-            <Typography variant="body1" component="p">
-              {data.symptoms.map((symptom, index) => (
+            <Typography
+              variant="body1"
+              component="p"
+              style={{
+                direction: "rtl",
+              }}
+            >
+              {urduData.symptoms.map((symptom, index) => (
                 <li key={index}>{symptom}</li>
               ))}
             </Typography>
@@ -194,6 +212,6 @@ export default function ReaultTab(props) {
           </Grid>
         </Grid>
       </TabPanel>
-    </Box>
+    </Card>
   );
 }

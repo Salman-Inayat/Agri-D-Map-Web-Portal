@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Drawer, IconButton, List } from "@material-ui/core";
+import { Drawer, IconButton, List, Typography } from "@material-ui/core";
 import {
   Home as HomeIcon,
   NotificationsNone as NotificationsIcon,
@@ -14,6 +14,7 @@ import {
 import { useTheme } from "@material-ui/styles";
 import { withRouter } from "react-router-dom";
 import classNames from "classnames";
+import { useMediaQuery } from "react-responsive";
 
 // styles
 import useStyles from "./styles";
@@ -27,6 +28,7 @@ import {
   useLayoutDispatch,
   toggleSidebar,
 } from "../../context/LayoutContext";
+import { useUserDispatch, signOut } from "../../context/UserContext";
 
 const structure = [
   { id: 0, label: "Dashboard", link: "/app/dashboard", icon: <HomeIcon /> },
@@ -37,57 +39,24 @@ const structure = [
     link: "/app/segmentation",
     icon: <HomeIcon />,
   },
-  // {
-  //   id: 3,
-  //   label: "Vari  Calculation",
-  //   link: "/app/vari",
-  //   icon: <HomeIcon />,
-  // },
-  // {
-  //   id: 4,
-  //   label: "Demo page",
-  //   // link: "/app/dashboard",
-  //   icon: <HomeIcon />,
-  // },
-  // {
-  //   id: 5,
-  //   label: "Demo page",
-  //   // link: "/app/dashboard",
-  //   icon: <HomeIcon />,
-  // },
-  // {
-  //   id: 2,
-  //   label: "Typography",
-  //   link: "/app/typography",
-  //   icon: <TypographyIcon />,
-  // },
-  // { id: 3, label: "Tables", link: "/app/tables", icon: <TableIcon /> },
-  // {
-  //   id: 4,
-  //   label: "Notifications",
-  //   link: "/app/notifications",
-  //   icon: <NotificationsIcon />,
-  // },
-  // {
-  //   id: 5,
-  //   label: "UI Elements",
-  //   link: "/app/ui",
-  //   icon: <UIElementsIcon />,
-  //   children: [
-  //     { label: "Icons", link: "/app/ui/icons" },
-  //     { label: "Charts", link: "/app/ui/charts" },
-  //     { label: "Maps", link: "/app/ui/maps" },
-  //   ],
-  // },
 ];
 
-function Sidebar({ location }) {
+function Sidebar({ location, history }) {
   var classes = useStyles();
   var theme = useTheme();
+
+  var userDispatch = useUserDispatch();
+
+  var isDesktop = useMediaQuery({
+    query: "(min-width: 1024px)",
+  });
+
+  const isMobile = useMediaQuery({ maxWidth: 767 });
 
   // global
   var { isSidebarOpened } = useLayoutState();
   var layoutDispatch = useLayoutDispatch();
+  var userDispatch = useUserDispatch();
 
   // local
   var [isPermanent, setPermanent] = useState(true);
@@ -140,6 +109,29 @@ function Sidebar({ location }) {
           />
         ))}
       </List>
+      <div
+        style={{
+          position: "absolute",
+          bottom: "0",
+          width: "100%",
+          height: "50px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Typography
+          onClick={() => signOut(userDispatch, history)}
+          variant="body1"
+          style={{
+            cursor: "pointer",
+            fontSize: "1.2rem",
+            color: "#fff",
+          }}
+        >
+          Sign Out
+        </Typography>
+      </div>{" "}
     </Drawer>
   );
 

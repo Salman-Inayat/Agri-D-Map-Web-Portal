@@ -75,7 +75,7 @@ const PolygonTable = (props) => {
   };
 
   const CheckCell = ({ rowData, onChange, checkedKeys, dataKey, ...props }) => (
-    <Cell {...props} sstyle={{ padding: "auto 0px" }}>
+    <Cell {...props}>
       <div>
         <Radio
           checked={value === rowData.id}
@@ -108,34 +108,58 @@ const PolygonTable = (props) => {
       hover={false}
       rowHeight={60}
       headerHeight={40}
-      // cellBordered={false}
-      // bordered={false}
+      cellBordered={false}
+      bordered={false}
       style={{
         width: "100%",
+        backgroundColor: "transparent",
+        borderRadius: "1rem",
+        border: "1px solid #fff",
       }}
     >
-      <Column width={isMobile ? 60 : 100} align="center">
-        <HeaderCell style={{ backgroundColor: "#3f4257", color: "white" }}>
+      <Column
+        width={isMobile ? 60 : 100}
+        align="center"
+        style={{ backgroundColor: " #3f4257", color: "white" }}
+      >
+        <HeaderCell
+          style={{ backgroundColor: "#3f4257", color: "white", height: "3rem" }}
+        >
           Select
         </HeaderCell>
         <CheckCell dataKey="id" />
       </Column>
 
-      <Column width={isMobile ? 150 : 250} sortable align="center">
+      <Column
+        flexGrow={1}
+        sortable
+        align="center"
+        style={{ backgroundColor: " #3f4257", color: "white" }}
+      >
         <HeaderCell style={{ backgroundColor: "#3f4257", color: "white" }}>
           Polygon Name
         </HeaderCell>
-        <Cell dataKey="name" style={{ padding: "20px" }} />
+        <Cell dataKey="name" style={{ padding: "20px", border: "none" }} />
       </Column>
 
-      <Column width={isMobile ? 150 : 250} sortable align="center">
+      <Column
+        flexGrow={1}
+        sortable
+        align="center"
+        style={{ backgroundColor: " #3f4257", color: "white" }}
+      >
         <HeaderCell style={{ backgroundColor: "#3f4257", color: "white" }}>
           Created at
         </HeaderCell>
         <Cell dataKey="created_at" style={{ padding: "20px" }} />
       </Column>
 
-      <Column width={isMobile ? 100 : 200} sortable align="center">
+      <Column
+        flexGrow={1}
+        sortable
+        align="center"
+        style={{ backgroundColor: " #3f4257", color: "white" }}
+      >
         <HeaderCell style={{ backgroundColor: "#3f4257", color: "white" }}>
           Area
         </HeaderCell>

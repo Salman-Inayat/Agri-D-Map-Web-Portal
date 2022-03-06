@@ -4,13 +4,13 @@ import { fade } from "@material-ui/core/styles/colorManipulator";
 export default makeStyles((theme) => ({
   logotype: {
     color: "white",
-    marginLeft: theme.spacing(2.5),
-    marginRight: theme.spacing(2.5),
+    margin: "auto",
     fontWeight: 500,
-    fontSize: 18,
+    fontSize: 22,
+
     whiteSpace: "nowrap",
     [theme.breakpoints.down("xs")]: {
-      display: "none",
+      margin: "auto 6rem",
     },
   },
   appBar: {
@@ -110,7 +110,7 @@ export default makeStyles((theme) => ({
   },
   headerIcon: {
     fontSize: 28,
-    color: "rgba(255, 255, 255, 0.35)",
+    color: "rgba(255, 255, 255, 1)",
   },
   headerIconCollapse: {
     color: "white",

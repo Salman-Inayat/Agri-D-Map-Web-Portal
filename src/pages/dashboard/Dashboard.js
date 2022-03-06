@@ -204,7 +204,7 @@ export default function Dashboard(props) {
       <Grid item md={7} xs={12} m={20} className={classes.addPolygonContainer}>
         <TextField
           id="outlined-basic"
-          label="Enter polygon name"
+          label="Enter field name"
           variant="outlined"
           size="small"
           value={polygonName}
@@ -216,7 +216,11 @@ export default function Dashboard(props) {
               root: classes.root,
             },
           }}
-          style={{ backgroundColor: "rgba(255,255,255,0.2)", borderRadius: 25 }}
+          style={{
+            backgroundColor: "rgba(255,255,255,1)",
+            borderRadius: 25,
+            color: "#fff",
+          }}
         />
         <Button
           onClick={createPolygon}
