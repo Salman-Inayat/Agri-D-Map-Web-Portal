@@ -31,14 +31,14 @@ import {
 import { useUserDispatch, signOut } from "../../context/UserContext";
 
 const structure = [
-  { id: 0, label: "Dashboard", link: "/app/dashboard", icon: <HomeIcon /> },
-  { id: 1, label: "Statistics", link: "/app/statistics", icon: <HomeIcon /> },
   {
-    id: 2,
-    label: "Image Segmentation",
-    link: "/app/segmentation",
+    id: 0,
+    label: "Disease Detection",
+    link: "/app/disease-detection",
     icon: <HomeIcon />,
   },
+  { id: 1, label: "Fields", link: "/app/fields", icon: <HomeIcon /> },
+  { id: 2, label: "Statistics", link: "/app/statistics", icon: <HomeIcon /> },
 ];
 
 function Sidebar({ location, history }) {

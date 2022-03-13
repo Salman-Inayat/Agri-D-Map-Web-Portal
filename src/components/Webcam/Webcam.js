@@ -33,10 +33,10 @@ const WebcamCapture = (props) => {
         {image === "" ? (
           <Webcam
             audio={false}
-            height={400}
+            // height={400}
             ref={webcamRef}
             screenshotFormat="image/jpeg"
-            width={300}
+            // width={300}
             videoConstraints={videoConstraints}
           />
         ) : (

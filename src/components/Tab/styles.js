@@ -8,5 +8,7 @@ export default makeStyles((theme) => ({
     height: "300px",
     width: "300px",
     marginTop: "30px",
+    borderRadius: "10px",
+    border: "1px solid #ccc",
   },
 }));

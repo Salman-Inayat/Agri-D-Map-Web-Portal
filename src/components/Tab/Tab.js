@@ -51,14 +51,22 @@ export default function ReaultTab(props) {
 
   useEffect(() => {
     setImage(props.image);
-    console.log(props.image);
-    setImageURL(`${process.env.REACT_APP_SERVER_URL}/${props.image}`);
+    setImageURL(
+      `${process.env.REACT_APP_SERVER_URL}/${props.image.replace(
+        "jpg",
+        "png",
+      )}`,
+    );
   }, []);
 
   useEffect(() => {
     setImage(props.image);
-    console.log(props.image);
-    setImageURL(`${process.env.REACT_APP_SERVER_URL}/${props.image}`);
+    setImageURL(
+      `${process.env.REACT_APP_SERVER_URL}/${props.image.replace(
+        "jpg",
+        "png",
+      )}`,
+    );
   }, [props.image]);
 
   const handleChange = (event, newValue) => {
@@ -67,7 +75,10 @@ export default function ReaultTab(props) {
 
   const reloadSrc = (e) => {
     if (fallback) {
-      e.target.src = `${process.env.REACT_APP_SERVER_URL}/${props.image}`;
+      e.target.src = `${process.env.REACT_APP_SERVER_URL}/${props.image.replace(
+        "jpg",
+        "png",
+      )}`;
     } else {
       e.target.src = imageURL(
         `${process.env.REACT_APP_SERVER_URL}/${props.image}`,
@@ -97,7 +108,7 @@ export default function ReaultTab(props) {
       </Box>
       <TabPanel value={value} index={0}>
         <Grid container spacing={4}>
-          <Grid item md={6} xs={12} style={{ padding: "0px" }}>
+          <Grid item md={6} xs={12} style={{ padding: "1rem" }}>
             <Typography
               variant="h4"
               component="h2"
@@ -135,7 +146,7 @@ export default function ReaultTab(props) {
             style={{
               display: "flex",
               flexDirection: "column",
-              justifyContent: "space-between",
+              justifyContent: "space-around",
               alignItems: "center",
             }}
           >
@@ -151,7 +162,7 @@ export default function ReaultTab(props) {
       </TabPanel>
       <TabPanel value={value} index={1}>
         <Grid container spacing={4}>
-          <Grid item md={6} xs={12} style={{ padding: "0px" }}>
+          <Grid item md={6} xs={12} style={{ padding: "1rem" }}>
             <Typography
               variant="h4"
               component="h2"
@@ -198,13 +209,13 @@ export default function ReaultTab(props) {
             style={{
               display: "flex",
               flexDirection: "column",
-              justifyContent: "space-between",
+              justifyContent: "space-around",
               alignItems: "center",
             }}
           >
             <Audio audio={audio} />
             <img
-              src={`${process.env.REACT_APP_SERVER_URL}/${image}`}
+              src={imageURL}
               alt="result"
               className={classes.resultImage}
               onError={reloadSrc}

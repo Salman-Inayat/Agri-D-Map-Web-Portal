@@ -37,9 +37,12 @@ function Layout(props) {
         >
           <div className={classes.fakeToolbar} />
           <Switch>
-            <Route path="/app/dashboard" component={Dashboard} />
+            <Route path="/app/fields" component={Dashboard} />
             <Route path="/app/statistics" component={Statistics} />
-            <Route path="/app/segmentation" component={Image_Segmentation} />
+            <Route
+              path="/app/disease-detection"
+              component={Image_Segmentation}
+            />
           </Switch>
         </div>
       </>

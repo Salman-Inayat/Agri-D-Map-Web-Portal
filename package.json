@@ -44,6 +44,7 @@
     "react-dropzone-uploader": "^2.11.0",
     "react-geocode": "^0.2.3",
     "react-google-maps": "^9.4.5",
+    "react-h5-audio-player": "^3.8.3",
     "react-images-upload": "^1.2.8",
     "react-loading-overlay": "^1.0.1",
     "react-open-weather-widget": "^1.1.0",

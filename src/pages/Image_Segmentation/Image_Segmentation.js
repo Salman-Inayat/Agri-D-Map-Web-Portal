@@ -15,7 +15,7 @@ function Image_Segmentation() {
   const classes = useStyles();
   const [image, setImage] = useState(null);
   const [result, setResult] = useState(null);
-  const [resultImage, setResultImage] = useState();
+  const [resultImage, setResultImage] = useState("");
   const [loading, setLoading] = useState(false);
   const [imagePresent, setImagePresent] = useState(false);
   const [isResult, setIsResult] = useState(false);
@@ -135,11 +135,15 @@ function Image_Segmentation() {
         )
         .then((res) => {
           const response = res.data;
-          var responseArray = response.split(/(\s+)/);
-          setResult(responseArray[2]);
+          // split the reponse on the basis of space
+          const responseArray = response.split(" ");
+          console.log("responseArray: ", responseArray);
+          const leafResult = responseArray[1].replace(/\r\n/g, "");
+          console.log("leafResult: ", leafResult);
+          setResult(leafResult);
           setResultImage(responseArray[0]);
 
-          switch (responseArray[2]) {
+          switch (leafResult) {
             case "Healthy":
               setResultAudio("/healthy_english.mp3");
               setEnglishTabData(remedialActions.healthy);
@@ -165,6 +169,7 @@ function Image_Segmentation() {
               break;
           }
           setLoading(false);
+          console.log("Done");
           setIsResult(true);
           setOpen(false);
         })
@@ -222,22 +227,19 @@ function Image_Segmentation() {
             Submit
           </Button>
         </Grid>
-        {isResult &&
-          englishTabData &&
-          urduTabData &&
-          resultImage === "image.png" && (
-            <Grid item md={12} sm={12}>
-              <div className={classes.result_container}>
-                <ResultTab
-                  audio={resultAudio}
-                  result={result}
-                  image={resultImage}
-                  englishData={englishTabData}
-                  urduData={urduTabData}
-                />
-              </div>
-            </Grid>
-          )}
+        {isResult && englishTabData && urduTabData && resultImage !== "" && (
+          <Grid item md={12} sm={12}>
+            <div className={classes.result_container}>
+              <ResultTab
+                audio={resultAudio}
+                result={result}
+                image={resultImage}
+                englishData={englishTabData}
+                urduData={urduTabData}
+              />
+            </div>
+          </Grid>
+        )}
       </Grid>
       <Backdrop
         style={{
