@@ -1,6 +1,9 @@
 import { makeStyles } from "@material-ui/styles";
 
 export default makeStyles((theme) => ({
+  root: {
+    color: "#FF4842",
+  },
   container: {
     height: "100vh",
     width: "100vw",
@@ -141,7 +144,7 @@ export default makeStyles((theme) => ({
     width: "100%",
     marginTop: theme.spacing(4),
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignItems: "center",
   },
   submitButton: {
@@ -163,5 +166,10 @@ export default makeStyles((theme) => ({
       position: "absolute",
       bottom: theme.spacing(2),
     },
+  },
+  loginError: {
+    marginTop: theme.spacing(2),
+    color: theme.palette.error.main,
+    fontSize: theme.typography.fontSize * 0.875,
   },
 }));

@@ -28,11 +28,39 @@ function Login(props) {
   var [error, setError] = useState(null);
   var [activeTabId, setActiveTabId] = useState(0);
   var [nameValue, setNameValue] = useState("");
-  var [loginValue, setLoginValue] = useState("demo@demo.com");
-  var [loginPasswordValue, setLoginPasswordValue] = useState("demo");
+  var [loginValue, setLoginValue] = useState("");
+  var [loginPasswordValue, setLoginPasswordValue] = useState("");
 
   var [signupValue, setSignupValue] = useState("");
   var [signupPasswordValue, setSignupPasswordValue] = useState("");
+  const [errroMessage, setErrorMessage] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
+  const handleEmailChange = (event) => {
+    setSignupValue(event.target.value);
+
+    if (
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+        event.target.value,
+      )
+    ) {
+      setEmailError("");
+      return true;
+    }
+    setEmailError("Email is not valid");
+    return false;
+  };
+
+  const handlePasswordChange = (event) => {
+    setSignupPasswordValue(event.target.value);
+    if (event.target.value.length > 5) {
+      setPasswordError("");
+      return true;
+    }
+    setPasswordError("Password must be at least 6 characters");
+    return false;
+  };
 
   const handleSignupUser = () => {
     setIsLoading(true);
@@ -51,6 +79,7 @@ function Login(props) {
       .catch((err) => {
         console.log(err);
         setIsLoading(false);
+        setErrorMessage(err.response.data.message);
       });
   };
 
@@ -74,7 +103,9 @@ function Login(props) {
         );
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err.response.data.message);
+        setIsLoading(false);
+        setErrorMessage(err.response.data.message);
       });
   };
 
@@ -111,7 +142,11 @@ function Login(props) {
                   },
                 }}
                 value={loginValue}
-                onChange={(e) => setLoginValue(e.target.value)}
+                // onChange={(e) => setLoginValue(e.target.value)}
+                onChange={(e) => {
+                  setLoginValue(e.target.value);
+                  setErrorMessage("");
+                }}
                 margin="normal"
                 placeholder="Email Adress"
                 type="email"
@@ -126,12 +161,20 @@ function Login(props) {
                   },
                 }}
                 value={loginPasswordValue}
-                onChange={(e) => setLoginPasswordValue(e.target.value)}
+                onChange={(e) => {
+                  setLoginPasswordValue(e.target.value);
+                  setErrorMessage("");
+                }}
                 margin="normal"
                 placeholder="Password"
                 type="password"
                 fullWidth
               />
+
+              <Typography className={classes.loginError}>
+                {errroMessage}
+              </Typography>
+
               <div className={classes.formButtons}>
                 {isLoading ? (
                   <CircularProgress size={26} className={classes.loginLoader} />
@@ -149,13 +192,6 @@ function Login(props) {
                     Login
                   </Button>
                 )}
-                <Button
-                  color="primary"
-                  size="large"
-                  className={classes.forgetButton}
-                >
-                  Forgot Password
-                </Button>
               </div>
             </React.Fragment>
           )}
@@ -193,11 +229,17 @@ function Login(props) {
                   },
                 }}
                 value={signupValue}
-                onChange={(e) => setSignupValue(e.target.value)}
+                onChange={handleEmailChange}
                 margin="normal"
                 placeholder="Email Adress"
                 type="email"
                 fullWidth
+                helperText={emailError}
+                FormHelperTextProps={{
+                  classes: {
+                    root: classes.root,
+                  },
+                }}
               />
               <TextField
                 id="password"
@@ -208,12 +250,23 @@ function Login(props) {
                   },
                 }}
                 value={signupPasswordValue}
-                onChange={(e) => setSignupPasswordValue(e.target.value)}
+                onChange={handlePasswordChange}
                 margin="normal"
                 placeholder="Password"
                 type="password"
                 fullWidth
+                helperText={passwordError}
+                FormHelperTextProps={{
+                  classes: {
+                    root: classes.root,
+                  },
+                }}
               />
+
+              <Typography className={classes.loginError}>
+                {errroMessage}
+              </Typography>
+
               <div className={classes.creatingButtonContainer}>
                 {isLoading ? (
                   <CircularProgress size={26} />
@@ -222,7 +275,7 @@ function Login(props) {
                     onClick={handleSignupUser}
                     disabled={
                       signupValue.length === 0 ||
-                      signupPasswordValue.length === 0 ||
+                      signupPasswordValue.length <= 5 ||
                       nameValue.length === 0
                     }
                     size="large"

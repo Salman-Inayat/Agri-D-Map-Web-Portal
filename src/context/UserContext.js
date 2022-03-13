@@ -52,6 +52,7 @@ export { UserProvider, useUserState, useUserDispatch, loginUser, signOut };
 function loginUser(dispatch, login, password, history, setIsLoading, setError) {
   setError(false);
   setIsLoading(true);
+  console.log(login, password);
 
   if (!!login && !!password) {
     setTimeout(() => {
