@@ -12,6 +12,9 @@ export default makeStyles((theme) => ({
     width: `calc(100vw - 240px)`,
     minHeight: "100vh",
     backgroundColor: "#27293d",
+    [theme.breakpoints.down("sm")]: {
+      padding: theme.spacing(2),
+    },
   },
   contentShift: {
     backgroundColor: "#27293d",

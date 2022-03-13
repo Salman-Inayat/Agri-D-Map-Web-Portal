@@ -9,9 +9,12 @@ import PropTypes from "prop-types";
 import Typography from "@material-ui/core/Typography";
 import Audio from "../../components/Audio_Player/Audio_Player";
 import useStyles from "./styles.js";
+import { useMediaQuery } from "react-responsive";
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
   const classes = useStyles();
+  const isMobile = useMediaQuery({ maxWidth: 767 });
 
   return (
     <div
@@ -19,7 +22,7 @@ function TabPanel(props) {
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
       className={classes.tabPanel}
-      style={{ padding: "50px 20px" }}
+      style={{ padding: isMobile ? "10px 0px" : "50px 20px" }}
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
@@ -48,6 +51,7 @@ export default function ReaultTab(props) {
   const [image, setImage] = useState();
   const [imageURL, setImageURL] = useState();
   const [fallback, setFallback] = useState(false);
+  const isMobile = useMediaQuery({ maxWidth: 767 });
 
   useEffect(() => {
     setImage(props.image);
@@ -91,7 +95,7 @@ export default function ReaultTab(props) {
     <Card
       style={{
         width: "100%",
-        padding: "1rem",
+        padding: isMobile ? "0.3rem" : "1rem",
         backgroundColor: "#3f4257",
         color: "#fff",
       }}

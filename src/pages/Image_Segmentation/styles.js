@@ -25,4 +25,19 @@ export default makeStyles((theme) => ({
       backgroundColor: "#51556f",
     },
   },
+
+  // ==============
+  imgBox: {
+    maxWidth: "80%",
+    maxHeight: "80%",
+    margin: "10px",
+  },
+  img: {
+    height: "inherit",
+    maxWidth: "inherit",
+    borderRadius: "10px",
+  },
+  input: {
+    display: "none",
+  },
 }));

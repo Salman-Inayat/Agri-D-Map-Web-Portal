@@ -1,15 +1,23 @@
 import React, { useState } from "react";
 import ImagePicker from "../../components/Image_Picker/Image_Picker";
-import Grid from "@material-ui/core/Grid";
 import useStyles from "./styles";
 import WebcamCapture from "../../components/Webcam/Webcam.js";
-import { Button, Backdrop, Typography } from "@material-ui/core";
+import {
+  Grid,
+  Box,
+  IconButton,
+  Button,
+  Backdrop,
+  Typography,
+} from "@material-ui/core";
 import axios from "axios";
 import LoadingOverlay from "react-loading-overlay";
 import Audio from "../../components/Audio_Player/Audio_Player";
 import ResultTab from "../../components/Tab/Tab";
 import { useMediaQuery } from "react-responsive";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import FileUplaodIcon from "../../assets/uploadIcon.svg";
+import PhotoCameraRoundedIcon from "@material-ui/icons/PhotoCameraRounded";
 
 function Image_Segmentation() {
   const classes = useStyles();
@@ -22,9 +30,11 @@ function Image_Segmentation() {
   const [resultAudio, setResultAudio] = useState();
   const [open, setOpen] = useState(false);
 
+  const [source, setSource] = useState("");
+
   const [englishTabData, setEnglishTabData] = useState();
   const [urduTabData, setUrduTabData] = useState();
-  // const isMobile = useMediaQuery({ maxWidth: 767 });
+  const isMobile = useMediaQuery({ maxWidth: 767 });
 
   const remedialActions = {
     healthy: {
@@ -179,32 +189,113 @@ function Image_Segmentation() {
     }
   };
 
+  const handleCapture = (target) => {
+    if (target.files) {
+      if (target.files.length !== 0) {
+        setImagePresent(true);
+        const file = target.files[0];
+        const newUrl = URL.createObjectURL(file);
+        setSource(newUrl);
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+          handleImage(reader.result);
+        };
+      }
+    }
+  };
+
   return (
     <div style={{ backgroundColor: "#27293d" }}>
-      {/* <LoadingOverlay active={loading} spinner text="Processing the image"> */}
       <Grid container spacing={3} className={classes.grid_container}>
-        <Grid item md={5} sm={12} xs={12} className={classes.ind_grid}>
-          <ImagePicker
-            handleImage={handleImage}
-            handleImagePresent={handleImagePresent}
-          />
-        </Grid>
-        {/* {!isMobile && ( */}
-        <Grid item md={7}>
-          <Grid container>
-            <Grid item md={3} sm={12} xs={12} className={classes.ind_grid}>
-              <Typography variant="h5" style={{ color: "#fff" }}>
-                OR
-              </Typography>
-            </Grid>
-            <Grid item md={9} sm={12} xs={12} className={classes.ind_grid}>
-              <WebcamCapture
-                handleImage={handleImage}
-                handleImagePresent={handleImagePresent}
-              />
+        {!isMobile && (
+          <Grid item md={12} xs={!2}>
+            <Grid container>
+              <Grid item md={5} sm={12} xs={12} className={classes.ind_grid}>
+                <ImagePicker
+                  handleImage={handleImage}
+                  handleImagePresent={handleImagePresent}
+                />
+              </Grid>
+              <Grid item md={7}>
+                <Grid container>
+                  <Grid
+                    item
+                    md={3}
+                    sm={12}
+                    xs={12}
+                    className={classes.ind_grid}
+                  >
+                    <Typography variant="h5" style={{ color: "#fff" }}>
+                      OR
+                    </Typography>
+                  </Grid>
+                  <Grid
+                    item
+                    md={9}
+                    sm={12}
+                    xs={12}
+                    className={classes.ind_grid}
+                  >
+                    <WebcamCapture
+                      handleImage={handleImage}
+                      handleImagePresent={handleImagePresent}
+                    />
+                  </Grid>
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
+        )}
+        {isMobile && (
+          <Grid
+            item
+            xs={12}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+            }}
+          >
+            {source && (
+              <Box
+                display="flex"
+                justifyContent="center"
+                className={classes.imgBox}
+              >
+                <img src={source} alt={"snap"} className={classes.img}></img>
+              </Box>
+            )}
+
+            <label htmlFor="icon-button-file">
+              <input
+                accept="image/*"
+                className={classes.input}
+                id="icon-button-file"
+                type="file"
+                capture="environment"
+                onChange={(e) => handleCapture(e.target)}
+              />
+              <IconButton
+                aria-label="upload picture"
+                component="span"
+                className={classes.submitButton}
+                style={{
+                  fontSize: "1.1rem",
+                  height: "2.5rem",
+                  color: "#fff",
+                }}
+              >
+                <PhotoCameraRoundedIcon
+                  fontSize="large"
+                  style={{ marginRight: "10px", color: "#fff" }}
+                />
+                Open Camera
+              </IconButton>
+            </label>
+          </Grid>
+        )}
         <Grid
           item
           md={12}
@@ -274,7 +365,6 @@ function Image_Segmentation() {
           </Typography>
         </div>
       </Backdrop>
-      {/* </LoadingOverlay> */}
     </div>
   );
 }
