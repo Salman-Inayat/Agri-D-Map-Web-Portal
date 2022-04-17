@@ -15,6 +15,7 @@ import Sidebar from "../Sidebar";
 import Dashboard from "../../pages/dashboard";
 import Image_Segmentation from "../../pages/Image_Segmentation/Image_Segmentation";
 import Statistics from "../../pages/Statistics/Statistics";
+import Weather from "../../pages/weather";
 
 // context
 import { useLayoutState } from "../../context/LayoutContext";
@@ -43,6 +44,7 @@ function Layout(props) {
               path="/app/disease-detection"
               component={Image_Segmentation}
             />
+            <Route path="/app/weather" component={Weather} />
           </Switch>
         </div>
       </>

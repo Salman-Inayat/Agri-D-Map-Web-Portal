@@ -39,6 +39,7 @@ const structure = [
   },
   { id: 1, label: "Fields", link: "/app/fields", icon: <HomeIcon /> },
   { id: 2, label: "Statistics", link: "/app/statistics", icon: <HomeIcon /> },
+  { id: 3, label: "Weather", link: "/app/weather", icon: <HomeIcon /> },
 ];
 
 function Sidebar({ location, history }) {
