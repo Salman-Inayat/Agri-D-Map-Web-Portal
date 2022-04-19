@@ -33,7 +33,6 @@ const DashboardPolygonTable = forwardRef((props, ref) => {
 
   const [data, setdata] = useState([]);
   const [sortColumn, setSortColumn] = useState();
-  const [sortType, setSortType] = useState();
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [editName, setEditName] = useState("");
@@ -65,7 +64,13 @@ const DashboardPolygonTable = forwardRef((props, ref) => {
             date.getFullYear();
           data[i].created_at = standard_date;
         });
-        setdata(data);
+        if (data.length > 0) {
+          console.log("has data");
+          setdata(data);
+        } else {
+          console.log("no data");
+          setdata([]);
+        }
       })
       .catch((err) => console.log(err));
   };
@@ -75,36 +80,6 @@ const DashboardPolygonTable = forwardRef((props, ref) => {
       fetchPolygons();
     },
   }));
-
-  const getData = () => {
-    if (sortColumn && sortType) {
-      return data.sort((a, b) => {
-        let x = a[sortColumn];
-        let y = b[sortColumn];
-        if (typeof x === "string") {
-          x = x.charCodeAt();
-        }
-        if (typeof y === "string") {
-          y = y.charCodeAt();
-        }
-        if (sortType === "asc") {
-          return x - y;
-        } else {
-          return y - x;
-        }
-      });
-    }
-    return data;
-  };
-
-  const handleSortColumn = (sortColumn, sortType) => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setSortColumn(sortColumn);
-      setSortType(sortType);
-    }, 5);
-  };
 
   const ModalClick = (id) => {
     setOpen(true);
@@ -131,18 +106,19 @@ const DashboardPolygonTable = forwardRef((props, ref) => {
     }, 500);
   };
 
-  const DeletePolygon = (id) => {
-    fetch(
+  const DeletePolygon = async (id) => {
+    const response = await fetch(
       `${process.env.REACT_APP_AGROMONITORING_API_URL}polygons/${id}?appid=${process.env.REACT_APP_AGROMONITORING_API_KEY}`,
       {
         method: "DELETE",
       },
     );
-    console.log("Delete polygon id: ", id);
-    setTimeout(() => {
-      fetchPolygons();
-      setDialogOpen(false);
-    }, 500);
+
+    console.log(response);
+
+    setDialogOpen(false);
+
+    setTimeout(() => {}, fetchPolygons(), 1000);
   };
 
   const EditPolygonsCell = ({
@@ -154,11 +130,8 @@ const DashboardPolygonTable = forwardRef((props, ref) => {
   }) => (
     <Cell {...props}>
       <div>
-        <IconButton size="small">
-          <EditIcon
-            style={{ color: "#fff" }}
-            onClick={() => ModalClick(rowData.id)}
-          />
+        <IconButton size="small" onClick={() => ModalClick(rowData.id)}>
+          <EditIcon style={{ color: "#fff" }} />
         </IconButton>
         |
         <IconButton
@@ -182,10 +155,8 @@ const DashboardPolygonTable = forwardRef((props, ref) => {
     <div>
       <Table
         height={420}
-        data={getData()}
+        data={data}
         sortColumn={sortColumn}
-        sortType={sortType}
-        onSortColumn={handleSortColumn}
         loading={loading}
         autoHeight={true}
         cellBordered={false}
@@ -197,7 +168,6 @@ const DashboardPolygonTable = forwardRef((props, ref) => {
         }}
       >
         <Column
-          sortable
           align="center"
           flexGrow={2}
           style={{ backgroundColor: " #3f4257", color: "white" }}
@@ -209,7 +179,6 @@ const DashboardPolygonTable = forwardRef((props, ref) => {
         </Column>
 
         <Column
-          sortable
           align="center"
           flexGrow={1}
           style={{ backgroundColor: " #3f4257", color: "white" }}
@@ -221,7 +190,6 @@ const DashboardPolygonTable = forwardRef((props, ref) => {
         </Column>
 
         <Column
-          sortable
           align="center"
           flexGrow={1}
           style={{ backgroundColor: " #3f4257", color: "white" }}

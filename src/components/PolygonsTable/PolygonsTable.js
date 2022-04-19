@@ -20,20 +20,24 @@ const PolygonTable = (props) => {
     )
       .then((res) => res.json())
       .then((data) => {
-        setValue(data[0].id);
-        data.map((item, i) => {
-          const unixTimestamp = data[i].created_at;
-          var date = new Date(unixTimestamp * 1000);
-          const standard_date =
-            date.getDate() +
-            "-" +
-            (date.getMonth() + 1) +
-            "-" +
-            date.getFullYear();
-          data[i].created_at = standard_date;
-          data[i].area.toFixed(1);
-        });
-        setdata(data);
+        if (data.length > 0) {
+          setValue(data[0].id);
+          data.map((item, i) => {
+            const unixTimestamp = data[i].created_at;
+            var date = new Date(unixTimestamp * 1000);
+            const standard_date =
+              date.getDate() +
+              "-" +
+              (date.getMonth() + 1) +
+              "-" +
+              date.getFullYear();
+            data[i].created_at = standard_date;
+            data[i].area.toFixed(1);
+          });
+          setdata(data);
+        } else {
+          setdata([]);
+        }
         setLoading(false);
       })
       .catch((err) => console.log(err));
@@ -88,15 +92,16 @@ const PolygonTable = (props) => {
     </Cell>
   );
 
-  return loading ? (
-    <div style={{ height: "200px" }}>
-      <img
-        src="/horizontal-loader.gif"
-        alt="loader"
-        style={{ display: "block", margin: "auto" }}
-      ></img>
-    </div>
-  ) : (
+  return (
+    // loading ? (
+    //   <div style={{ height: "200px" }}>
+    //     <img
+    //       src="/horizontal-loader.gif"
+    //       alt="loader"
+    //       style={{ display: "block", margin: "auto" }}
+    //     ></img>
+    //   </div>
+    // ) : (
     <Table
       height={420}
       data={getData()}

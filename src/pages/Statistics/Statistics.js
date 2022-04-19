@@ -37,6 +37,7 @@ export default function Statistics(props) {
   const [polygonId, setPolygonId] = useState("");
   const [firstPolygonId, setFirstPolygonId] = useState("");
   const [mountComponent, setMountComponent] = useState(false);
+  const [doesPolygonExist, setDoesPolygonExist] = useState(false);
 
   useEffect(() => {
     let firstPolygon;
@@ -45,12 +46,23 @@ export default function Statistics(props) {
     )
       .then((response) => response.json())
       .then((data) => {
-        firstPolygon = data[0].id;
-        setPolygonId(firstPolygon);
-        setFirstPolygonId(firstPolygon);
-        setTimeout(() => {
-          setMountComponent(true);
-        }, 1000);
+        if (data.length > 0) {
+          setDoesPolygonExist(true);
+          firstPolygon = data[0].id;
+
+          setPolygonId(firstPolygon);
+          setFirstPolygonId(firstPolygon);
+          setTimeout(() => {
+            setMountComponent(true);
+          }, 1000);
+        } else {
+          setDoesPolygonExist(false);
+          setPolygonId("");
+          setFirstPolygonId("");
+          setTimeout(() => {
+            setMountComponent(true);
+          }, 1000);
+        }
       });
 
     setTimeout(() => {
@@ -109,67 +121,68 @@ export default function Statistics(props) {
       <Grid item md={12} xs={12}>
         <PolygonTable onChange={handleChange} value={polygonId} />
       </Grid>
-      <Grid container className={classes.NDVIContainer}>
-        <Grid item md={5}>
-          <Typography variant="h5" style={{ color: "#fff" }}>
-            Historical
-          </Typography>
-          <Typography variant="h1" style={{ color: "#fff" }}>
-            NDVI
-          </Typography>
+      {doesPolygonExist && (
+        <Grid container className={classes.NDVIContainer}>
+          <Grid item md={5}>
+            <Typography variant="h5" style={{ color: "#fff" }}>
+              Historical
+            </Typography>
+            <Typography variant="h1" style={{ color: "#fff" }}>
+              NDVI
+            </Typography>
+          </Grid>
+          <Grid item md={3}></Grid>
+          <Grid
+            item
+            md={4}
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <DatePicker
+                style={{ margin: "5px", width: "130px", color: "white" }}
+                label="From"
+                variant="inline"
+                openTo="date"
+                views={["year", "month", "date"]}
+                format="dd/MM/yyyy"
+                value={fromDate}
+                onChange={handleFromDateChange}
+                disableFuture
+              />
+            </MuiPickersUtilsProvider>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <DatePicker
+                label="To"
+                style={{ margin: "5px", width: "130px", color: "white" }}
+                variant="inline"
+                openTo="date"
+                views={["year", "month", "date"]}
+                format="dd/MM/yyyy"
+                value={toDate}
+                onChange={handleToDateChange}
+                maxDate={new Date()}
+              />
+            </MuiPickersUtilsProvider>
+          </Grid>
+          <Grid item md={12} xs={12}>
+            {" "}
+            {NDVI_data.length > 0 && <NDVIChart data={NDVI_data} />}
+          </Grid>
+          <Grid item md={12} xs={12}>
+            {mountComponent && (
+              <NDVILayers
+                fromDateUNIX={fromDateUNIX}
+                toDateUNIX={toDateUNIX}
+                polygonId={polygonId}
+              />
+            )}
+          </Grid>
         </Grid>
-        <Grid item md={3}></Grid>
-        <Grid
-          item
-          md={4}
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <DatePicker
-              style={{ margin: "5px", width: "130px", color: "white" }}
-              label="From"
-              variant="inline"
-              openTo="date"
-              views={["year", "month", "date"]}
-              format="dd/MM/yyyy"
-              value={fromDate}
-              onChange={handleFromDateChange}
-              disableFuture
-            />
-          </MuiPickersUtilsProvider>
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <DatePicker
-              label="To"
-              style={{ margin: "5px", width: "130px", color: "white" }}
-              variant="inline"
-              openTo="date"
-              views={["year", "month", "date"]}
-              format="dd/MM/yyyy"
-              value={toDate}
-              onChange={handleToDateChange}
-              maxDate={new Date()}
-            />
-          </MuiPickersUtilsProvider>
-        </Grid>
-        <Grid item md={12} xs={12}>
-          {" "}
-          {NDVI_data.length > 0 && <NDVIChart data={NDVI_data} />}
-        </Grid>
-      </Grid>
-
-      <Grid item md={12} xs={12}>
-        {mountComponent && (
-          <NDVILayers
-            fromDateUNIX={fromDateUNIX}
-            toDateUNIX={toDateUNIX}
-            polygonId={polygonId}
-          />
-        )}
-      </Grid>
+      )}
       {/* {mountComponent && (
           <WeatherChart firstPolygon={firstPolygonId} polygonId={polygonId} />
         )} */}

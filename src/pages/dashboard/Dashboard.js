@@ -47,6 +47,7 @@ export default function Dashboard(props) {
   const childRef = useRef();
 
   useEffect(() => {
+    console.log("useEffect", process.env.REACT_APP_GEO_LOCATION_URL);
     fetch(`${process.env.REACT_APP_GEO_LOCATION_URL}`)
       .then((response) => response.json())
       .then((data) => {
@@ -55,6 +56,9 @@ export default function Dashboard(props) {
           latitude: data.latitude,
           longitude: data.longitude,
         });
+      })
+      .catch((error) => {
+        console.log(error);
       });
   }, []);
 

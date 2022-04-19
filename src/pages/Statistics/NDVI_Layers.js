@@ -47,8 +47,24 @@ function NDVILayers(props) {
       .then((response) => response.json())
 
       .then((data) => {
+        console.log("data", data);
         const dataB = data;
         setLayersData(dataB);
+        setMetricDate(dataB[0].dt);
+
+        let layerStats = dataB[0].stats.ndvi;
+
+        if (layerStats.includes("http")) {
+          layerStats = layerStats.replace("http", "https");
+        }
+
+        setImageURL(dataB[0].image.ndvi);
+
+        fetch(layerStats)
+          .then((res) => res.json())
+          .then((data) => {
+            setTableData(data);
+          });
       })
       .catch((error) => {
         console.log("error: ", error);
@@ -73,6 +89,8 @@ function NDVILayers(props) {
   };
 
   const switchFunction = (value, required_layer_object) => {
+    console.log("value", value);
+    console.log("required_layer_object", required_layer_object);
     switch (value) {
       case "ndvi":
         setImageURL(required_layer_object[0].image.ndvi);
@@ -244,10 +262,14 @@ function NDVILayers(props) {
                 id="demo-simple-select"
                 value={metricDate}
                 label="date"
-                defaultValue={
-                  layersData.length > 0 ? formatDate(layersData[1].dt) : ""
-                }
-                onChange={(e) => handleDateChange(e)}
+                defaultValue={metricDate}
+                // defaultValue={
+                //   layersData.length > 0 ? formatDate(layersData[1].dt) : ""
+                // }
+                onChange={(e) => {
+                  handleDateChange(e);
+                  console.log("layers data", layersData);
+                }}
                 style={{ color: "#fff" }}
               >
                 {layersData.map(

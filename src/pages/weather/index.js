@@ -12,6 +12,7 @@ import {
   FormHelperText,
   Card,
   CardContent,
+  CircularProgress,
 } from "@material-ui/core";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -20,6 +21,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import { withStyles } from "@material-ui/core/styles";
+import useStyles from "./styles.js";
 
 const StyledTableCell = withStyles({
   root: {
@@ -28,10 +30,14 @@ const StyledTableCell = withStyles({
 })(TableCell);
 
 const Weather = () => {
+  const classes = useStyles();
   const [polygons, setPolygons] = useState([]);
   const [currentWeather, setCurrentWeather] = useState();
+  const [currentSoil, setCurrentSoil] = useState();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     fetchPolygons();
   }, []);
 
@@ -53,30 +59,61 @@ const Weather = () => {
           data[i].created_at = standard_date;
         });
         setPolygons(data);
-        console.log(data);
+        console.log("Polygons data: ", data);
         fetchWeather(data[0].center[0], data[0].center[1]);
+        fetchSoil(data[0].id);
+        setLoading(false);
       })
       .catch((err) => console.log(err));
   };
 
-  const fetchWeather = (lat, lon) => {
-    fetch(
-      `https://api.agromonitoring.com/agro/1.0/weather?lat=${lat}&lon=${lon}&appid=${process.env.REACT_APP_AGROMONITORING_API_KEY}`,
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        setCurrentWeather(data);
-        console.log(data);
-      })
-      .catch((err) => console.log(err));
+  const fetchWeather = async (lat, lon) => {
+    const promise = new Promise((resolve, reject) => {
+      fetch(
+        `https://api.agromonitoring.com/agro/1.0/weather?lat=${lat}&lon=${lon}&appid=${process.env.REACT_APP_AGROMONITORING_API_KEY}`,
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          setCurrentWeather(data);
+          console.log(data);
+        })
+        .catch((err) => console.log(err));
+    });
+    return promise;
   };
 
-  const handleFieldClick = (field) => {
-    fetchWeather(field.center[0], field.center[1]);
+  const fetchSoil = async (id) => {
+    const promise = new Promise((resolve, reject) => {
+      fetch(
+        `https://api.agromonitoring.com/agro/1.0/soil?polygon_id=${id}&appid=${process.env.REACT_APP_AGROMONITORING_API_KEY}`,
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          setCurrentSoil(data);
+          console.log(data);
+          resolve(data);
+        })
+        .catch((err) => console.log(err));
+    });
+    return promise;
   };
 
-  const convertKelinToFahrenheit = (kelvin) => {
-    return Math.round((kelvin * 9) / 5 - 459.67);
+  const handleFieldClick = async (field) => {
+    setLoading(true);
+    const promise1 = new Promise((resolve, reject) => {
+      fetchWeather(field.center[0], field.center[1]);
+      resolve();
+    });
+    const promise2 = new Promise((resolve, reject) => {
+      fetchSoil(field.id);
+      resolve();
+    });
+    await Promise.all([promise1, promise2]);
+    setLoading(false);
+  };
+
+  const convertKelinToCelcius = (kelvin) => {
+    return (kelvin - 273.15).toFixed(1);
   };
 
   return (
@@ -145,57 +182,126 @@ const Weather = () => {
             }}
           >
             <CardContent>
-              <Grid container spacing={2}>
-                <Grid item md={12}>
-                  <Typography variant="body1" component="h2">
-                    Current
-                  </Typography>
-                  <Typography
-                    style={{
-                      fontSize: "1.7rem",
-                      fontWeight: "400",
-                    }}
+              {loading ? (
+                <CircularProgress />
+              ) : (
+                <Grid container spacing={2}>
+                  <Grid item md={12}>
+                    <Typography variant="body1" component="h2">
+                      Current
+                    </Typography>
+                    <Typography
+                      style={{
+                        fontSize: "1.7rem",
+                        fontWeight: "400",
+                      }}
+                    >
+                      Weather
+                    </Typography>
+                  </Grid>
+                  <Grid
+                    item
+                    md={6}
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
                   >
-                    Weather
-                  </Typography>
-                </Grid>
-                <Grid
-                  item
-                  md={6}
-                  display="flex"
-                  justifyContent="center"
-                  alignItems="center"
-                >
-                  <img
-                    src={`https://openweathermap.org/img/w/${currentWeather?.weather[0]?.icon}.png`}
-                    alt="weather"
-                    style={{
-                      width: "50px",
-                      height: "50px",
-                    }}
-                  />
-                </Grid>
-                <Grid
-                  item
-                  md={6}
-                  display="flex"
-                  justifyContent="center"
-                  alignItems="center"
-                >
-                  <Typography
-                    style={{ fontSize: "2.5rem", fontWeight: "400" }}
-                    align="center"
+                    <img
+                      src={`https://openweathermap.org/img/w/${currentWeather?.weather[0]?.icon}.png`}
+                      alt="weather"
+                      style={{
+                        width: "80px",
+                        height: "80px",
+                      }}
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    md={6}
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
                   >
-                    {convertKelinToFahrenheit(currentWeather?.main?.temp)}°
-                  </Typography>
-                  <Typography
-                    style={{ fontSize: "1rem", fontWeight: "400" }}
-                    align="center"
-                  >
-                    {currentWeather?.weather[0]?.description}
-                  </Typography>
+                    <Typography
+                      style={{ fontSize: "2.5rem", fontWeight: "400" }}
+                      align="center"
+                    >
+                      {convertKelinToCelcius(currentWeather?.main?.temp)}°
+                    </Typography>
+                    <Typography
+                      style={{ fontSize: "1rem", fontWeight: "400" }}
+                      align="center"
+                    >
+                      {currentWeather?.weather[0]?.description}
+                    </Typography>
+                  </Grid>
                 </Grid>
-              </Grid>
+              )}
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item md={4} xs={12}>
+          <Card
+            style={{
+              backgroundColor: "#3F4257",
+              borderRadius: "10px",
+              color: "white",
+            }}
+          >
+            <CardContent>
+              {loading ? (
+                <CircularProgress />
+              ) : (
+                <Grid container spacing={2}>
+                  <Grid item md={12}>
+                    <Typography variant="body1" component="h2">
+                      Current
+                    </Typography>
+                    <Typography
+                      style={{
+                        fontSize: "1.7rem",
+                        fontWeight: "400",
+                      }}
+                    >
+                      Soil data
+                    </Typography>
+                  </Grid>
+                  <Grid item md={12}>
+                    <Grid container spacing={3}>
+                      <Grid item md={6}>
+                        <Typography className={classes.soilLeftText}>
+                          Temperature at the surface
+                        </Typography>
+                      </Grid>
+                      <Grid item md={6}>
+                        <Typography className={classes.soilRightText}>
+                          {convertKelinToCelcius(currentSoil?.t0)}°C
+                        </Typography>
+                      </Grid>
+                      <Grid item md={6}>
+                        <Typography className={classes.soilLeftText}>
+                          Temperature at the depth of 10cm
+                        </Typography>
+                      </Grid>
+                      <Grid item md={6}>
+                        <Typography className={classes.soilRightText}>
+                          {convertKelinToCelcius(currentSoil?.t10)}°C
+                        </Typography>
+                      </Grid>
+                      <Grid item md={6}>
+                        <Typography className={classes.soilLeftText}>
+                          Soil moisture
+                        </Typography>
+                      </Grid>
+                      <Grid item md={6}>
+                        <Typography className={classes.soilRightText}>
+                          {(currentSoil?.moisture * 100).toFixed(2)}%
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              )}
             </CardContent>
           </Card>
         </Grid>
