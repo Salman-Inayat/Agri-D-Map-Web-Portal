@@ -141,7 +141,7 @@ export default function Header(props) {
           </IconButton>
         )}
         <Typography variant="h4" weight="medium" className={classes.logotype}>
-          Agri D Map
+          AgriVision
         </Typography>
       </Toolbar>
     </AppBar>

@@ -65,10 +65,8 @@ const DashboardPolygonTable = forwardRef((props, ref) => {
           data[i].created_at = standard_date;
         });
         if (data.length > 0) {
-          console.log("has data");
           setdata(data);
         } else {
-          console.log("no data");
           setdata([]);
         }
       })
@@ -113,8 +111,6 @@ const DashboardPolygonTable = forwardRef((props, ref) => {
         method: "DELETE",
       },
     );
-
-    console.log(response);
 
     setDialogOpen(false);
 

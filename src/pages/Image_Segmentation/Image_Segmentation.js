@@ -147,9 +147,7 @@ function Image_Segmentation() {
           const response = res.data;
           // split the reponse on the basis of space
           const responseArray = response.split(" ");
-          console.log("responseArray: ", responseArray);
           const leafResult = responseArray[1].replace(/\r\n/g, "");
-          console.log("leafResult: ", leafResult);
           setResult(leafResult);
           setResultImage(responseArray[0]);
 
@@ -179,7 +177,6 @@ function Image_Segmentation() {
               break;
           }
           setLoading(false);
-          console.log("Done");
           setIsResult(true);
           setOpen(false);
         })

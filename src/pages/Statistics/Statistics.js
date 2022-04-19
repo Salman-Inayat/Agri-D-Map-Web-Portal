@@ -66,7 +66,6 @@ export default function Statistics(props) {
       });
 
     setTimeout(() => {
-      console.log(firstPolygon);
       fetch(
         `${process.env.REACT_APP_AGROMONITORING_API_URL}ndvi/history?polyid=${firstPolygon}&start=${fromDateUNIX}&end=${toDateUNIX}&appid=${process.env.REACT_APP_AGROMONITORING_API_KEY}`,
       )

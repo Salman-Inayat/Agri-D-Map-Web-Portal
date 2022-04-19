@@ -11,7 +11,6 @@ function ImagePicker(props) {
     if (pictureDataURL.length > 0) {
       props.handleImage(pictureDataURL[0]);
     } else {
-      console.log("No image selected");
       props.handleImagePresent(false);
     }
   };

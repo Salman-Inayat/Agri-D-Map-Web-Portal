@@ -47,11 +47,9 @@ export default function Dashboard(props) {
   const childRef = useRef();
 
   useEffect(() => {
-    console.log("useEffect", process.env.REACT_APP_GEO_LOCATION_URL);
     fetch(`${process.env.REACT_APP_GEO_LOCATION_URL}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         setLocation({
           latitude: data.latitude,
           longitude: data.longitude,
@@ -143,7 +141,6 @@ export default function Dashboard(props) {
           },
         );
         const content = await rawResponse.json();
-        console.log(content);
         childRef.current.updateTable();
       })();
       setpolygonName("");

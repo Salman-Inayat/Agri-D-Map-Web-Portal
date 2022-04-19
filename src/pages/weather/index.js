@@ -59,7 +59,6 @@ const Weather = () => {
           data[i].created_at = standard_date;
         });
         setPolygons(data);
-        console.log("Polygons data: ", data);
         fetchWeather(data[0].center[0], data[0].center[1]);
         fetchSoil(data[0].id);
         setLoading(false);
@@ -75,7 +74,6 @@ const Weather = () => {
         .then((res) => res.json())
         .then((data) => {
           setCurrentWeather(data);
-          console.log(data);
         })
         .catch((err) => console.log(err));
     });
@@ -90,7 +88,6 @@ const Weather = () => {
         .then((res) => res.json())
         .then((data) => {
           setCurrentSoil(data);
-          console.log(data);
           resolve(data);
         })
         .catch((err) => console.log(err));
@@ -199,13 +196,7 @@ const Weather = () => {
                       Weather
                     </Typography>
                   </Grid>
-                  <Grid
-                    item
-                    md={6}
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                  >
+                  <Grid item md={6}>
                     <img
                       src={`https://openweathermap.org/img/w/${currentWeather?.weather[0]?.icon}.png`}
                       alt="weather"
@@ -215,13 +206,7 @@ const Weather = () => {
                       }}
                     />
                   </Grid>
-                  <Grid
-                    item
-                    md={6}
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                  >
+                  <Grid item md={6}>
                     <Typography
                       style={{ fontSize: "2.5rem", fontWeight: "400" }}
                       align="center"

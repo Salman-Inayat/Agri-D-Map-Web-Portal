@@ -77,9 +77,7 @@ function Vari() {
   const handleSubmit = (data) => {
     fetch("https://zoom.us/oauth/token", options)
       .then((res) => res.json())
-      .then((json) => {
-        console.log(json);
-      });
+      .then((json) => {});
   };
 
   return (

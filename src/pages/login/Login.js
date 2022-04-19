@@ -18,7 +18,6 @@ import useStyles from "./styles";
 import { useUserDispatch, loginUser } from "../../context/UserContext";
 
 function Login(props) {
-  console.log(props);
   var classes = useStyles();
   const history = useHistory();
   var userDispatch = useUserDispatch();

@@ -4,7 +4,6 @@ import Button from "@material-ui/core/Button";
 
 function WeatherChart(props) {
   const [changedPolygonID, setChangedPolygonID] = useState();
-  console.log("Weather polygon ID: ", changedPolygonID);
   const [location, setLocation] = useState({
     latitude: null,
     longitude: null,
@@ -64,7 +63,6 @@ function WeatherChart(props) {
   }, []);
 
   const refreshWeather = () => {
-    console.log("Called when polygon id is changed");
     let coordinates = [];
     let latitudes;
     let longitudes;
@@ -82,14 +80,12 @@ function WeatherChart(props) {
         });
       });
 
-    console.log("Latitude: ", latitudes, "Longitude: ", longitudes);
     setTimeout(() => {
       fetch(
         `${process.env.REACT_APP_AGROMONITORING_API_URL}weather/forecast?lat=${latitudes}&lon=${longitudes}&appid=${process.env.REACT_APP_AGROMONITORING_API_KEY}`,
       )
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
           data.map((item, i) => {
             const unixTimestamp = item.dt;
 

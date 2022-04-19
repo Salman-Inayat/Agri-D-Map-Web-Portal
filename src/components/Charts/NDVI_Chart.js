@@ -30,7 +30,6 @@ function NDVIChart(props) {
     result[2].data.push(item.data.mean.toFixed(2));
     // setChartDate((prevState) => [...prevState, standard_date]);
     chartDate.push(standard_date);
-    console.log("result array: " + result);
   });
 
   const options = {
@@ -203,6 +202,18 @@ function NDVIChart(props) {
       dynamicAnimation: {
         enabled: true,
         speed: 350,
+      },
+    },
+    noData: {
+      text: "No data for selected period",
+      align: "center",
+      verticalAlign: "middle",
+      offsetX: 0,
+      offsetY: 0,
+      style: {
+        color: undefined,
+        fontSize: "14px",
+        fontFamily: undefined,
       },
     },
   };

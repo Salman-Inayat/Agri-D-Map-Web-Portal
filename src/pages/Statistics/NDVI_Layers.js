@@ -47,28 +47,27 @@ function NDVILayers(props) {
       .then((response) => response.json())
 
       .then((data) => {
-        console.log("data", data);
-        const dataB = data;
-        setLayersData(dataB);
-        setMetricDate(dataB[0].dt);
+        if (data.length > 0) {
+          const dataB = data;
+          setLayersData(dataB);
+          setMetricDate(dataB[0].dt);
 
-        let layerStats = dataB[0].stats.ndvi;
+          let layerStats = dataB[0].stats.ndvi;
 
-        if (layerStats.includes("http")) {
-          layerStats = layerStats.replace("http", "https");
+          if (layerStats.includes("http")) {
+            layerStats = layerStats.replace("http", "https");
+          }
+
+          setImageURL(dataB[0].image.ndvi);
+
+          fetch(layerStats)
+            .then((res) => res.json())
+            .then((data) => {
+              setTableData(data);
+            });
         }
-
-        setImageURL(dataB[0].image.ndvi);
-
-        fetch(layerStats)
-          .then((res) => res.json())
-          .then((data) => {
-            setTableData(data);
-          });
       })
-      .catch((error) => {
-        console.log("error: ", error);
-      });
+      .catch((error) => {});
   }, [props]);
 
   const handleDateChange = (event) => {
@@ -89,11 +88,10 @@ function NDVILayers(props) {
   };
 
   const switchFunction = (value, required_layer_object) => {
-    console.log("value", value);
-    console.log("required_layer_object", required_layer_object);
     switch (value) {
       case "ndvi":
         setImageURL(required_layer_object[0].image.ndvi);
+
         fetchStatsData(required_layer_object[0].stats.ndvi);
         break;
       case "evi":
@@ -117,7 +115,6 @@ function NDVILayers(props) {
         fetchStatsData(required_layer_object[0].stats.dswi);
         break;
       default:
-        console.log("Incorrect choice");
     }
     setImageLoading(false);
   };
@@ -268,7 +265,6 @@ function NDVILayers(props) {
                 // }
                 onChange={(e) => {
                   handleDateChange(e);
-                  console.log("layers data", layersData);
                 }}
                 style={{ color: "#fff" }}
               >

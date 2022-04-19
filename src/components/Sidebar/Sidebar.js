@@ -113,7 +113,7 @@ function Sidebar({ location, history }) {
       <div
         style={{
           position: "absolute",
-          bottom: "0",
+          bottom: "30%",
           width: "100%",
           height: "50px",
           display: "flex",
@@ -126,11 +126,11 @@ function Sidebar({ location, history }) {
           variant="body1"
           style={{
             cursor: "pointer",
-            fontSize: "1.2rem",
+            fontSize: "1rem",
             color: "#fff",
           }}
         >
-          Sign Out
+          Logout
         </Typography>
       </div>{" "}
     </Drawer>

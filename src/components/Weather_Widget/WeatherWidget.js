@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import ReactWeather from "react-open-weather-widget";
 import "react-open-weather-widget/lib/css/ReactWeather.css";
 import axios from "axios";
+import { Typography } from "@material-ui/core";
 
 export default function WeatherWidget(props) {
   const customStyles = {
@@ -33,14 +34,11 @@ export default function WeatherWidget(props) {
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         setCity(data.address.city);
-        console.log(data.address.city);
       });
   };
 
   useEffect(() => {
-    console.log("useEffect", process.env.REACT_APP_GEO_LOCATION_URL);
     axios
       .get(`${process.env.REACT_APP_GEO_LOCATION_URL}`)
       .then((response) => {
@@ -63,7 +61,16 @@ export default function WeatherWidget(props) {
         />
       ) : (
         <div>
-          <h4>{status}</h4>
+          <Typography
+            style={{
+              color: "white",
+              fontSize: "1.2rem",
+              textAlign: "center",
+              marginTop: "10%",
+            }}
+          >
+            {status}
+          </Typography>
         </div>
       )}
     </div>
