@@ -9,6 +9,10 @@ import {
   Button,
   Backdrop,
   Typography,
+  InputLabel,
+  MenuItem,
+  FormControl,
+  Select,
 } from "@material-ui/core";
 import axios from "axios";
 import LoadingOverlay from "react-loading-overlay";
@@ -35,6 +39,7 @@ function Image_Segmentation() {
   const [englishTabData, setEnglishTabData] = useState();
   const [urduTabData, setUrduTabData] = useState();
   const isMobile = useMediaQuery({ maxWidth: 767 });
+  const [model, setModel] = useState("resnet18");
 
   const remedialActions = {
     healthy: {
@@ -122,6 +127,10 @@ function Image_Segmentation() {
 
   const handleImagePresent = (result) => {
     setImagePresent(result);
+  };
+
+  const handleModelSelect = (event) => {
+    setModel(event.target.value);
   };
 
   const handleSubmit = () => {
@@ -302,8 +311,36 @@ function Image_Segmentation() {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            flexDirection: "column",
           }}
         >
+          <FormControl
+            style={{
+              width: "20%",
+            }}
+          >
+            <InputLabel
+              id="demo-simple-select-label"
+              style={{
+                color: "#fff",
+              }}
+            >
+              Select model
+            </InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={model}
+              label="Model"
+              onChange={handleModelSelect}
+              style={{ color: "#fff" }}
+            >
+              <MenuItem value="resnet18">Resnet 18</MenuItem>
+              <MenuItem value="resnet50">Resnet 50</MenuItem>
+              <MenuItem value="alexnet">AlexNet</MenuItem>
+            </Select>
+          </FormControl>
+
           <Button
             variant="contained"
             disabled={imagePresent ? false : true}

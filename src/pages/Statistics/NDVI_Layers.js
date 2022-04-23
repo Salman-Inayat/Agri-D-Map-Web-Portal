@@ -260,9 +260,6 @@ function NDVILayers(props) {
                 value={metricDate}
                 label="date"
                 defaultValue={metricDate}
-                // defaultValue={
-                //   layersData.length > 0 ? formatDate(layersData[1].dt) : ""
-                // }
                 onChange={(e) => {
                   handleDateChange(e);
                 }}
