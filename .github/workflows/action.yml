@@ -26,6 +26,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
         env:
+          REACT_APP_SERVER_URL: ${{ secrets.REACT_APP_SERVER_URL }} 
           REACT_APP_AGROMONITORING_API_URL: ${{ secrets.REACT_APP_AGROMONITORING_API_URL }}
           REACT_APP_AGROMONITORING_API_KEY: ${{ secrets.REACT_APP_AGROMONITORING_API_KEY }}
           REACT_APP_MAPBOX_GL_ACCESS_TOKEN: ${{ secrets.REACT_APP_MAPBOX_GL_ACCESS_TOKEN }}
