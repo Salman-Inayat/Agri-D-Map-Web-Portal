@@ -138,20 +138,18 @@ function Image_Segmentation() {
     setResult();
     setResultImage();
     setIsResult(false);
+    const data = {
+      image: image,
+      model: model,
+    };
     if (imagePresent) {
       setLoading(true);
       axios
-        .post(
-          `${process.env.REACT_APP_SERVER_URL}/image-segment`,
-          {
-            image: image,
+        .post(`${process.env.REACT_APP_SERVER_URL}/image-segment`, data, {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
           },
-          {
-            headers: {
-              "Access-Control-Allow-Origin": "*",
-            },
-          },
-        )
+        })
         .then((res) => {
           const response = res.data;
           // split the reponse on the basis of space
