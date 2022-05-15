@@ -314,7 +314,7 @@ function Image_Segmentation() {
         >
           <FormControl
             style={{
-              width: "20%",
+              width: isMobile ? "50%" : "20%",
             }}
           >
             <InputLabel

@@ -39,9 +39,6 @@ function NDVIChart(props) {
       height: "auto",
       type: "line",
       // background: "#373368",
-      zoom: {
-        enabled: true,
-      },
     },
     dataLabels: {
       enabled: false,
@@ -50,17 +47,6 @@ function NDVIChart(props) {
       curve: "smooth",
       width: 3,
     },
-    // title: {
-    //   text: "NDVI Statistics",
-    //   margin: 20,
-    //   style: {
-    //     fontSize: "18px",
-    //     fontWeight: "light",
-    //     color: "white",
-    //   },
-    //   align: "center",
-    // },
-
     legend: {
       show: true,
       showForSingleSeries: false,
@@ -150,7 +136,7 @@ function NDVIChart(props) {
       // mode: "dark",
     },
     tooltip: {
-      theme: false,
+      theme: true,
       y: [
         {
           title: {
@@ -219,24 +205,6 @@ function NDVIChart(props) {
   };
 
   return (
-    // <Chart
-    //   padding={"auto"}
-    //   appendPadding={10}
-    //   scale={{ date: { type: "cat", nice: false } }}
-    //   autoFit
-    //   height={300}
-    //   data={result}
-    // >
-    //   <LineAdvance shape="smooth" point position="date*value" color="label" />
-    //   <Axis
-    //     name="date"
-    //     label={{
-    //       rotate: 0.5,
-    //       autoRotate: true,
-    //       style: { textAlign: "start", fontSize: 11 },
-    //     }}
-    //   />
-    // </Chart>
     <ReactApexChart
       options={options}
       series={result}

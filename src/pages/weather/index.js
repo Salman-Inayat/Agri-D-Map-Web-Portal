@@ -1,15 +1,8 @@
 import React, { useState, useEffect, Fragment } from "react";
 import {
+  Box,
   Grid,
   Typography,
-  Button,
-  TextField,
-  Select,
-  MenuItem,
-  InputLabel,
-  FormControl,
-  Input,
-  FormHelperText,
   Card,
   CardContent,
   CircularProgress,
@@ -22,6 +15,11 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import { withStyles } from "@material-ui/core/styles";
 import useStyles from "./styles.js";
+import { Swiper, SwiperSlide } from "swiper/react/swiper-react";
+import "swiper/swiper.scss";
+
+import FeelsLike from "../../assets/FllesLike.svg";
+import Cloud from "../../assets/cloud-with-rain.svg";
 
 const StyledTableCell = withStyles({
   root: {
@@ -33,6 +31,8 @@ const Weather = () => {
   const classes = useStyles();
   const [polygons, setPolygons] = useState([]);
   const [currentWeather, setCurrentWeather] = useState();
+  const [hourlyWeather, setHourlyWeather] = useState([]);
+  const [dailyWeather, setDailyWeather] = useState([]);
   const [currentSoil, setCurrentSoil] = useState();
   const [loading, setLoading] = useState(false);
 
@@ -59,25 +59,41 @@ const Weather = () => {
           data[i].created_at = standard_date;
         });
         setPolygons(data);
-        fetchWeather(data[0].center[0], data[0].center[1]);
+
+        // fetchWeather(data[0].center[0], data[0].center[1]);
         fetchSoil(data[0].id);
-        setLoading(false);
+        fetchWeather(data[0].center[0], data[0].center[1]);
       })
       .catch((err) => console.log(err));
   };
 
+  // const fetchWeather = async (lat, lon) => {
+  //   const promise = new Promise((resolve, reject) => {
+  //     fetch(
+  //       `https://api.agromonitoring.com/agro/1.0/weather?lat=${lat}&lon=${lon}&appid=${process.env.REACT_APP_AGROMONITORING_API_KEY}`,
+  //     )
+  //       .then((res) => res.json())
+  //       .then((data) => {
+  //         setCurrentWeather(data);
+  //       })
+  //       .catch((err) => console.log(err));
+  //   });
+  //   return promise;
+  // };
+
   const fetchWeather = async (lat, lon) => {
-    const promise = new Promise((resolve, reject) => {
-      fetch(
-        `https://api.agromonitoring.com/agro/1.0/weather?lat=${lat}&lon=${lon}&appid=${process.env.REACT_APP_AGROMONITORING_API_KEY}`,
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          setCurrentWeather(data);
-        })
-        .catch((err) => console.log(err));
-    });
-    return promise;
+    fetch(
+      `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`,
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Forecast data: ", data);
+        setCurrentWeather(data.current);
+        setHourlyWeather(data.hourly);
+        setDailyWeather(data.daily);
+        setLoading(false);
+      })
+      .catch((err) => console.log(err));
   };
 
   const fetchSoil = async (id) => {
@@ -88,6 +104,7 @@ const Weather = () => {
         .then((res) => res.json())
         .then((data) => {
           setCurrentSoil(data);
+
           resolve(data);
         })
         .catch((err) => console.log(err));
@@ -111,6 +128,10 @@ const Weather = () => {
 
   const convertKelinToCelcius = (kelvin) => {
     return (kelvin - 273.15).toFixed(1);
+  };
+
+  const convertC = (x) => {
+    return x - 273.15;
   };
 
   return (
@@ -141,7 +162,7 @@ const Weather = () => {
                   <TableHead>
                     <TableRow>
                       <StyledTableCell component="th" scope="row">
-                        Fields
+                        <Typography variant="h3">Fields</Typography>
                       </StyledTableCell>
                     </TableRow>
                   </TableHead>
@@ -183,7 +204,7 @@ const Weather = () => {
                 <CircularProgress />
               ) : (
                 <Grid container spacing={2}>
-                  <Grid item md={12}>
+                  <Grid item md={12} xs={12}>
                     <Typography variant="body1" component="h2">
                       Current
                     </Typography>
@@ -196,29 +217,90 @@ const Weather = () => {
                       Weather
                     </Typography>
                   </Grid>
-                  <Grid item md={6}>
+                  <Grid
+                    item
+                    md={6}
+                    xs={6}
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
                     <img
-                      src={`https://openweathermap.org/img/w/${currentWeather?.weather[0]?.icon}.png`}
+                      src={
+                        "/weather-icons/" +
+                        currentWeather?.weather[0]?.icon +
+                        ".png"
+                      }
                       alt="weather"
                       style={{
-                        width: "80px",
-                        height: "80px",
+                        width: "120px",
+                        height: "120px",
                       }}
                     />
                   </Grid>
-                  <Grid item md={6}>
+                  <Grid item md={6} xs={6}>
                     <Typography
                       style={{ fontSize: "2.5rem", fontWeight: "400" }}
                       align="center"
                     >
-                      {convertKelinToCelcius(currentWeather?.main?.temp)}°
+                      {convertC(currentWeather?.temp).toFixed(0)}° C
                     </Typography>
                     <Typography
-                      style={{ fontSize: "1rem", fontWeight: "400" }}
+                      style={{
+                        fontSize: "1rem",
+                        fontWeight: "400",
+                        marginBottom: "10px",
+                      }}
                       align="center"
                     >
                       {currentWeather?.weather[0]?.description}
                     </Typography>
+
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      <img
+                        src={FeelsLike}
+                        alt="feels like"
+                        width="40px"
+                        height="35px"
+                      ></img>
+                      <Typography
+                        style={{ fontSize: "1rem", fontWeight: "400" }}
+                      >
+                        Feels like{" "}
+                        {convertC(currentWeather?.feels_like).toFixed(0)}° C
+                      </Typography>
+                    </div>
+
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      <img src={Cloud} alt="feels like"></img>
+                      <Typography
+                        style={{ fontSize: "1rem", fontWeight: "400" }}
+                      >
+                        Cloudly - {currentWeather?.clouds}%
+                      </Typography>
+                    </div>
+
+                    {/* {currentWeather?.clouds && (
+                      <Typography>
+                        {" "}
+                        <Cloud />
+                        Cloudly - {currentWeather?.clouds}%
+                      </Typography>
+                    )} */}
                   </Grid>
                 </Grid>
               )}
@@ -253,32 +335,47 @@ const Weather = () => {
                   </Grid>
                   <Grid item md={12}>
                     <Grid container spacing={3}>
-                      <Grid item md={6}>
+                      <Grid
+                        item
+                        md={6}
+                        xs={8}
+                        className={classes.soilLeftTextContainer}
+                      >
                         <Typography className={classes.soilLeftText}>
                           Temperature at the surface
                         </Typography>
                       </Grid>
-                      <Grid item md={6}>
+                      <Grid item md={6} xs={4}>
                         <Typography className={classes.soilRightText}>
-                          {convertKelinToCelcius(currentSoil?.t0)}°C
+                          {convertC(currentSoil?.t0).toFixed(0)}° C
                         </Typography>
                       </Grid>
-                      <Grid item md={6}>
+                      <Grid
+                        item
+                        md={6}
+                        xs={8}
+                        className={classes.soilLeftTextContainer}
+                      >
                         <Typography className={classes.soilLeftText}>
                           Temperature at the depth of 10cm
                         </Typography>
                       </Grid>
-                      <Grid item md={6}>
+                      <Grid item md={6} xs={4}>
                         <Typography className={classes.soilRightText}>
-                          {convertKelinToCelcius(currentSoil?.t10)}°C
+                          {convertC(currentSoil?.t10).toFixed(0)}° C
                         </Typography>
                       </Grid>
-                      <Grid item md={6}>
+                      <Grid
+                        item
+                        md={6}
+                        xs={8}
+                        className={classes.soilLeftTextContainer}
+                      >
                         <Typography className={classes.soilLeftText}>
                           Soil moisture
                         </Typography>
                       </Grid>
-                      <Grid item md={6}>
+                      <Grid item md={6} xs={4}>
                         <Typography className={classes.soilRightText}>
                           {(currentSoil?.moisture * 100).toFixed(2)}%
                         </Typography>
@@ -289,6 +386,179 @@ const Weather = () => {
               )}
             </CardContent>
           </Card>
+        </Grid>
+        <Grid
+          item
+          md={12}
+          xs={12}
+          style={{
+            overflowX: "auto",
+            width: "100%",
+          }}
+          mb={3}
+        >
+          <Typography
+            variant="h3"
+            component="h3"
+            style={{ color: "white", marginBottom: "1rem" }}
+          >
+            Today
+          </Typography>
+          {!loading ? (
+            <Swiper
+              spaceBetween={20}
+              slidesPerView={2}
+              breakpoints={{
+                // when window width is >= 320px
+                320: {
+                  slidesPerView: 3,
+                  spaceBetween: 10,
+                },
+                // when window width is >= 480px
+                480: {
+                  slidesPerView: 3,
+                  spaceBetween: 10,
+                },
+                // when window width is >= 640px
+                640: {
+                  width: 640,
+                  slidesPerView: 4,
+                },
+                // when window width is >= 768px
+                768: {
+                  width: 768,
+                  slidesPerView: 5,
+                },
+                // when window width is >= 991px
+                991: {
+                  width: 991,
+                  slidesPerView: 6,
+                },
+                // when window width is >= 1024px
+                1024: {
+                  width: 1024,
+                  slidesPerView: 6,
+                },
+              }}
+            >
+              {hourlyWeather.map((item, i) => {
+                return (
+                  <SwiperSlide key={i.toString()}>
+                    <Card className={classes.weatherCard}>
+                      <CardContent className={classes.weatherCardContent}>
+                        <Typography>
+                          {new Date(item.dt * 1000).toLocaleString("en-US", {
+                            hour: "numeric",
+                            minute: "numeric",
+                            hour12: true,
+                          })}
+                        </Typography>
+                        <img
+                          src={
+                            "/weather-icons/" + item.weather[0].icon + ".png"
+                          }
+                          alt={item.weather[0].description}
+                          style={{
+                            width: "80px",
+                            height: "80px",
+                          }}
+                        />
+                        <Typography variant="body1">
+                          {convertC(item.temp).toFixed(0)}° C
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </SwiperSlide>
+                );
+              })}
+            </Swiper>
+          ) : (
+            <CircularProgress />
+          )}
+        </Grid>
+        <Grid item md={12} xs={12} mt={3}>
+          <Typography
+            variant="h3"
+            component="h3"
+            style={{ color: "white", marginBottom: "1rem" }}
+          >
+            Weekly
+          </Typography>
+          <Grid container spacing={2}>
+            {!loading ? (
+              <Swiper
+                spaceBetween={20}
+                slidesPerView={2}
+                breakpoints={{
+                  // when window width is >= 320px
+                  320: {
+                    slidesPerView: 3,
+                    spaceBetween: 10,
+                  },
+                  // when window width is >= 480px
+                  480: {
+                    slidesPerView: 3,
+                    spaceBetween: 10,
+                  },
+                  // when window width is >= 640px
+                  640: {
+                    width: 640,
+                    slidesPerView: 4,
+                  },
+                  // when window width is >= 768px
+                  768: {
+                    width: 768,
+                    slidesPerView: 5,
+                  },
+                  // when window width is >= 991px
+                  991: {
+                    width: 991,
+                    slidesPerView: 6,
+                  },
+                  // when window width is >= 1024px
+                  1024: {
+                    width: 1024,
+                    slidesPerView: 6,
+                  },
+                }}
+              >
+                {dailyWeather.map((day, i) => {
+                  return (
+                    <SwiperSlide key={i.toString()}>
+                      <Card className={classes.weatherCard}>
+                        <CardContent className={classes.weatherCardContent}>
+                          <Typography>
+                            {new Date(day.dt * 1000).toLocaleString("en-US", {
+                              hour: "numeric",
+                              minute: "numeric",
+                              hour12: true,
+                            })}
+                          </Typography>
+                          <img
+                            src={
+                              "/weather-icons/" + day.weather[0].icon + ".png"
+                            }
+                            alt={day.weather[0].description}
+                            style={{
+                              width: "80px",
+                              height: "80px",
+                            }}
+                          />
+                          <Typography variant="body1">
+                            {convertC(day.temp.max).toFixed(0)}°{" "}
+                            <span> - </span> {convertC(day.temp.min).toFixed(0)}
+                            ° C
+                          </Typography>
+                        </CardContent>
+                      </Card>
+                    </SwiperSlide>
+                  );
+                })}
+              </Swiper>
+            ) : (
+              <CircularProgress />
+            )}
+          </Grid>
         </Grid>
       </Grid>
     </Fragment>

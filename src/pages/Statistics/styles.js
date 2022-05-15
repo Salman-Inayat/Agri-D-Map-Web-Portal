@@ -36,4 +36,9 @@ export default makeStyles((theme) => ({
       height: "10rem",
     },
   },
+  datePicker: {
+    "& .MuiFormLabel-root, .MuiInputBase-root": {
+      color: "#fff",
+    },
+  },
 }));

@@ -75,6 +75,7 @@ const DashboardPolygonTable = forwardRef((props, ref) => {
 
   useImperativeHandle(ref, () => ({
     updateTable() {
+      console.log("update table");
       fetchPolygons();
     },
   }));
@@ -105,16 +106,21 @@ const DashboardPolygonTable = forwardRef((props, ref) => {
   };
 
   const DeletePolygon = async (id) => {
-    const response = await fetch(
+    await fetch(
       `${process.env.REACT_APP_AGROMONITORING_API_URL}polygons/${id}?appid=${process.env.REACT_APP_AGROMONITORING_API_KEY}`,
       {
         method: "DELETE",
       },
     );
 
-    setDialogOpen(false);
+    console.log("deleted", data);
+    const newData = data.filter((item) => item.id !== id);
 
-    setTimeout(() => {}, fetchPolygons(), 1000);
+    console.log(newData);
+    setdata(newData);
+
+    fetchPolygons();
+    setDialogOpen(false);
   };
 
   const EditPolygonsCell = ({

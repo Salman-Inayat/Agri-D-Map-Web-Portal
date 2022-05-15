@@ -1,10 +1,8 @@
 import React, { useRef, useEffect, useState } from "react";
 import { Grid } from "@material-ui/core";
 
-// styles
 import useStyles from "./styles.js";
 import "react-dropzone-uploader/dist/styles.css";
-// import Audio_Player from "../../components/Audio_Player/Audio_Player";
 
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -16,12 +14,11 @@ import DashboardPolygonTable from "../../components/PolygonsTable/DashboardPolyg
 
 import Button from "@material-ui/core/Button";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
-import AddIcon from "@material-ui/icons/Add";
-
 import TextField from "@material-ui/core/TextField";
 
+import { SnackbarContent, Snackbar } from "@material-ui/core";
+
 import "date-fns";
-import DateFnsUtils from "@date-io/date-fns";
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_GL_ACCESS_TOKEN;
 
@@ -45,6 +42,8 @@ export default function Dashboard(props) {
   const [fieldHelperText, setFieldHelperText] = useState("");
 
   const childRef = useRef();
+
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_GEO_LOCATION_URL}`)
@@ -108,6 +107,8 @@ export default function Dashboard(props) {
   function updateArea(e) {
     const data = draw.current.getAll();
 
+    console.log("Coooooordinates", data.features[0].geometry.coordinates);
+
     if (data.features.length > 0) {
       const area = turf.area(data);
       setroundedArea(Math.round(area * 100) / 100 / 10000);
@@ -116,6 +117,8 @@ export default function Dashboard(props) {
       const polygonData = turf.polygon(data.features[0].geometry.coordinates, {
         name: { polygonName },
       });
+
+      console.log("polygonData", polygonData);
 
       setPolygon(polygonData);
     } else {
@@ -142,6 +145,7 @@ export default function Dashboard(props) {
         );
         const content = await rawResponse.json();
         childRef.current.updateTable();
+        setOpen(true);
       })();
       setpolygonName("");
     }
@@ -228,7 +232,6 @@ export default function Dashboard(props) {
           variant="contained"
           color="primary"
           className={classes.createPolygonButon}
-          // startIcon={<AddIcon />}
           disabled={roundedArea > 0 ? false : true}
         >
           Create field
@@ -237,6 +240,20 @@ export default function Dashboard(props) {
       <Grid item md={12} xs={12} style={{ marginTop: "50px" }}>
         <DashboardPolygonTable ref={childRef} />
       </Grid>
+      <Snackbar
+        open={open}
+        autoHideDuration={2000}
+        onClose={() => setOpen(false)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+        key={"bottom" + " left"}
+      >
+        <SnackbarContent
+          style={{
+            backgroundColor: "rgb(56, 142, 60)",
+          }}
+          message={<span id="client-snackbar">Field created successfully</span>}
+        />
+      </Snackbar>
     </Grid>
   );
 }

@@ -113,4 +113,9 @@ export default makeStyles((theme) => ({
       borderRadius: 50,
     },
   },
+  snackbar: {
+    "& .MuiSnackbar-root": {
+      backgroundColor: "#FF4842",
+    },
+  },
 }));
