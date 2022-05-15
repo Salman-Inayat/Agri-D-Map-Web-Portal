@@ -4,6 +4,11 @@ export default makeStyles((theme) => ({
   root: {
     color: "#FF4842",
   },
+  tableCellHeading: {
+    "& .MuiTableCell-root": {
+      borderBottom: "3px solid #fff",
+    },
+  },
   soilLeftTextContainer: {
     display: "flex",
     alignItems: "center",

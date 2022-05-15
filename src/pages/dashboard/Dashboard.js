@@ -143,9 +143,13 @@ export default function Dashboard(props) {
             body: JSON.stringify({ geo_json: polygon, name: polygonName }),
           },
         );
-        const content = await rawResponse.json();
+        await rawResponse.json();
         childRef.current.updateTable();
-        setOpen(true);
+
+        console.log("content", rawResponse);
+        if (rawResponse.statusText === "Created") {
+          setOpen(true);
+        }
       })();
       setpolygonName("");
     }

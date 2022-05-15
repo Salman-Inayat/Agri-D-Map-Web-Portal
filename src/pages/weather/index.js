@@ -21,6 +21,13 @@ import "swiper/swiper.scss";
 import FeelsLike from "../../assets/FllesLike.svg";
 import Cloud from "../../assets/cloud-with-rain.svg";
 
+const StyledTableCellHeading = withStyles({
+  root: {
+    color: "#fff",
+    borderBottom: "none",
+  },
+})(TableCell);
+
 const StyledTableCell = withStyles({
   root: {
     color: "#fff",
@@ -126,10 +133,6 @@ const Weather = () => {
     setLoading(false);
   };
 
-  const convertKelinToCelcius = (kelvin) => {
-    return (kelvin - 273.15).toFixed(1);
-  };
-
   const convertC = (x) => {
     return x - 273.15;
   };
@@ -146,7 +149,6 @@ const Weather = () => {
           >
             <CardContent>
               <TableContainer
-                // component={Card}
                 style={{ backgroundColor: "transparent", color: "white" }}
                 sx={{
                   ".MuiTableBody-root": {
@@ -161,9 +163,9 @@ const Weather = () => {
                 >
                   <TableHead>
                     <TableRow>
-                      <StyledTableCell component="th" scope="row">
+                      <StyledTableCellHeading component="th" scope="row">
                         <Typography variant="h3">Fields</Typography>
-                      </StyledTableCell>
+                      </StyledTableCellHeading>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -201,7 +203,22 @@ const Weather = () => {
           >
             <CardContent>
               {loading ? (
-                <CircularProgress />
+                <Grid container>
+                  <Grid
+                    item
+                    md={12}
+                    xs={12}
+                    style={{
+                      textAlign: "center",
+                    }}
+                  >
+                    <CircularProgress
+                      style={{
+                        color: "white",
+                      }}
+                    />
+                  </Grid>
+                </Grid>
               ) : (
                 <Grid container spacing={2}>
                   <Grid item md={12} xs={12}>
@@ -293,14 +310,6 @@ const Weather = () => {
                         Cloudly - {currentWeather?.clouds}%
                       </Typography>
                     </div>
-
-                    {/* {currentWeather?.clouds && (
-                      <Typography>
-                        {" "}
-                        <Cloud />
-                        Cloudly - {currentWeather?.clouds}%
-                      </Typography>
-                    )} */}
                   </Grid>
                 </Grid>
               )}
@@ -317,7 +326,22 @@ const Weather = () => {
           >
             <CardContent>
               {loading ? (
-                <CircularProgress />
+                <Grid container>
+                  <Grid
+                    item
+                    md={12}
+                    xs={12}
+                    style={{
+                      textAlign: "center",
+                    }}
+                  >
+                    <CircularProgress
+                      style={{
+                        color: "white",
+                      }}
+                    />
+                  </Grid>
+                </Grid>
               ) : (
                 <Grid container spacing={2}>
                   <Grid item md={12}>
@@ -473,7 +497,22 @@ const Weather = () => {
               })}
             </Swiper>
           ) : (
-            <CircularProgress />
+            <Grid container>
+              <Grid
+                item
+                md={12}
+                xs={12}
+                style={{
+                  textAlign: "center",
+                }}
+              >
+                <CircularProgress
+                  style={{
+                    color: "white",
+                  }}
+                />
+              </Grid>
+            </Grid>
           )}
         </Grid>
         <Grid item md={12} xs={12} mt={3}>
@@ -529,9 +568,7 @@ const Weather = () => {
                         <CardContent className={classes.weatherCardContent}>
                           <Typography>
                             {new Date(day.dt * 1000).toLocaleString("en-US", {
-                              hour: "numeric",
-                              minute: "numeric",
-                              hour12: true,
+                              weekday: "short",
                             })}
                           </Typography>
                           <img
@@ -556,7 +593,22 @@ const Weather = () => {
                 })}
               </Swiper>
             ) : (
-              <CircularProgress />
+              <Grid container>
+                <Grid
+                  item
+                  md={12}
+                  xs={12}
+                  style={{
+                    textAlign: "center",
+                  }}
+                >
+                  <CircularProgress
+                    style={{
+                      color: "white",
+                    }}
+                  />
+                </Grid>
+              </Grid>
             )}
           </Grid>
         </Grid>

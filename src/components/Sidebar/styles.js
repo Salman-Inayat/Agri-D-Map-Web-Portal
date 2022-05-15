@@ -50,7 +50,7 @@ export default makeStyles((theme) => ({
     padding: theme.spacing(3),
   },
   sidebarList: {
-    // marginTop: theme.spacing(6),
+    marginTop: theme.spacing(6),
     color: "white",
   },
   mobileBackButton: {
