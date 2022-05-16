@@ -18,23 +18,26 @@ import useStyles from "./styles";
 import { useUserDispatch, loginUser } from "../../context/UserContext";
 
 function Login(props) {
-  var classes = useStyles();
+  const classes = useStyles();
   const history = useHistory();
-  var userDispatch = useUserDispatch();
+  const userDispatch = useUserDispatch();
 
   // local
-  var [isLoading, setIsLoading] = useState(false);
-  var [error, setError] = useState(null);
-  var [activeTabId, setActiveTabId] = useState(0);
-  var [nameValue, setNameValue] = useState("");
-  var [loginValue, setLoginValue] = useState("");
-  var [loginPasswordValue, setLoginPasswordValue] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [activeTabId, setActiveTabId] = useState(0);
+  const [nameValue, setNameValue] = useState("");
+  const [loginValue, setLoginValue] = useState("");
+  const [loginPasswordValue, setLoginPasswordValue] = useState("");
 
-  var [signupValue, setSignupValue] = useState("");
-  var [signupPasswordValue, setSignupPasswordValue] = useState("");
+  const [signupValue, setSignupValue] = useState("");
+  const [signupPasswordValue, setSignupPasswordValue] = useState("");
+  const [signupPasswordConfirmValue, setSignupPasswordConfirmValue] =
+    useState("");
   const [errroMessage, setErrorMessage] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [passwordConfirmError, setPasswordConfirmError] = useState("");
 
   const handleEmailChange = (event) => {
     setSignupValue(event.target.value);
@@ -53,26 +56,55 @@ function Login(props) {
 
   const handlePasswordChange = (event) => {
     setSignupPasswordValue(event.target.value);
-    if (event.target.value.length > 5) {
-      setPasswordError("");
-      return true;
-    }
-    setPasswordError("Password must be at least 6 characters");
-    return false;
+    // if (event.target.value.length > 5) {
+    //   setPasswordError("");
+    //   return true;
+    // }
+    // setPasswordError("Password must be at least 6 characters");
+    // return false;
+  };
+
+  const handlePasswordConfirmChange = (event) => {
+    setSignupPasswordConfirmValue(event.target.value);
+    // if (event.target.value === signupPasswordValue) {
+    //   setPasswordConfirmError("");
+    //   return true;
+    // }
+    // setPasswordConfirmError("Passwords do not match");
+    // return false;
   };
 
   const handleSignupUser = () => {
+    if (signupPasswordValue.length < 6) {
+      setPasswordError("Password must be at least 6 characters");
+      return;
+    }
+
+    if (signupPasswordValue !== signupPasswordConfirmValue) {
+      setPasswordConfirmError("Passwords do not match");
+      return;
+    }
+
     setIsLoading(true);
     const data = {
       name: nameValue,
       email: signupValue,
       password: signupPasswordValue,
+      confirmPassword: signupPasswordConfirmValue,
     };
 
     axios
       .post(`${process.env.REACT_APP_SERVER_URL}/register`, data)
       .then((res) => {
-        props.history.push("/");
+        // props.history.push("/");
+        loginUser(
+          userDispatch,
+          signupValue,
+          signupPasswordValue,
+          props.history,
+          setIsLoading,
+          setError,
+        );
         setIsLoading(true);
       })
       .catch((err) => {
@@ -255,6 +287,28 @@ function Login(props) {
                 type="password"
                 fullWidth
                 helperText={passwordError}
+                FormHelperTextProps={{
+                  classes: {
+                    root: classes.root,
+                  },
+                }}
+              />
+
+              <TextField
+                id="confirmPassword"
+                InputProps={{
+                  classes: {
+                    underline: classes.textFieldUnderline,
+                    input: classes.textField,
+                  },
+                }}
+                value={signupPasswordConfirmValue}
+                onChange={handlePasswordConfirmChange}
+                margin="normal"
+                placeholder="Confirm Password"
+                type="password"
+                fullWidth
+                helperText={passwordConfirmError}
                 FormHelperTextProps={{
                   classes: {
                     root: classes.root,
