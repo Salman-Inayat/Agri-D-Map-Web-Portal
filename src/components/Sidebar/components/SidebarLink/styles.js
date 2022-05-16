@@ -47,6 +47,7 @@ export default makeStyles((theme) => ({
   },
   linkActive: {
     background: "white",
+    color: "#3F4257",
   },
   linkNested: {
     paddingLeft: 0,

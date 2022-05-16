@@ -61,7 +61,7 @@ function loginUser(dispatch, login, password, history, setIsLoading, setError) {
       dispatch({ type: "LOGIN_SUCCESS" });
 
       history.push("/app/disease-detection");
-    }, 2000);
+    }, 1000);
   } else {
     dispatch({ type: "LOGIN_FAILURE" });
     setError(true);

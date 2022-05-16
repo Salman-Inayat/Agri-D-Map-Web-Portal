@@ -150,7 +150,6 @@ function NDVILayers(props) {
       >
         <CardContent>
           <TableContainer
-            // component={Card}
             style={{ backgroundColor: "transparent", color: "white" }}
             sx={{
               ".MuiTableBody-root": {

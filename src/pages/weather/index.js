@@ -42,6 +42,7 @@ const Weather = () => {
   const [dailyWeather, setDailyWeather] = useState([]);
   const [currentSoil, setCurrentSoil] = useState();
   const [loading, setLoading] = useState(false);
+  const [selectedField, setSelectedField] = useState();
 
   useEffect(() => {
     setLoading(true);
@@ -66,6 +67,7 @@ const Weather = () => {
           data[i].created_at = standard_date;
         });
         setPolygons(data);
+        setSelectedField(data[0]);
 
         // fetchWeather(data[0].center[0], data[0].center[1]);
         fetchSoil(data[0].id);
@@ -73,20 +75,6 @@ const Weather = () => {
       })
       .catch((err) => console.log(err));
   };
-
-  // const fetchWeather = async (lat, lon) => {
-  //   const promise = new Promise((resolve, reject) => {
-  //     fetch(
-  //       `https://api.agromonitoring.com/agro/1.0/weather?lat=${lat}&lon=${lon}&appid=${process.env.REACT_APP_AGROMONITORING_API_KEY}`,
-  //     )
-  //       .then((res) => res.json())
-  //       .then((data) => {
-  //         setCurrentWeather(data);
-  //       })
-  //       .catch((err) => console.log(err));
-  //   });
-  //   return promise;
-  // };
 
   const fetchWeather = async (lat, lon) => {
     fetch(
@@ -120,6 +108,7 @@ const Weather = () => {
   };
 
   const handleFieldClick = async (field) => {
+    setSelectedField(field);
     setLoading(true);
     const promise1 = new Promise((resolve, reject) => {
       fetchWeather(field.center[0], field.center[1]);
@@ -175,6 +164,10 @@ const Weather = () => {
                           key={i}
                           style={{
                             cursor: "pointer",
+                            backgroundColor:
+                              selectedField === item
+                                ? "#26293c"
+                                : "transparent",
                           }}
                           onClick={() => handleFieldClick(item)}
                         >
@@ -515,7 +508,15 @@ const Weather = () => {
             </Grid>
           )}
         </Grid>
-        <Grid item md={12} xs={12} mt={3}>
+        <Grid
+          item
+          md={12}
+          xs={12}
+          mt={3}
+          style={{
+            marginBottom: "3rem",
+          }}
+        >
           <Typography
             variant="h3"
             component="h3"
