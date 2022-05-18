@@ -44,18 +44,24 @@ export default makeStyles((theme) => ({
   },
   formContainer: {
     width: "35%",
-    height: "75%",
+    height: "80%",
     display: "flex",
     flexDirection: "column",
+    overflowY: "auto",
     justifyContent: "center",
     backgroundColor: "white",
     borderRadius: "15px",
     alignItems: "center",
+
     [theme.breakpoints.down("md")]: {
       width: "90%",
       height: "60%",
       padding: "1rem",
     },
+    // focus-within
+    // "&:focus-within": {
+    //   height: "95%",
+    // },
   },
   form: {
     width: 320,

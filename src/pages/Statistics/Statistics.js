@@ -39,6 +39,8 @@ export default function Statistics(props) {
   const [firstPolygonId, setFirstPolygonId] = useState("");
   const [mountComponent, setMountComponent] = useState(false);
   const [doesPolygonExist, setDoesPolygonExist] = useState(false);
+  const [getNDVIFailed, setGetNDVIFailed] = useState();
+  const [NDVILoading, setNDVILoading] = useState(false);
 
   useEffect(() => {
     let firstPolygon;
@@ -97,6 +99,7 @@ export default function Statistics(props) {
   };
 
   const handleChange = (value) => {
+    setNDVI_data([]);
     setPolygonId(value);
     setTimeout(() => {
       setMountComponent(true);
@@ -104,12 +107,22 @@ export default function Statistics(props) {
   };
 
   const getNDVI = (fromDateUNIX, toDateUNIX) => {
+    setNDVILoading(true);
     (async () => {
       const rawResponse = await fetch(
         `${process.env.REACT_APP_AGROMONITORING_API_URL}ndvi/history?polyid=${polygonId}&start=${fromDateUNIX}&end=${toDateUNIX}&appid=${process.env.REACT_APP_AGROMONITORING_API_KEY}`,
       );
-      const data = await rawResponse.json();
-      setNDVI_data(data);
+
+      if (rawResponse.status === 200) {
+        const data = await rawResponse.json();
+
+        setNDVI_data(data);
+        setGetNDVIFailed(false);
+        setNDVILoading(false);
+      } else {
+        setGetNDVIFailed(true);
+        setNDVILoading(false);
+      }
     })();
   };
 
@@ -187,24 +200,35 @@ export default function Statistics(props) {
                     height: "30vh",
                   }}
                 >
-                  <Typography variant="h5" style={{ color: "#fff" }}>
-                    Loading NDVI data...
-                  </Typography>
-                  <Box sx={{ width: "50%", marginTop: "2rem" }}>
-                    <LinearProgress />
-                  </Box>
+                  {NDVILoading ? (
+                    <>
+                      <Typography variant="h5" style={{ color: "#fff" }}>
+                        Loading NDVI data...
+                      </Typography>
+                      <Box sx={{ width: "50%", marginTop: "2rem" }}>
+                        <LinearProgress />
+                      </Box>
+                    </>
+                  ) : (
+                    <Typography variant="h5" style={{ color: "#fff" }}>
+                      No NDVI data available for selected field
+                    </Typography>
+                  )}
                 </Grid>
               </Grid>
             )}
           </Grid>
           <Grid item md={12} xs={12}>
-            {mountComponent && (
-              <NDVILayers
-                fromDateUNIX={fromDateUNIX}
-                toDateUNIX={toDateUNIX}
-                polygonId={polygonId}
-              />
-            )}
+            {mountComponent &&
+              (getNDVIFailed ? (
+                <Typography variant="h5" style={{ color: "#fff" }}></Typography>
+              ) : (
+                <NDVILayers
+                  fromDateUNIX={fromDateUNIX}
+                  toDateUNIX={toDateUNIX}
+                  polygonId={polygonId}
+                />
+              ))}
           </Grid>
         </Grid>
       )}

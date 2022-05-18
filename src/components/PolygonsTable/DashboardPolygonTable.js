@@ -106,20 +106,21 @@ const DashboardPolygonTable = forwardRef((props, ref) => {
   };
 
   const DeletePolygon = async (id) => {
-    await fetch(
+    const response = await fetch(
       `${process.env.REACT_APP_AGROMONITORING_API_URL}polygons/${id}?appid=${process.env.REACT_APP_AGROMONITORING_API_KEY}`,
       {
         method: "DELETE",
       },
     );
 
-    console.log("deleted", data);
-    const newData = data.filter((item) => item.id !== id);
+    // remove the polygon from the table
+    setdata(data.filter((item) => item.id !== id));
 
-    console.log(newData);
-    setdata(newData);
+    // const newData = data.filter((item) => item.id !== id);
 
-    fetchPolygons();
+    // setdata(newData);
+
+    // fetchPolygons();
     setDialogOpen(false);
   };
 

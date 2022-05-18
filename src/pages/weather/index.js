@@ -76,7 +76,7 @@ const Weather = () => {
       .catch((err) => console.log(err));
   };
 
-  const fetchWeather = async (lat, lon) => {
+  const fetchWeather = async (lon, lat) => {
     fetch(
       `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`,
     )

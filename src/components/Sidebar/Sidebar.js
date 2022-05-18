@@ -29,7 +29,11 @@ import {
   useLayoutDispatch,
   toggleSidebar,
 } from "../../context/LayoutContext";
-import { useUserDispatch, signOut } from "../../context/UserContext";
+import {
+  useUserDispatch,
+  useUserState,
+  signOut,
+} from "../../context/UserContext";
 
 const HomeIcon = (props) => {
   return (
@@ -362,6 +366,8 @@ function Sidebar({ location, history }) {
   var classes = useStyles();
   var theme = useTheme();
 
+  const { userName } = useUserState();
+
   var userDispatch = useUserDispatch();
 
   var isDesktop = useMediaQuery({
@@ -372,7 +378,7 @@ function Sidebar({ location, history }) {
 
   // global
   var { isSidebarOpened } = useLayoutState();
-  console.log("isSidebarOpened", isSidebarOpened);
+
   var layoutDispatch = useLayoutDispatch();
   var userDispatch = useUserDispatch();
 
@@ -417,7 +423,7 @@ function Sidebar({ location, history }) {
       </div>
       <div className={classes.userArea}>
         <img src="/person.png" className={classes.sideBarImage} alt="" />
-        <h3>John Doe</h3>
+        <h3>{userName}</h3>
       </div>
       <List className={classes.sidebarList}>
         {structure.map((link) => (

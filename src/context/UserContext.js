@@ -6,7 +6,11 @@ var UserDispatchContext = React.createContext();
 function userReducer(state, action) {
   switch (action.type) {
     case "LOGIN_SUCCESS":
-      return { ...state, isAuthenticated: true };
+      return {
+        ...state,
+        isAuthenticated: true,
+        userName: action.payload.userName,
+      };
     case "SIGN_OUT_SUCCESS":
       return { ...state, isAuthenticated: false };
     default: {
@@ -49,16 +53,25 @@ export { UserProvider, useUserState, useUserDispatch, loginUser, signOut };
 
 // ###########################################################
 
-function loginUser(dispatch, login, password, history, setIsLoading, setError) {
+function loginUser(
+  dispatch,
+  userData,
+  login,
+  password,
+  history,
+  setIsLoading,
+  setError,
+) {
   setError(false);
   setIsLoading(true);
 
+  console.log("loginUser", userData);
   if (!!login && !!password) {
     setTimeout(() => {
       localStorage.setItem("id_token", 1);
       setError(null);
       setIsLoading(false);
-      dispatch({ type: "LOGIN_SUCCESS" });
+      dispatch({ type: "LOGIN_SUCCESS", payload: { userName: userData.name } });
 
       history.push("/app/disease-detection");
     }, 1000);

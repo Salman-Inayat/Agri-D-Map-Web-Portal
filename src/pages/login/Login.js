@@ -99,6 +99,7 @@ function Login(props) {
         // props.history.push("/");
         loginUser(
           userDispatch,
+          res.data,
           signupValue,
           signupPasswordValue,
           props.history,
@@ -124,8 +125,10 @@ function Login(props) {
     axios
       .post(`${process.env.REACT_APP_SERVER_URL}/login`, data)
       .then((res) => {
+        console.log(res);
         loginUser(
           userDispatch,
+          res.data,
           loginValue,
           loginPasswordValue,
           props.history,
