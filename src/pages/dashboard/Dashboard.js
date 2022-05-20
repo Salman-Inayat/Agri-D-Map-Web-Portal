@@ -146,7 +146,6 @@ export default function Dashboard(props) {
         await rawResponse.json();
         childRef.current.updateTable();
 
-        console.log("content", rawResponse);
         if (rawResponse.statusText === "Created") {
           setOpen(true);
         }

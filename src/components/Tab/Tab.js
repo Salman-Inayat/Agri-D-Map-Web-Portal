@@ -47,7 +47,7 @@ function a11yProps(index) {
 export default function ReaultTab(props) {
   const [value, setValue] = React.useState(0);
   const classes = useStyles();
-  const { audio, englishData, urduData } = props;
+  const { englishAudio, urduAudio, englishData, urduData } = props;
   const [image, setImage] = useState();
   const [imageURL, setImageURL] = useState();
   const [fallback, setFallback] = useState(false);
@@ -154,7 +154,7 @@ export default function ReaultTab(props) {
               alignItems: "center",
             }}
           >
-            <Audio audio={audio} />
+            <Audio audio={englishAudio} />
             <img
               src={imageURL}
               alt="result"
@@ -217,7 +217,7 @@ export default function ReaultTab(props) {
               alignItems: "center",
             }}
           >
-            <Audio audio={audio} />
+            <Audio audio={urduAudio} />
             <img
               src={imageURL}
               alt="result"

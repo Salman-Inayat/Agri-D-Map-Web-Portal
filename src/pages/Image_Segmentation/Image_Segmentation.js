@@ -32,6 +32,8 @@ function Image_Segmentation() {
   const [imagePresent, setImagePresent] = useState(false);
   const [isResult, setIsResult] = useState(false);
   const [resultAudio, setResultAudio] = useState();
+  const [englishAudio, setEnglishAudio] = useState();
+  const [urduAudio, setUrduAudio] = useState();
   const [open, setOpen] = useState(false);
 
   const [source, setSource] = useState("");
@@ -160,24 +162,29 @@ function Image_Segmentation() {
 
           switch (leafResult) {
             case "Healthy":
-              setResultAudio("/healthy_english.mp3");
+              setEnglishAudio("/healthy_english.mp3");
+              setUrduAudio("/healthy_urdu.mp3");
               setEnglishTabData(remedialActions.healthy);
               setUrduTabData(urduRemedialActions.healthy);
               break;
             case "Resistant":
-              setResultAudio("/resistant_english.mp3");
+              setEnglishAudio("/resistant_english.mp3");
+              setUrduAudio("/resistant_urdu.mp3");
               setEnglishTabData(remedialActions.resistant);
               setUrduTabData(urduRemedialActions.resistant);
 
               break;
             case "Susceptible":
-              setResultAudio("/susceptible_english.mp3");
+              setEnglishAudio("/susceptible_english.mp3");
+              setUrduAudio("/susceptible_urdu.mp3");
+
               setEnglishTabData(remedialActions.susceptible);
               setUrduTabData(urduRemedialActions.susceptible);
 
               break;
             default:
-              setResultAudio("/healthy_english.mp3");
+              setEnglishAudio("/healthy_english.mp3");
+              setUrduAudio("/healthy_urdu.mp3");
               setEnglishTabData(remedialActions.healthy);
               setUrduTabData(urduRemedialActions.healthy);
 
@@ -354,7 +361,8 @@ function Image_Segmentation() {
           <Grid item md={12} sm={12}>
             <div className={classes.result_container}>
               <ResultTab
-                audio={resultAudio}
+                englishAudio={englishAudio}
+                urduAudio={urduAudio}
                 result={result}
                 image={resultImage}
                 englishData={englishTabData}
