@@ -45,6 +45,7 @@ function a11yProps(index) {
 }
 
 export default function ReaultTab(props) {
+  console.log("Image value", props.image);
   const [value, setValue] = React.useState(0);
   const classes = useStyles();
   const { englishAudio, urduAudio, englishData, urduData } = props;
@@ -55,22 +56,12 @@ export default function ReaultTab(props) {
 
   useEffect(() => {
     setImage(props.image);
-    setImageURL(
-      `${process.env.REACT_APP_SERVER_URL}/${props.image.replace(
-        "jpg",
-        "png",
-      )}`,
-    );
+    setImageURL(`${process.env.REACT_APP_SERVER_URL}/${props.image}`);
   }, []);
 
   useEffect(() => {
     setImage(props.image);
-    setImageURL(
-      `${process.env.REACT_APP_SERVER_URL}/${props.image.replace(
-        "jpg",
-        "png",
-      )}`,
-    );
+    setImageURL(`${process.env.REACT_APP_SERVER_URL}/${props.image}`);
   }, [props.image]);
 
   const handleChange = (event, newValue) => {
@@ -79,14 +70,12 @@ export default function ReaultTab(props) {
 
   const reloadSrc = (e) => {
     if (fallback) {
-      e.target.src = `${process.env.REACT_APP_SERVER_URL}/${props.image.replace(
-        "jpg",
-        "png",
-      )}`;
+      e.target.src = `${process.env.REACT_APP_SERVER_URL}/${props.image}`;
     } else {
-      e.target.src = imageURL(
-        `${process.env.REACT_APP_SERVER_URL}/${props.image}`,
-      );
+      // e.target.src = imageURL(
+      //   `${process.env.REACT_APP_SERVER_URL}/${props.image}`,
+      // );
+      e.target.src = `${process.env.REACT_APP_SERVER_URL}/${props.image}`;
       setFallback(true);
     }
   };

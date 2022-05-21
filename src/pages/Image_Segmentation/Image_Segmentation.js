@@ -149,7 +149,8 @@ function Image_Segmentation() {
       axios
         .post(`${process.env.REACT_APP_SERVER_URL}/image-segment`, data, {
           headers: {
-            "Access-Control-Allow-Origin": "*",
+            Accept: "application/json",
+            "Content-Type": "application/json",
           },
         })
         .then((res) => {
@@ -158,7 +159,10 @@ function Image_Segmentation() {
           const responseArray = response.split(" ");
           const leafResult = responseArray[1].replace(/\r\n/g, "");
           setResult(leafResult);
-          setResultImage(responseArray[0]);
+
+          const imageResult = responseArray[0].replace("jpg", "png");
+
+          setResultImage(imageResult);
 
           switch (leafResult) {
             case "Healthy":
